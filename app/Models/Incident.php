@@ -5,22 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Borrowing extends Model
+class Incident extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
         'equipment_id',
-        'borrow_date',
-        'return_date',
+        'description',
         'status',
-        'notes',
-    ];
-
-    protected $casts = [
-        'borrow_date' => 'date',
-        'return_date' => 'date',
+        'resolution',
     ];
 
     public function user()
