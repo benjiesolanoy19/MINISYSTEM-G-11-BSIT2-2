@@ -10,11 +10,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Create admin user with specified credentials (only if not exists)
+        // Create admin user benjie (user: benjie, pass: benjie062606)
         User::firstOrCreate(
-            ['email' => 'benjadmin@clfms.com'],
+            ['email' => 'benjie@clfms.com'],
             [
-                'name' => 'benjadmin',
+                'name' => 'Benjie',
+                'username' => 'benjie',
                 'password' => Hash::make('benjie062606'),
                 'password_hint' => '606',
                 'role' => 'admin',
@@ -52,8 +53,9 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('Database seeded successfully!');
         $this->command->info('Login credentials:');
-        $this->command->info('Admin: admin@clfms.com / password');
+        $this->command->info('Admin: benjie (benjie@clfms.com or username benjie) / benjie062606');
         $this->command->info('Staff: staff@clfms.com / password');
         $this->command->info('Student: john@clfms.com / password');
     }
 }
+

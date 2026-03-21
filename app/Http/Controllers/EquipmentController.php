@@ -10,7 +10,7 @@ class EquipmentController extends Controller
     public function index()
     {
         $equipment = Equipment::orderBy('name')->get();
-        return view('equipment.list', compact('equipment'));
+        return view('equipment.index', compact('equipment'));
     }
 
     public function create()

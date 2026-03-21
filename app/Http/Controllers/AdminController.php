@@ -59,4 +59,25 @@ class AdminController extends Controller
         $user->delete();
         return back()->with('success', 'User deleted!');
     }
+
+    public function usage()
+    {
+        $reservations_by_lab = Reservation::with('laboratory')->get()->groupBy('laboratory_id')->map->count();
+        $borrowings_by_equipment = Borrowing::with('equipment')->get()->groupBy('equipment_id')->map->count();
+        $user_activity = Log::with('user')->selectRaw('user_id, count(*) as logs_count')->groupBy('user_id')->get();
+        return view('admin.reports.usage', compact('reservations_by_lab', 'borrowings_by_equipment', 'user_activity'));
+    }
+
+    public function inventory()
+    {
+        $equipment = Equipment::all();
+        return view('admin.reports.inventory', compact('equipment'));
+    }
+
+    public function transactions()
+    {
+        $transactions = Borrowing::with(['user', 'equipment'])->orderBy('created_at', 'desc')->get();
+        return view('admin.reports.transactions', compact('transactions'));
+    }
 }
+

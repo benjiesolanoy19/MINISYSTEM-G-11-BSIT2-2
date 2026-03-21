@@ -44,7 +44,7 @@
         </div>
         
         <button type="submit" class="btn btn-primary">Submit Report</button>
-        <a href="{{ route('dashboard.home') }}" class="btn btn-secondary">Cancel</a>
+<a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancel</a>
       </form>
     </div>
   </div>

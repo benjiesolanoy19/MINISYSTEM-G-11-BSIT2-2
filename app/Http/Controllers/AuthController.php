@@ -1,148 +1,79 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // Show welcome page
+    public function welcome()
+    {
+        return view('welcome');
+    }
+
+    // Show login form
     public function showLogin()
     {
         return view('auth.login');
     }
 
+    // Handle login
     public function login(Request $request)
     {
-        $loginField = $request->input('email');
-        $password = $request->input('password');
-        $isAdmin = $request->input('is_admin');
-
-        // Determine if login is by email or username
-        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-
-        $credentials = [
-            $fieldType => $loginField,
-            'password' => $password,
-        ];
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            
-            // Check if admin login is required
-            if ($isAdmin && !$user->isAdmin()) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'You do not have admin privileges!',
-                ])->withInput();
-            }
-
-            $request->session()->regenerate();
-            
-            // Redirect based on role
-            if ($user->isAdmin()) {
-                return redirect()->intended('/admin')->with('success', 'Welcome Admin!');
-            }
-            return redirect()->intended('/dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'Invalid credentials!',
-        ])->withInput();
-    }
-
-    public function showForgotPassword()
-    {
-        return view('auth.forgot-password');
-    }
-
-    public function verifyForgotPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password_hint' => 'required|min:3|max:3',
+$credentials = $request->validate([
+            'login' => 'required',
+            'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('email', $credentials['login'])
+            ->orWhere('username', $credentials['login'])
+            ->first();
 
-        if (!$user) {
-            return back()->withErrors(['email' => 'Email not found!'])->withInput();
+
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            Auth::login($user);
+            return redirect()->route('dashboard');
         }
 
-        // Verify the last 3 digits of password
-        if ($user->password_hint !== $request->input('password_hint')) {
-            return back()->withErrors(['password_hint' => 'Invalid password hint!'])->withInput();
-        }
-
-        // If verified, redirect to reset password page
-        return redirect()->route('password.reset', ['email' => $user->email]);
+        return back()->withErrors(['email' => 'Invalid email or password']);
     }
 
-    public function showResetPassword(Request $request)
-    {
-        $email = $request->query('email');
-        $user = User::where('email', $email)->first();
-        
-        if (!$user) {
-            return redirect('/login')->with('error', 'Invalid reset request!');
-        }
-        
-        return view('auth.reset-password', ['user' => $user]);
-    }
-
-    public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6|confirmed',
-        ]);
-
-        $user = User::where('email', $request->input('email'))->first();
-
-        if (!$user) {
-            return back()->withErrors(['email' => 'User not found!'])->withInput();
-        }
-
-        $user->update([
-            'password' => Hash::make($request->input('password')),
-        ]);
-
-        return redirect('/login')->with('success', 'Password reset successfully! Please login with your new password.');
-    }
-
+    // Show register form
     public function showRegister()
     {
         return view('auth.register');
     }
 
+    // Handle registration
     public function register(Request $request)
     {
-        $validated = $request->validate([
+$validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'username' => 'required|string|max:50|unique:users|alpha_dash',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6'
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
+            'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => 'student',
+            'role' => 'student'
         ]);
 
-        Auth::login($user);
 
-        return redirect('/dashboard')->with('success', 'Registration successful!');
+        Auth::login($user);
+        return redirect()->route('dashboard');
     }
 
-    public function logout(Request $request)
+    // Handle logout
+    public function logout()
     {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

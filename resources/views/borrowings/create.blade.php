@@ -113,7 +113,7 @@
           <div class="selected-equipment" id="submitSection" style="display: none;">
             <h5 class="selected-title"><i class="fas fa-paper-plane"></i> Submit Request</h5>
             <button type="submit" class="btn btn-submit w-100 mb-2"><i class="fas fa-check me-2"></i>Submit Request</button>
-            <a href="{{ route('dashboard.home') }}" class="btn btn-outline-secondary w-100">Cancel</a>
+<a href="{{ route('dashboard') }}" class="btn btn-outline-secondary w-100">Cancel</a>
           </div>
       </div>
     </form>

@@ -8,10 +8,15 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function show()
+    public function index()
     {
         $user = Auth::user();
         return view('profile.index', compact('user'));
+    }
+
+    public function show()
+    {
+        return $this->index();
     }
 
     public function update(Request $request)

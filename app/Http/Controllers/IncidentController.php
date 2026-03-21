@@ -10,10 +10,15 @@ use App\Models\Notification;
 
 class IncidentController extends Controller
 {
-    public function create()
+    public function report()
     {
         $equipment = Equipment::all();
         return view('incidents.report', compact('equipment'));
+    }
+
+    public function create()
+    {
+        return $this->report();
     }
 
     public function store(Request $request)
