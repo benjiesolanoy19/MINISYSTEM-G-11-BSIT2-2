@@ -23,7 +23,37 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// Test route to check auth
+Route::get('/test-auth', function() {
+    return response()->json([
+        'authenticated' => auth()->check(),
+        'user' => auth()->user(),
+        'timestamp' => now()
+    ]);
+});
+
+// Quick health check
+Route::get('/health', function() {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now(),
+        'memory' => memory_get_usage(true) / 1024 / 1024 . ' MB'
+    ]);
+});
+
+// Debug login - test user lookup
+Route::get('/debug/user/{login}', function($login) {
+    $user = \App\Models\User::where('email', $login)
+        ->orWhere('username', $login)
+        ->first(['id', 'name', 'email', 'username']);
+    
+    return response()->json([
+        'found' => $user !== null,
+        'user' => $user
+    ]);
+});
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
@@ -34,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/reservations/list', [ReservationController::class, 'index'])->name('reservations.list');
+
     
     // Borrowings
     Route::get('/borrowings/create', [BorrowingController::class, 'create'])->name('borrowings.create');

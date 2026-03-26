@@ -11,7 +11,7 @@
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: linear-gradient(135deg, #0ea5e9 0%, #10b981 50%, #06b6d4 100%);
   display: flex;
   flex-direction: column;
 }
@@ -104,13 +104,13 @@ body {
 .reset-header .icon {
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
 }
 
 .reset-header .icon i { font-size: 30px; color: white; }
@@ -142,15 +142,15 @@ body {
 
 .form-control:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #0ea5e9;
   background: white;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
 }
 
 .btn-submit {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -162,7 +162,7 @@ body {
 
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
 }
 
 .alert-custom {
@@ -179,7 +179,7 @@ body {
 }
 
 .reset-links { text-align: center; margin-top: 25px; }
-.reset-links a { color: #667eea; text-decoration: none; font-weight: 600; font-size: 14px; }
+.reset-links a { color: #0ea5e9; text-decoration: none; font-weight: 600; font-size: 14px; }
 
 .auth-footer {
   text-align: center;

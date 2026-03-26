@@ -23,22 +23,39 @@ class AuthController extends Controller
     // Handle login
     public function login(Request $request)
     {
-$credentials = $request->validate([
-            'login' => 'required',
-            'password' => 'required'
-        ]);
+        try {
+            $credentials = $request->validate([
+                'login' => 'required|string',
+                'password' => 'required|string'
+            ]);
 
-        $user = User::where('email', $credentials['login'])
-            ->orWhere('username', $credentials['login'])
-            ->first();
+            // Find user by email or username
+            $user = User::where('email', $credentials['login'])
+                ->orWhere('username', $credentials['login'])
+                ->first();
 
+            // Verify password
+            if (!$user || !Hash::check($credentials['password'], $user->password)) {
+                return back()
+                    ->withErrors(['email' => 'Invalid credentials.'])
+                    ->onlyInput('login')
+                    ->with('status', 'Login failed');
+            }
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            Auth::login($user);
-            return redirect()->route('dashboard');
+            // Log the user in
+            Auth::login($user, true);
+            $request->session()->regenerate();
+
+            // Redirect to dashboard
+            return redirect()->route('dashboard')
+                ->with('success', 'Logged in successfully!');
+
+        } catch (\Exception $e) {
+            \Log::error('Login error: ' . $e->getMessage());
+            return back()
+                ->withErrors(['email' => 'An error occurred. Please try again.'])
+                ->onlyInput('login');
         }
-
-        return back()->withErrors(['email' => 'Invalid email or password']);
     }
 
     // Show register form
@@ -47,28 +64,38 @@ $credentials = $request->validate([
         return view('auth.register');
     }
 
-    // Handle registration
     public function register(Request $request)
     {
-$validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:50|unique:users|alpha_dash',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'username' => 'required|string|max:50|unique:users|alpha_dash',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:6'
+            ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'student'
-        ]);
+            $user = User::create([
+                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => 'student'
+            ]);
 
+            Auth::login($user);
+            $request->session()->regenerate();
 
-        Auth::login($user);
-        return redirect()->route('dashboard');
+            return redirect()->route('dashboard')
+                ->with('success', 'Account created and logged in successfully!');
+
+        } catch (\Exception $e) {
+            \Log::error('Register error: ' . $e->getMessage());
+            return back()
+                ->withErrors(['email' => 'Registration failed. Please try again.'])
+                ->withInput();
+        }
     }
+
 
     // Handle logout
     public function logout()

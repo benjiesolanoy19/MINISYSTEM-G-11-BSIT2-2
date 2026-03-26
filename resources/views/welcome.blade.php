@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -186,12 +187,13 @@
 <!-- Hero Section -->
 <section class="hero">
     <div class="container text-center position-relative">
-        <h1 class="animate__animated animate__fadeInDown">Welcome to CLFMS</h1>
-        <p class="animate__animated animate__fadeInUp">Computer Laboratory Facilities Management System</p>
-        <div class="animate__animated animate__zoomIn">
+        <h1 class="animate__animated animate__fadeInDown" data-aos="fade-down" data-aos-duration="600">Welcome to CLFMS</h1>
+        <p class="animate__animated animate__fadeInUp" data-aos="fade-up" data-aos-delay="150">Computer Laboratory Facilities Management System</p>
+        <div class="animate__animated animate__zoomIn" data-aos="zoom-in" data-aos-delay="300">
             <a href="{{ route('login') }}" class="btn btn-main me-3">Get Started</a>
             <a href="{{ route('register') }}" class="btn btn-outline-light">Create Account</a>
         </div>
+    </div>
 </section>
 
 <!-- Info Section -->
@@ -199,24 +201,24 @@
     <div class="container">
         <div class="row text-center mb-5">
             <div class="col-12">
-                <h2 class="fw-bold">Manage Your Lab Resources Efficiently</h2>
-                <p class="text-muted">Everything you need to manage laboratory facilities in one place</p>
+                <h2 class="fw-bold" data-aos="fade-down" data-aos-duration="600">Manage Your Lab Resources Efficiently</h2>
+                <p class="text-muted" data-aos="fade-down" data-aos-delay="150">Everything you need to manage laboratory facilities in one place</p>
             </div>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="info-card">
+                <div class="info-card" data-aos="fade-up" data-aos-delay="100">
                     <i class="fas fa-calendar-check"></i>
                     <h5>Easy Reservations</h5>
                     <p>Book laboratory rooms and equipment with just a few clicks. View availability in real-time.</p>
                 </div>
             <div class="col-md-4">
-                <div class="info-card">
+                <div class="info-card" data-aos="fade-up" data-aos-delay="150">
                     <i class="fas fa-laptop"></i>
                     <h5>Equipment Borrowing</h5>
                     <p>Track and manage all equipment borrowings. Never miss a return date again.</p>
                 </div>
             <div class="col-md-4">
-                <div class="info-card">
+                <div class="info-card" data-aos="fade-up" data-aos-delay="200">
                     <i class="fas fa-chart-line"></i>
                     <h5>Detailed Reports</h5>
                     <p>Generate comprehensive reports on usage, inventory, and transactions.</p>
@@ -232,5 +234,15 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 600,
+        easing: 'ease-out-cubic',
+        once: false,
+        mirror: true,
+        offset: 100
+    });
+</script>
 </body>
 </html>

@@ -19,20 +19,25 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
+        // Limit queries to improve performance
         $reservations = Reservation::where('user_id', $user->id)
             ->orderBy('date', 'desc')
+            ->limit(10)
             ->get();
             
         $borrowings = Borrowing::where('user_id', $user->id)
             ->orderBy('borrow_date', 'desc')
+            ->limit(10)
             ->get();
             
         $logs = Log::where('user_id', $user->id)
             ->orderBy('timestamp', 'desc')
+            ->limit(10)
             ->get();
             
         $incidents = Incident::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
+            ->limit(10)
             ->get();
             
         $notifications = Notification::where('user_id', $user->id)
@@ -51,20 +56,25 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
+        // Limit queries to improve performance
         $reservations = Reservation::where('user_id', $user->id)
             ->orderBy('date', 'desc')
+            ->limit(10)
             ->get();
             
         $borrowings = Borrowing::where('user_id', $user->id)
             ->orderBy('borrow_date', 'desc')
+            ->limit(10)
             ->get();
             
         $logs = Log::where('user_id', $user->id)
             ->orderBy('timestamp', 'desc')
+            ->limit(10)
             ->get();
             
         $incidents = Incident::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
+            ->limit(10)
             ->get();
             
         $notifications = Notification::where('user_id', $user->id)
