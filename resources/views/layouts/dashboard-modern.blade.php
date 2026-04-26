@@ -289,9 +289,14 @@
                             <i class="fas fa-user me-2"></i>My Profile
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2 text-danger" href="{{ route('logout') }}">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}" style="display: contents;">
+                                @csrf
+                                <button type="submit" class="dropdown-item py-2 text-danger">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

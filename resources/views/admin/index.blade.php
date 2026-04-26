@@ -271,8 +271,9 @@
                         <span class="badge" style="background: #f59e0b; color: white;"><i class="fas fa-hourglass"></i> Pending</span>
                       @else
                         <span class="badge" style="background: #94a3b8; color: white;"><i class="fas fa-info-circle"></i> {{ ucfirst($reservation->status) }}</span>
-                      </td>
-                    </tr>
+                      @endif
+                    </td>
+                  </tr>
                   @endforeach
                 </tbody>
               </table>
@@ -312,11 +313,12 @@
                         <span class="badge" style="background: #ef4444; color: white;"><i class="fas fa-circle-exclamation"></i> Open</span>
                       @else
                         <span class="badge" style="background: #10b981; color: white;"><i class="fas fa-check"></i> Resolved</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                      @endif
+                    </td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
             </div>
           @else
             <div class="empty-state">

@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/borrowings/create', [BorrowingController::class, 'create'])->name('borrowings.create');
     Route::post('/borrowings', [BorrowingController::class, 'store'])->name('borrowings.store');
     Route::get('/borrowings', [BorrowingController::class, 'index'])->name('borrowings.index');
+    Route::get('/borrowings/list', [BorrowingController::class, 'index'])->name('borrowings.list');
     
     // Equipment
     Route::get('/equipment', [EquipmentController::class, 'index'])->name('equipment.index');

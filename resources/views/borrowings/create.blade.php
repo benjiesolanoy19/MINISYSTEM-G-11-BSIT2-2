@@ -399,12 +399,12 @@
                 <i class="fas fa-sticky-note"></i>Purpose / Notes (Optional)
               </label>
               <textarea 
-                name="purpose" 
-                id="purpose" 
+                name="notes" 
+                id="notes" 
                 class="form-control" 
                 rows="4"
                 placeholder="Why do you need this equipment?"
-                x-model="purpose"
+                x-model="notes"
               ></textarea>
             </div>
 
@@ -442,7 +442,7 @@ function borrowingForm() {
     selectedQuantity: 0,
     borrowDate: '',
     expectedReturn: '',
-    purpose: '',
+    notes: '',
     isSubmitting: false,
     today: new Date().toISOString().split('T')[0],
 

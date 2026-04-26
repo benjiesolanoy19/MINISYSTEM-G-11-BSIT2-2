@@ -26,19 +26,23 @@ class AuthController extends Controller
         try {
             $credentials = $request->validate([
                 'login' => 'required|string',
-                'password' => 'required|string'
+                'password' => 'required|string',
+                'role' => 'required|in:student,staff,admin'
             ]);
 
-            // Find user by email or username
-            $user = User::where('email', $credentials['login'])
-                ->orWhere('username', $credentials['login'])
+            // Find user by email or username and role
+            $user = User::where(function ($query) use ($credentials) {
+                    $query->where('email', $credentials['login'])
+                          ->orWhere('username', $credentials['login']);
+                })
+                ->where('role', $credentials['role'])
                 ->first();
 
             // Verify password
             if (!$user || !Hash::check($credentials['password'], $user->password)) {
                 return back()
-                    ->withErrors(['email' => 'Invalid credentials.'])
-                    ->onlyInput('login')
+                    ->withErrors(['login' => 'Invalid credentials or account type.'])
+                    ->withInput($request->only('login', 'role'))
                     ->with('status', 'Login failed');
             }
 
@@ -71,6 +75,7 @@ class AuthController extends Controller
                 'name' => 'required|string|max:255',
                 'username' => 'required|string|max:50|unique:users|alpha_dash',
                 'email' => 'required|email|unique:users',
+                'role' => 'required|in:student,staff',
                 'password' => 'required|min:6'
             ]);
 
@@ -79,7 +84,7 @@ class AuthController extends Controller
                 'username' => $validated['username'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role' => 'student'
+                'role' => $validated['role'] ?? 'student'
             ]);
 
             Auth::login($user);
