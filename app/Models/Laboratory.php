@@ -18,12 +18,7 @@ class Laboratory extends Model
         'status',
     ];
 
-    protected $casts = [
+protected $casts = [
         'capacity' => 'integer',
     ];
-
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
 }

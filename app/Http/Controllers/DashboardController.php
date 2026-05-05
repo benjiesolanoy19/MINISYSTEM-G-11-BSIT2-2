@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Reservation;
 use App\Models\Borrowing;
 use App\Models\Equipment;
 use App\Models\Laboratory;
@@ -20,11 +19,6 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Limit queries to improve performance
-        $reservations = Reservation::where('user_id', $user->id)
-            ->orderBy('date', 'desc')
-            ->limit(10)
-            ->get();
-            
         $borrowings = Borrowing::where('user_id', $user->id)
             ->orderBy('borrow_date', 'desc')
             ->limit(10)
@@ -49,7 +43,7 @@ class DashboardController extends Controller
             ->where('is_read', false)
             ->count();
             
-        return view('dashboard.home', compact('user', 'reservations', 'borrowings', 'logs', 'incidents', 'notifications', 'unreadCount'));
+        return view('dashboard.home', compact('user', 'borrowings', 'logs', 'incidents', 'notifications', 'unreadCount'));
     }
     
     public function main()
@@ -57,11 +51,6 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Limit queries to improve performance
-        $reservations = Reservation::where('user_id', $user->id)
-            ->orderBy('date', 'desc')
-            ->limit(10)
-            ->get();
-            
         $borrowings = Borrowing::where('user_id', $user->id)
             ->orderBy('borrow_date', 'desc')
             ->limit(10)
@@ -86,6 +75,6 @@ class DashboardController extends Controller
             ->where('is_read', false)
             ->count();
             
-        return view('dashboard.home', compact('user', 'reservations', 'borrowings', 'logs', 'incidents', 'notifications', 'unreadCount'));
+        return view('dashboard.home', compact('user', 'borrowings', 'logs', 'incidents', 'notifications', 'unreadCount'));
     }
 }

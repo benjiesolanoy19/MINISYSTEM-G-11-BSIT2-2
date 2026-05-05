@@ -8,7 +8,27 @@ use App\Models\Log;
 
 class LogController extends Controller
 {
-    public function timeIn()
+    public function timein()
+    {
+        return redirect()->route('logs.index');
+    }
+
+    public function timeout()
+    {
+        return redirect()->route('logs.index');
+    }
+
+    public function storeTimein()
+    {
+        return $this->handleTimeIn();
+    }
+
+    public function storeTimeout()
+    {
+        return $this->handleTimeOut();
+    }
+
+    public function handleTimeIn()
     {
         $lastLog = Log::where('user_id', Auth::id())
             ->orderBy('timestamp', 'desc')
@@ -28,7 +48,7 @@ class LogController extends Controller
         return back()->with('success', 'Time in recorded successfully!');
     }
 
-    public function timeOut()
+    public function handleTimeOut()
     {
         $lastLog = Log::where('user_id', Auth::id())
             ->orderBy('timestamp', 'desc')

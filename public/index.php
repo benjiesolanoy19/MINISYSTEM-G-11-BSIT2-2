@@ -1,6 +1,6 @@
 <?php
 /**
- * CLFMS - Computer Laboratory Facilities Management System
+ * ITMSF - Information Technology Management for Student and Faculty
  * Laravel-style PHP Application
  */
 

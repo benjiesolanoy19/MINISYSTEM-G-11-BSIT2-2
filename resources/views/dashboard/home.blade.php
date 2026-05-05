@@ -3,69 +3,410 @@
 @section('title', 'Dashboard')
 @section('page-title', 'Dashboard')
 
+@section('styles')
+<style>
+/* Enhanced Dashboard Styles */
+.hero-banner {
+    background: linear-gradient(135deg, #0ea5e9 0%, #10b981 50%, #0284c7 100%);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-circle {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-top: 2px;
+}
+
+.hero-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.pattern-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pattern-circle-1 {
+    width: 200px;
+    height: 200px;
+    top: -100px;
+    right: -50px;
+}
+
+.pattern-circle-2 {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    right: 10%;
+}
+
+.pattern-circle-3 {
+    width: 100px;
+    height: 100px;
+    bottom: -30px;
+    right: 20%;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.stat-item-modern {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(14, 165, 233, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(14, 165, 233, 0.1);
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.activity-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.activity-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0ea5e9, #10b981);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.activity-meta {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.activity-time {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.quick-action-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #1e293b;
+    transition: all 0.2s ease;
+}
+
+.quick-action-card:hover {
+    background: #f1f5f9;
+    border-color: #0ea5e9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.action-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0ea5e9, #10b981);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.action-content {
+    flex: 1;
+}
+
+.action-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.action-subtitle {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.notifications-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.notification-preview-item.unread {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.notification-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(14, 165, 233, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0ea5e9;
+    font-size: 0.8rem;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.notification-time {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .stat-circle {
+        width: 60px;
+        height: 60px;
+    }
+
+    .stat-number {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.6rem;
+    }
+
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+@endsection
+
 @section('content')
 <div class="container-fluid py-4">
-    <div class="row g-4 align-items-center mb-4">
-        <div class="col-xl-8">
-            <div class="card-modern p-4 hero-banner">
+    <!-- Welcome Hero Section -->
+    <div class="row g-4 align-items-center mb-5">
+        <div class="col-xl-9">
+            <div class="card-modern p-4 hero-banner position-relative overflow-hidden">
                 <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <span class="badge bg-white text-primary mb-3">Welcome back</span>
-                        <h1 class="display-6 text-white mb-2">Hello, {{ $user->name }}.</h1>
+                    <div class="col-lg-7">
+                        <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill">Welcome back</span>
+                        <h1 class="display-5 text-white mb-3 fw-bold">Hello, {{ $user->name }}.</h1>
                         @if($user->role === 'staff')
-                            <p class="text-white-75">Quickly oversee lab approvals, track equipment usage, and manage incident response with clarity.</p>
+                            <p class="text-white-75 fs-5 mb-4">Quickly oversee equipment approvals, track usage, and manage incident response with clarity.</p>
                         @else
-                            <p class="text-white-75">Access reservations, borrowings, and lab alerts in one clean, organized student dashboard.</p>
+                            <p class="text-white-75 fs-5 mb-4">Access borrowings, equipment availability, and alerts in one clean, organized dashboard.</p>
                         @endif
-                    </div>
-                    <div class="col-md-4 text-md-end mt-4 mt-md-0">
-                        <div class="d-grid gap-2">
+                        <div class="d-flex flex-wrap gap-3">
                             @if($user->role === 'staff')
-                                <a href="{{ route('reservations.index') }}" class="btn btn-light btn-lg text-primary">Review Reservations</a>
-                                <a href="{{ route('equipment.index') }}" class="btn btn-light btn-lg text-dark">Manage Equipment</a>
+                                <a href="{{ route('borrowings.index') }}" class="btn btn-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                                    <i class="fas fa-clipboard-check me-2"></i>Review Borrowings
+                                </a>
+                                <a href="{{ route('equipment.index') }}" class="btn btn-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                                    <i class="fas fa-cogs me-2"></i>Manage Equipment
+                                </a>
                             @else
-                                <a href="{{ route('reservations.create') }}" class="btn btn-light btn-lg text-primary">Reserve Lab</a>
-                                <a href="{{ route('borrowings.create') }}" class="btn btn-light btn-lg text-dark">Borrow Equipment</a>
+                                <a href="{{ route('borrowings.create') }}" class="btn btn-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                                    <i class="fas fa-plus me-2"></i>Borrow Equipment
+                                </a>
+                                <a href="{{ route('equipment.index') }}" class="btn btn-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                                    <i class="fas fa-list me-2"></i>View Equipment
+                                </a>
                             @endif
                         </div>
                     </div>
+                    <div class="col-lg-5 mt-4 mt-lg-0 text-center">
+                        <div class="hero-stats-grid">
+                            <div class="stat-circle">
+                                <div class="stat-number">{{ $borrowings->count() }}</div>
+                                <div class="stat-label">Active Borrowings</div>
+                            </div>
+                            <div class="stat-circle">
+                                <div class="stat-number">{{ $unreadCount }}</div>
+                                <div class="stat-label">Notifications</div>
+                            </div>
+                            <div class="stat-circle">
+                                <div class="stat-number">{{ $incidents->count() }}</div>
+                                <div class="stat-label">Incidents</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Background Pattern -->
+                <div class="hero-pattern">
+                    <div class="pattern-circle pattern-circle-1"></div>
+                    <div class="pattern-circle pattern-circle-2"></div>
+                    <div class="pattern-circle pattern-circle-3"></div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-4">
+        <!-- Quick Stats Card -->
+        <div class="col-xl-3">
             <div class="card-modern p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h5 class="mb-1">Today's Snapshot</h5>
-                        <p class="mb-0 text-muted">Live summary of your current activity.</p>
+                        <h5 class="mb-1 fw-bold">System Overview</h5>
+                        <p class="text-muted small mb-0">Real-time statistics</p>
                     </div>
-                    <span class="badge bg-primary bg-opacity-15 text-primary py-2 px-3">Updated</span>
+                    <span class="badge bg-primary bg-opacity-15 text-primary py-2 px-3 rounded-pill">Live</span>
                 </div>
 
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="metric-card p-3 text-center">
-                            <div class="metric-label">Reservations</div>
-                            <div class="metric-value">{{ $reservations->count() }}</div>
+                <div class="stats-grid">
+                    <div class="stat-item-modern">
+                        <div class="stat-icon">
+                            <i class="fas fa-laptop text-primary"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">{{ \App\Models\Equipment::count() }}</div>
+                            <div class="stat-label">Total Equipment</div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="metric-card p-3 text-center">
-                            <div class="metric-label">Borrowings</div>
-                            <div class="metric-value">{{ $borrowings->count() }}</div>
+                    <div class="stat-item-modern">
+                        <div class="stat-icon">
+                            <i class="fas fa-users text-success"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">{{ \App\Models\User::count() }}</div>
+                            <div class="stat-label">Active Users</div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="metric-card p-3 text-center">
-                            <div class="metric-label">Incidents</div>
-                            <div class="metric-value">{{ $incidents->count() }}</div>
+                    <div class="stat-item-modern">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock text-warning"></i>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-card p-3 text-center">
-                            <div class="metric-label">Alerts</div>
-                            <div class="metric-value">{{ $unreadCount }}</div>
+                        <div class="stat-content">
+                            <div class="stat-value">{{ $borrowings->where('status', 'pending')->count() }}</div>
+                            <div class="stat-label">Pending Requests</div>
                         </div>
                     </div>
                 </div>
@@ -73,92 +414,182 @@
         </div>
     </div>
 
+    <!-- Main Dashboard Grid -->
     <div class="row g-4">
-        <div class="col-xl-4">
-            <div class="card-modern p-4 h-100">
-                <h5 class="mb-3">Quick Actions</h5>
-                <div class="list-group list-group-flush">
-                    @if($user->role === 'staff')
-                        <a href="{{ route('reservations.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">Review Reservations</a>
-                        <a href="{{ route('equipment.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">Equipment Inventory</a>
-                        <a href="{{ route('notifications.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">View Notifications</a>
-                        <a href="{{ route('incidents.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">Incident History</a>
-                    @else
-                        <a href="{{ route('reservations.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">My Reservations</a>
-                        <a href="{{ route('borrowings.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">My Borrowings</a>
-                        <a href="{{ route('notifications.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">Notifications</a>
-                        <a href="{{ route('profile.index') }}" class="list-group-item list-group-item-action rounded-4 py-3">Profile Settings</a>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4">
-            <div class="card-modern p-4 h-100">
-                <h5 class="mb-3">Activity Highlights</h5>
-                <div class="d-flex flex-column gap-3">
-                    <div class="bg-light rounded-4 p-3">
-                        <h6 class="mb-1">Equipment Status</h6>
-                        <p class="text-muted mb-0">Monitor availability and assigned lab equipment at a glance.</p>
+        <!-- Recent Activity -->
+        <div class="col-xl-8">
+            <div class="card-modern p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="mb-1 fw-bold">
+                            <i class="fas fa-history text-primary me-2"></i>Recent Activity
+                        </h5>
+                        <p class="text-muted small mb-0">Your latest borrowings and system updates</p>
                     </div>
-                    <div class="bg-light rounded-4 p-3">
-                        <h6 class="mb-1">Lab Utilization</h6>
-                        <p class="text-muted mb-0">Track how many labs are currently reserved and active.</p>
-                    </div>
+                    <a href="{{ route('borrowings.index') }}" class="btn btn-outline-primary btn-sm rounded-pill">
+                        View All
+                    </a>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-xl-4">
-            <div class="card-modern p-4 h-100">
-                <h5 class="mb-3">Recent Activity</h5>
-                <div class="list-group list-group-flush">
-                    @forelse($reservations->take(4) as $reservation)
-                        <div class="list-group-item rounded-4 mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <strong>{{ $reservation->laboratory->name ?? 'Laboratory' }}</strong>
-                                <span class="badge bg-primary bg-opacity-15 text-primary">{{ ucfirst($reservation->status) }}</span>
-                            </div>
-                            <p class="text-muted mb-1">{{ \Carbon\Carbon::parse($reservation->date)->format('M d, Y') }} · {{ $reservation->time_in }} - {{ $reservation->time_out }}</p>
+                <div class="activity-timeline">
+                    @forelse($borrowings->take(5) as $borrowing)
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-laptop text-primary"></i>
                         </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                Borrowed {{ $borrowing->equipment->name }}
+                                <span class="badge bg-{{ $borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary') }} bg-opacity-15 text-{{ $borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary') }} ms-2">
+                                    {{ ucfirst($borrowing->status) }}
+                                </span>
+                            </div>
+                            <div class="activity-meta">
+                                <span>{{ $borrowing->borrow_date->format('M d, Y') }}</span>
+                                @if($borrowing->purpose)
+                                <span class="mx-2">•</span>
+                                <span>{{ Str::limit($borrowing->purpose, 40) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="activity-time">
+                            {{ $borrowing->borrow_date->diffForHumans() }}
+                        </div>
+                    </div>
                     @empty
-                        <div class="text-muted">No recent activity available.</div>
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h6 class="text-muted">No recent activity</h6>
+                        <p class="text-muted small">Your borrowing history will appear here</p>
+                    </div>
                     @endforelse
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row g-4 mt-4">
-        <div class="col-xl-12">
-            <div class="card-modern p-4">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div>
-                        <h5 class="mb-1">Campus Operations</h5>
-                        <p class="text-muted mb-0">A clean overview of the most important dashboard sections.</p>
+        <!-- Quick Actions & Notifications -->
+        <div class="col-xl-4">
+            <div class="row g-4">
+                <!-- Quick Actions -->
+                <div class="col-12">
+                    <div class="card-modern p-4">
+                        <h5 class="mb-1 fw-bold">
+                            <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+                        </h5>
+                        <p class="text-muted small mb-4">Frequently used features</p>
+
+                        <div class="quick-actions-grid">
+                            @if($user->role === 'staff')
+                                <a href="{{ route('borrowings.index') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Review Requests</div>
+                                        <div class="action-subtitle">Approve borrowings</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('equipment.index') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-cogs"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Equipment</div>
+                                        <div class="action-subtitle">Manage inventory</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('incidents.index') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Incidents</div>
+                                        <div class="action-subtitle">Handle reports</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('logs.index') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Activity Logs</div>
+                                        <div class="action-subtitle">System history</div>
+                                    </div>
+                                </a>
+                            @else
+                                <a href="{{ route('borrowings.create') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">New Borrowing</div>
+                                        <div class="action-subtitle">Request equipment</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('borrowings.index') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-list"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">My Borrowings</div>
+                                        <div class="action-subtitle">Track requests</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('incidents.report') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Report Issue</div>
+                                        <div class="action-subtitle">Equipment problems</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('profile.index') }}" class="quick-action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <div class="action-title">Profile</div>
+                                        <div class="action-subtitle">Account settings</div>
+                                    </div>
+                                </a>
+                            @endif
+                        </div>
                     </div>
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-primary btn-sm">Refresh Overview</a>
                 </div>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="metric-card p-4 h-100">
-                            <div class="metric-label">Labs Reserved</div>
-                            <div class="metric-value">{{ $reservations->count() }}</div>
-                            <p class="text-muted">Active and upcoming bookings for your account.</p>
+
+                <!-- Recent Notifications -->
+                <div class="col-12">
+                    <div class="card-modern p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h5 class="mb-1 fw-bold">
+                                    <i class="fas fa-bell text-info me-2"></i>Notifications
+                                </h5>
+                                <p class="text-muted small mb-0">Latest updates</p>
+                            </div>
+                            <a href="{{ route('notifications.index') }}" class="btn btn-outline-info btn-sm rounded-pill">
+                                View All
+                            </a>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="metric-card p-4 h-100">
-                            <div class="metric-label">Equipment Borrowed</div>
-                            <div class="metric-value">{{ $borrowings->count() }}</div>
-                            <p class="text-muted">Current equipment loans and scheduled returns.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="metric-card p-4 h-100">
-                            <div class="metric-label">Open Alerts</div>
-                            <div class="metric-value">{{ $unreadCount }}</div>
-                            <p class="text-muted">Unread notifications and incident flags.</p>
+
+                        <div class="notifications-preview">
+                            @forelse($notifications->take(3) as $notification)
+                            <div class="notification-preview-item {{ $notification->is_read ? '' : 'unread' }}">
+                                <div class="notification-icon">
+                                    <i class="fas fa-info-circle text-info"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">{{ Str::limit($notification->message, 50) }}</div>
+                                    <div class="notification-time">{{ $notification->created_at->diffForHumans() }}</div>
+                                </div>
+                            </div>
+                            @empty
+                            <div class="text-center py-3">
+                                <i class="fas fa-bell-slash fa-2x text-muted mb-2"></i>
+                                <p class="text-muted small mb-0">No new notifications</p>
+                            </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>

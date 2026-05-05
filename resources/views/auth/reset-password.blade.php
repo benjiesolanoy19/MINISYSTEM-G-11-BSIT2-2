@@ -272,7 +272,7 @@ body {
 </div>
 
 <footer class="auth-footer">
-  <p>© 2026 CLFMS | Computer Laboratory Facilities Management System</p>
+  <p>© 2026 ITMSF | Information Technology Management for Student and Faculty</p>
 </footer>
 @endsection
 

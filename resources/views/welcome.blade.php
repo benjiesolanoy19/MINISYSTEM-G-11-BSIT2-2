@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLFMS - Computer Laboratory Facilities Management System</title>
+    <title>ITMSF - Information Technology Management for Student and Faculty</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -225,7 +225,7 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-lg">
         <a class="navbar-brand" href="{{ route('welcome') }}">
-            <i class="fas fa-laptop-code me-2"></i>CLFMS
+            <i class="fas fa-laptop-code me-2"></i>ITMSF
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -251,9 +251,9 @@
         <div class="row align-items-center gx-5">
             <div class="col-lg-7">
                 <div class="hero-content text-center text-lg-start">
-                    <p class="text-uppercase fw-semibold mb-3" style="letter-spacing: 0.24em; color: rgba(255,255,255,0.85);">Modern lab resource management</p>
-                    <h1 class="animate__animated animate__fadeInDown" data-aos="fade-down" data-aos-duration="700">Powerful laboratory management built for today’s institutions.</h1>
-                    <p class="animate__animated animate__fadeInUp" data-aos="fade-up" data-aos-delay="150">Streamline equipment reservations, borrowing workflows, incident reporting, and analytics with a polished, easy-to-use platform.</p>
+                    <p class="text-uppercase fw-semibold mb-3" style="letter-spacing: 0.24em; color: rgba(255,255,255,0.85);">Modern IT resource management</p>
+                    <h1 class="animate__animated animate__fadeInDown" data-aos="fade-down" data-aos-duration="700">Powerful IT equipment management built for students and faculty.</h1>
+                    <p class="animate__animated animate__fadeInUp" data-aos="fade-up" data-aos-delay="150">Streamline equipment borrowing workflows, incident reporting, and analytics with a polished, easy-to-use platform for educational institutions.</p>
                     <div class="hero-buttons justify-content-center justify-content-lg-start">
                         <a href="{{ route('register') }}" class="btn btn-primary btn-lg">Get Started</a>
                         <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
@@ -263,24 +263,24 @@
             <div class="col-lg-5 mt-5 mt-lg-0">
                 <div class="hero-panel" data-aos="zoom-in" data-aos-delay="250">
                     <h3>Live overview</h3>
-                    <p>Monitor reservations, equipment availability, and notifications with a clean, modern dashboard snapshot.</p>
+                    <p>Monitor equipment availability, borrowing requests, and notifications with a clean, modern dashboard snapshot.</p>
                     <div class="row g-3 mt-4">
-                        <div class="col-6">
-                            <div class="p-3 rounded-4" style="background: rgba(255,255,255,0.12);">
-                                <strong>12</strong>
-                                <p class="mb-0" style="color: rgba(255,255,255,0.8);">Labs online</p>
-                            </div>
-                        </div>
                         <div class="col-6">
                             <div class="p-3 rounded-4" style="background: rgba(255,255,255,0.12);">
                                 <strong>320+</strong>
                                 <p class="mb-0" style="color: rgba(255,255,255,0.8);">Equipment items</p>
                             </div>
                         </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4" style="background: rgba(255,255,255,0.12);">
+                                <strong>150+</strong>
+                                <p class="mb-0" style="color: rgba(255,255,255,0.8);">Active users</p>
+                            </div>
+                        </div>
                         <div class="col-12 mt-2">
                             <div class="p-3 rounded-4" style="background: rgba(255,255,255,0.12);">
                                 <strong>98%</strong>
-                                <p class="mb-0" style="color: rgba(255,255,255,0.8);">Reservation accuracy</p>
+                                <p class="mb-0" style="color: rgba(255,255,255,0.8);">Borrowing accuracy</p>
                             </div>
                         </div>
                     </div>
@@ -293,39 +293,39 @@
 <section class="feature-section" id="features">
     <div class="container-lg">
         <div class="section-title" data-aos="fade-up" data-aos-duration="700">
-            <h2>Essential features for modern laboratories</h2>
-            <p>CLFMS gives your team a polished workflow for reservations, equipment management, incident reporting, and reporting insights.</p>
+            <h2>Essential features for IT equipment management</h2>
+            <p>ITMSF gives your institution a polished workflow for equipment borrowing, incident reporting, and reporting insights for students and faculty.</p>
         </div>
         <div class="feature-grid">
             <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
-                <h5>Smart reservations</h5>
-                <p>Schedule lab spaces and equipment with built-in availability checks and conflict prevention.</p>
-            </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
                 <div class="feature-icon"><i class="fas fa-laptop"></i></div>
                 <h5>Equipment inventory</h5>
                 <p>Keep asset records current, track status, and see equipment history at a glance.</p>
             </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
                 <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
-                <h5>Borrowing workflows</h5>
-                <p>Manage checkouts, returns, and borrower records with clear due-date alerts.</p>
+                <h5>Advanced borrowing workflows</h5>
+                <p>Streamlined equipment borrowing with approval processes, due-date tracking, notifications, and automated reminders for returns.</p>
             </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
                 <div class="feature-icon"><i class="fas fa-exclamation-triangle"></i></div>
                 <h5>Incident reporting</h5>
-                <p>Log issues, assign follow-ups, and keep your lab team informed with fast reporting.</p>
+                <p>Log equipment issues, assign follow-ups, and keep your IT team informed with fast reporting.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                <h5>Smart notifications</h5>
+                <p>Receive alerts for borrowing requests, returns, due dates, and important updates automatically.</p>
             </div>
             <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="feature-icon"><i class="fas fa-bell"></i></div>
-                <h5>Notifications</h5>
-                <p>Receive alerts for reservations, returns, and important updates automatically.</p>
+                <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                <h5>Analytics & reporting</h5>
+                <p>Review usage trends, borrowing patterns, and reports that help optimize IT equipment management.</p>
             </div>
             <div class="feature-card" data-aos="fade-up" data-aos-delay="350">
-                <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
-                <h5>Analytics</h5>
-                <p>Review usage trends and reports that help you optimize lab operations.</p>
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h5>User management</h5>
+                <p>Manage student and faculty accounts with role-based access and borrowing permissions.</p>
             </div>
         </div>
     </div>
@@ -335,11 +335,11 @@
     <div class="container-lg">
         <div class="row align-items-center gy-4">
             <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
-                <h2>Why institutions choose CLFMS</h2>
-                <p class="mb-4">A modern interface, robust features, and a responsive experience make it easier for administrators and students to use the lab system every day.</p>
+                <h2>Why institutions choose ITMSF</h2>
+                <p class="mb-4">A modern interface, robust features, and a responsive experience make it easier for administrators, faculty, and students to manage IT equipment every day.</p>
                 <ul class="list-unstyled">
-                    <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Fast reservation workflows</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Clear equipment tracking</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Streamlined borrowing workflows</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Comprehensive equipment tracking</li>
                     <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Reliable reporting and analytics</li>
                 </ul>
             </div>
@@ -347,7 +347,7 @@
                 <div class="feature-card p-4" style="background: #eef7ff;">
                     <div class="feature-icon" style="color: #0ea5e9; background: rgba(14,165,233,0.12);"><i class="fas fa-rocket"></i></div>
                     <h5>Built for teams</h5>
-                    <p>Designed to support lab staff, faculty, and students with fast access to everything they need in one central system.</p>
+                    <p>Designed to support IT administrators, faculty, and students with fast access to everything they need in one central equipment management system.</p>
                 </div>
             </div>
         </div>
@@ -357,7 +357,7 @@
 <section class="feature-section bg-white" id="contact">
     <div class="container-lg text-center" data-aos="fade-up" data-aos-duration="700">
         <h2>Ready to get started?</h2>
-        <p class="mb-4">Create your account and start managing your laboratory facilities more efficiently today.</p>
+        <p class="mb-4">Create your account and start managing IT equipment more efficiently today.</p>
         <a href="{{ route('register') }}" class="btn btn-primary btn-lg me-3">Sign Up Now</a>
         <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
     </div>
@@ -365,8 +365,8 @@
 
 <footer class="footer">
     <div class="container-lg text-center">
-        <p class="mb-2">&copy; {{ date('Y') }} CLFMS. All rights reserved.</p>
-        <p class="mb-0">Laboratory resource management built for reliable, modern workflows.</p>
+        <p class="mb-2">&copy; {{ date('Y') }} ITMSF. All rights reserved.</p>
+        <p class="mb-0">IT equipment management built for reliable, modern educational workflows.</p>
     </div>
 </footer>
 

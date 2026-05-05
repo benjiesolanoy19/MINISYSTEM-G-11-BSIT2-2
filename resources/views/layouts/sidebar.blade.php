@@ -5,13 +5,13 @@
     </div>
     
     <div class="sidebar-header">
-        <h4><i class="fas fa-graduation-cap me-2"></i>CLFMS</h4>
-        <p class="sidebar-subtitle">Lab Management</p>
+        <h4><i class="fas fa-laptop-code me-2"></i>ITMSF</h4>
+        <p class="sidebar-subtitle">Information Technology Management</p>
     </div>
     
     <ul class="sidebar-menu">
         <!-- Common Menu Items -->
-        <li class="sidebar-item">
+<li class="sidebar-item">
             <a href="{{ route('dashboard') }}" class="sidebar-link {{ Request::is('dashboard') ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span>Dashboard Home</span>
@@ -19,21 +19,7 @@
         </li>
         
         <li class="sidebar-item">
-            <a href="{{ route('reservations.create') }}" class="sidebar-link {{ Request::is('reservations/create') ? 'active' : '' }}">
-                <i class="fas fa-calendar-plus"></i>
-                <span>Reserve Laboratory</span>
-            </a>
-        </li>
-        
-        <li class="sidebar-item">
-            <a href="{{ route('reservations.index') }}" class="sidebar-link {{ Request::is('reservations*') ? 'active' : '' }}">
-                <i class="fas fa-list-check"></i>
-                <span>My Reservations</span>
-            </a>
-        </li>
-        
-        <li class="sidebar-item">
-            <a href="{{ route('logs.timein') }}" class="sidebar-link {{ Request::is('logs/timein') ? 'active' : '' }}">
+            <a href="{{ route('logs.index') }}" class="sidebar-link {{ Request::is('logs') ? 'active' : '' }}">
                 <i class="fas fa-clock"></i>
                 <span>Time In / Out</span>
             </a>

@@ -14,6 +14,7 @@ class Borrowing extends Model
         'equipment_id',
         'borrow_date',
         'return_date',
+        'purpose',
         'status',
         'notes',
     ];

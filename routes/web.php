@@ -7,7 +7,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\IncidentController;
@@ -60,18 +59,16 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Reservations
-    Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
-    Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
-    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
-    Route::get('/reservations/list', [ReservationController::class, 'index'])->name('reservations.list');
-
-    
-    // Borrowings
+// Borrowings
     Route::get('/borrowings/create', [BorrowingController::class, 'create'])->name('borrowings.create');
     Route::post('/borrowings', [BorrowingController::class, 'store'])->name('borrowings.store');
     Route::get('/borrowings', [BorrowingController::class, 'index'])->name('borrowings.index');
     Route::get('/borrowings/list', [BorrowingController::class, 'index'])->name('borrowings.list');
+    Route::get('/borrowings/manage', [BorrowingController::class, 'manage'])->name('borrowings.manage');
+    Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve'])->name('borrowings.approve');
+    Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'return'])->name('borrowings.return');
+    Route::post('/borrowings/{borrowing}/damaged', [BorrowingController::class, 'markDamaged'])->name('borrowings.damaged');
+    Route::post('/borrowings/{borrowing}/lost', [BorrowingController::class, 'markLost'])->name('borrowings.lost');
     
     // Equipment
     Route::get('/equipment', [EquipmentController::class, 'index'])->name('equipment.index');
@@ -85,9 +82,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/incidents/report', [IncidentController::class, 'report'])->name('incidents.report');
     Route::post('/incidents', [IncidentController::class, 'store'])->name('incidents.store');
     Route::get('/incidents', [IncidentController::class, 'index'])->name('incidents.index');
+    Route::get('/incidents/list', [IncidentController::class, 'index'])->name('incidents.list');
     
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     
     // Logs
     Route::get('/logs/timein', [LogController::class, 'timein'])->name('logs.timein');

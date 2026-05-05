@@ -22,7 +22,9 @@ class BorrowingController extends Controller
     {
         $validated = $request->validate([
             'equipment_id' => 'required|exists:equipment,id',
-            'borrow_date' => 'required|date',
+            'borrow_date' => 'required|date|after_or_equal:today',
+            'return_date' => 'required|date|after:borrow_date',
+            'purpose' => 'required|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
@@ -36,6 +38,8 @@ class BorrowingController extends Controller
             'user_id' => Auth::id(),
             'equipment_id' => $validated['equipment_id'],
             'borrow_date' => $validated['borrow_date'],
+            'return_date' => $validated['return_date'],
+            'purpose' => $validated['purpose'],
             'notes' => $validated['notes'] ?? null,
             'status' => 'pending',
         ]);
@@ -44,9 +48,9 @@ class BorrowingController extends Controller
         $equipment->decrement('available_quantity');
 
         // Notify staff
-        $this->notifyStaff('New borrowing request from ' . Auth::user()->name . ' for ' . $equipment->name);
+        $this->notifyStaff('New borrowing request from ' . Auth::user()->name . ' for ' . $equipment->name . ' (' . $validated['purpose'] . ')');
 
-        return redirect()->route('borrowings.list')->with('success', 'Borrowing request submitted!');
+        return redirect()->route('borrowings.list')->with('success', 'Borrowing request submitted successfully!');
     }
 
     public function index()

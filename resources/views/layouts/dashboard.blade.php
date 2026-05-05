@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'CLFMS Dashboard')</title>
+    <title>@yield('title', 'ITMSF Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
@@ -17,8 +17,8 @@
             --text-muted: #64748b;
             --light-bg: #f8fafc;
             --border-color: #e2e8f0;
-            --sidebar-width: 270px;
-            --sidebar-collapsed: 80px;
+            --sidebar-width: 220px;
+            --sidebar-collapsed: 70px;
             --topbar-height: 70px;
         }
         
@@ -110,41 +110,131 @@
             justify-content: center;
         }
 
+        .notification-badge.pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         .dropdown-menu.notifications {
             min-width: 340px;
             max-width: 420px;
             border-radius: 22px;
-            padding: 0.5rem;
+            padding: 0;
             overflow: hidden;
-        }
-
-        .notification-item {
-            padding: 1rem 1rem;
-            border-radius: 18px;
-            transition: background 0.2s ease;
-        }
-
-        .notification-item:hover {
-            background: rgba(14, 165, 233, 0.08);
-        }
-
-        .notification-item.unread {
-            background: rgba(14, 165, 233, 0.11);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .notification-header {
-            padding: 0.95rem 1rem;
+            padding: 1.25rem 1.5rem;
             border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        }
+
+        .notification-list {
+            background: #ffffff;
+        }
+
+        .notification-item {
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .notification-item:hover {
+            background: rgba(14, 165, 233, 0.06);
+            border-left-color: var(--primary);
+        }
+
+        .notification-item.unread {
+            background: rgba(14, 165, 233, 0.08);
+            border-left-color: var(--primary);
+        }
+
+        .notification-item.unread:hover {
+            background: rgba(14, 165, 233, 0.12);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon i {
+            color: white;
+        }
+
+        .notification-title {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem !important;
         }
 
         .notification-footer {
-            padding: 0.85rem 1rem;
+            padding: 1rem 1.5rem;
             border-top: 1px solid rgba(226, 232, 240, 0.9);
-            background: #fff;
+            background: #f8fafc;
+        }
+
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar.sidebar-collapsed .sidebar-toggle i {
             transform: rotate(180deg);
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-header h4,
+        .sidebar.sidebar-collapsed .sidebar-subtitle,
+        .sidebar.sidebar-collapsed .sidebar-menu-title,
+        .sidebar.sidebar-collapsed .sidebar-divider {
+            opacity: 0;
+            visibility: hidden;
+            width: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu li a {
+            justify-content: center;
+            padding: 14px 0;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu li a i {
+            margin-right: 0;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu li a span {
+            display: none;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-header {
+            padding: 20px 0;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu {
+            padding: 10px 0;
         }
 
         .search-wrapper .form-control:focus {
@@ -452,7 +542,7 @@
     <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-3 w-100">
             <a class="navbar-brand-custom" href="{{ route('dashboard') }}">
-                <i class="fas fa-laptop-code me-2"></i>CLFMS
+                <i class="fas fa-laptop-code me-2"></i>ITMSF
             </a>
 
             <div class="search-wrapper d-none d-lg-flex">
@@ -465,35 +555,82 @@
             <div class="dropdown">
                 <button class="topbar-icon btn btn-sm p-0 dropdown-toggle" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge">{{ $globalUnreadCount }}</span>
+                    @if($globalUnreadCount > 0)
+                        <span class="notification-badge pulse">{{ $globalUnreadCount }}</span>
+                    @endif
                 </button>
-                <div class="dropdown-menu dropdown-menu-end notifications shadow-lg border-0 mt-3" aria-labelledby="notificationDropdown">
-                    <div class="notification-header d-flex align-items-center justify-content-between">
+                <div class="dropdown-menu dropdown-menu-end notifications shadow-lg border-0 mt-3" aria-labelledby="notificationDropdown" style="width: 380px; max-height: 500px;">
+                    <div class="notification-header d-flex align-items-center justify-content-between p-3 border-bottom">
                         <div>
-                            <strong>Notifications</strong>
-                            <p class="text-muted small mb-0">Latest alerts and messages</p>
+                            <h6 class="mb-1 fw-bold text-dark">
+                                <i class="fas fa-bell text-primary me-2"></i>Notifications
+                            </h6>
+                            <p class="text-muted small mb-0">
+                                @if($globalUnreadCount > 0)
+                                    {{ $globalUnreadCount }} unread {{ $globalUnreadCount === 1 ? 'notification' : 'notifications' }}
+                                @else
+                                    All caught up!
+                                @endif
+                            </p>
                         </div>
-                        <a href="{{ route('notifications.index') }}" class="small text-primary">View all</a>
+                        @if($globalUnreadCount > 0)
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="markAllAsRead()">
+                                <i class="fas fa-check-double me-1"></i>Mark all read
+                            </button>
+                        @endif
                     </div>
-                    <div class="p-2">
+
+                    <div class="notification-list" style="max-height: 350px; overflow-y: auto;">
                         @forelse($globalNotifications as $notification)
-                            <div class="notification-item {{ $notification->is_read ? '' : 'unread' }} mb-2">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($notification->title ?? 'Notification', 38) }}</div>
-                                        <p class="text-muted small mb-1">{{ \Illuminate\Support\Str::limit($notification->message ?? 'No details available.', 80) }}</p>
+                            <div class="notification-item {{ $notification->is_read ? '' : 'unread' }} p-3 border-bottom hover-lift" onclick="markAsRead({{ $notification->id }})" style="cursor: pointer;">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="notification-icon">
+                                        @if(str_contains($notification->message, 'approved'))
+                                            <i class="fas fa-check-circle text-success"></i>
+                                        @elseif(str_contains($notification->message, 'returned'))
+                                            <i class="fas fa-undo text-info"></i>
+                                        @elseif(str_contains($notification->message, 'incident'))
+                                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                                        @else
+                                            <i class="fas fa-info-circle text-primary"></i>
+                                        @endif
                                     </div>
-                                    <span class="badge rounded-pill bg-primary bg-opacity-15 text-primary small">{{ $notification->created_at->diffForHumans() }}</span>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                            <h6 class="notification-title mb-0 fw-semibold text-dark">
+                                                {{ \Illuminate\Support\Str::limit($notification->title ?? 'Notification', 35) }}
+                                            </h6>
+                                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                        </div>
+                                        <p class="notification-message text-muted small mb-2">
+                                            {{ \Illuminate\Support\Str::limit($notification->message ?? 'No details available.', 85) }}
+                                        </p>
+                                        @if(!$notification->is_read)
+                                            <span class="badge bg-primary bg-opacity-15 text-primary small px-2 py-1 rounded-pill">
+                                                <i class="fas fa-circle me-1" style="font-size: 6px;"></i>New
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="notification-item text-center text-muted">
-                                No new notifications yet.
+                            <div class="text-center py-5">
+                                <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                                <h6 class="text-muted mb-2">No notifications yet</h6>
+                                <p class="text-muted small">We'll notify you when there's something new</p>
                             </div>
                         @endforelse
                     </div>
-                    <div class="notification-footer text-center">
-                        <a href="{{ route('notifications.index') }}" class="btn btn-outline-primary btn-sm">See all notifications</a>
+
+                    <div class="notification-footer p-3 border-top bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ route('notifications.index') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                                <i class="fas fa-eye me-1"></i>View All
+                            </a>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>{{ now()->format('g:i A') }}
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -576,6 +713,71 @@
                 toggleIcon.classList.add('fa-chevron-left');
             }
         });
+    }
+
+    // Notification functions
+    function markAsRead(notificationId) {
+        fetch(`/notifications/${notificationId}/read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update UI
+                const notificationItem = document.querySelector(`[onclick="markAsRead(${notificationId})"]`);
+                if (notificationItem) {
+                    notificationItem.classList.remove('unread');
+                    const badge = notificationItem.querySelector('.badge');
+                    if (badge) badge.remove();
+
+                    // Update notification count
+                    const badgeElement = document.querySelector('.notification-badge');
+                    if (badgeElement) {
+                        const currentCount = parseInt(badgeElement.textContent) - 1;
+                        if (currentCount > 0) {
+                            badgeElement.textContent = currentCount;
+                        } else {
+                            badgeElement.remove();
+                        }
+                    }
+                }
+            }
+        })
+        .catch(error => console.error('Error marking notification as read:', error));
+    }
+
+    function markAllAsRead() {
+        fetch('/notifications/read-all', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update UI
+                document.querySelectorAll('.notification-item.unread').forEach(item => {
+                    item.classList.remove('unread');
+                    const badge = item.querySelector('.badge');
+                    if (badge) badge.remove();
+                });
+
+                // Remove notification badge
+                const badgeElement = document.querySelector('.notification-badge');
+                if (badgeElement) badgeElement.remove();
+
+                // Close dropdown
+                const dropdown = bootstrap.Dropdown.getInstance(document.getElementById('notificationDropdown'));
+                if (dropdown) dropdown.hide();
+            }
+        })
+        .catch(error => console.error('Error marking all notifications as read:', error));
     }
 </script>
 

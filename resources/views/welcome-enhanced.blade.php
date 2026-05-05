@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'CLFMS - Computer Laboratory Facilities Management System')
+@section('title', 'ITMSF - Information Technology Management for Student and Faculty')
 
 @section('styles')
 <style>
@@ -259,7 +259,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light" x-data="navAnimation()" x-init="init()">
     <div class="container-lg">
-        <a class="navbar-brand" href="#" @click="scrollTo('hero')">CLFMS</a>
+        <a class="navbar-brand" href="#" @click="scrollTo('hero')">ITMSF</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -293,10 +293,10 @@
 <!-- Hero Section -->
 <section class="hero" id="hero">
     <div class="hero-content" data-scroll data-aos="fade-down" data-aos-duration="600">
-        <h1 class="mb-0" x-data="{ text: 'CLFMS' }" @mouseenter="animateText" x-cloak data-aos="fade-down" data-aos-delay="100">
-            Laboratory Management System
+        <h1 class="mb-0" x-data="{ text: 'ITMSF' }" @mouseenter="animateText" x-cloak data-aos="fade-down" data-aos-delay="100">
+            Information Technology Management System
         </h1>
-        <p data-aos="fade-up" data-aos-delay="150">Streamline equipment management, reservations, and borrowing operations with our modern platform.</p>
+        <p data-aos="fade-up" data-aos-delay="150">Streamline equipment borrowing, incident reporting, and management operations with our modern platform for students and faculty.</p>
         <div class="hero-buttons" data-aos="zoom-in" data-aos-delay="300">
             <button class="btn-hero btn-hero-primary" @click="scrollTo('cta')">Get Started</button>
             <a href="#features" class="btn-hero btn-hero-secondary" @click="scrollTo('features')">Learn More</a>
@@ -398,8 +398,8 @@
 <section class="cta-section" id="cta">
     <div class="container-lg">
         <div class="cta-content" data-scroll data-aos="fade-down" data-aos-duration="600">
-            <h2 data-aos="fade-down" data-aos-delay="100">Ready to Transform Your Laboratory Management?</h2>
-            <p data-aos="fade-up" data-aos-delay="150">Join hundreds of institutions using CLFMS to streamline their facility operations.</p>
+            <h2 data-aos="fade-down" data-aos-delay="100">Ready to Transform Your IT Equipment Management?</h2>
+            <p data-aos="fade-up" data-aos-delay="150">Join hundreds of institutions using ITMSF to streamline their equipment operations for students and faculty.</p>
             <div class="hero-buttons" data-aos="zoom-in" data-aos-delay="300">
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="btn btn-primary">Sign Up Today</a>
@@ -417,8 +417,8 @@
     <div class="container-lg">
         <div class="row mb-4">
             <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <h5 class="gradient-text mb-3">CLFMS</h5>
-                <p>Computer Laboratory Facilities Management System</p>
+                <h5 class="gradient-text mb-3">ITMSF</h5>
+                <p>Information Technology Management for Student and Faculty</p>
             </div>
             <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="150">
                 <h5>Quick Links</h5>
@@ -438,7 +438,7 @@
             </div>
         </div>
         <hr style="border-color: rgba(255,255,255,0.1);">
-        <p class="text-center mb-0" data-aos="fade-up" data-aos-delay="300">&copy; 2026 CLFMS. All rights reserved.</p>
+        <p class="text-center mb-0" data-aos="fade-up" data-aos-delay="300">&copy; 2026 ITMSF. All rights reserved.</p>
     </div>
 </footer>
 
