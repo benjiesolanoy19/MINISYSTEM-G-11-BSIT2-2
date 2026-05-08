@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITMSF - Information Technology Management for Student and Faculty</title>
+    <title>ICTFE - ICT Facilities and Equipment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -63,6 +63,9 @@
             border-radius: 999px;
             padding: 0.95rem 1.8rem;
             font-weight: 600;
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+            border: none;
+            color: white;
             box-shadow: 0 16px 30px rgba(14, 165, 233, 0.18);
         }
 
@@ -70,6 +73,16 @@
             border-radius: 999px;
             padding: 0.95rem 1.8rem;
             font-weight: 600;
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+            background: transparent;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: rgba(14, 165, 233, 0.12);
+            color: white;
+            border-color: #0ea5e9;
         }
 
         .hero {
@@ -79,7 +92,7 @@
             position: relative;
             overflow: hidden;
             padding: 120px 0 80px;
-            background: radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 40%), linear-gradient(135deg, #0f172a 0%, #0ea5e9 45%, #22c55e 100%);
+            background: radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 40%), linear-gradient(135deg, #0ea5e9 0%, #22c55e 60%, #10b981 100%);
             color: white;
         }
 
@@ -192,8 +205,8 @@
             place-items: center;
             margin-bottom: 1.25rem;
             border-radius: 18px;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(16, 185, 129, 0.15));
-            color: var(--primary);
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(16, 185, 129, 0.2));
+            color: #0ea5e9;
             font-size: 1.75rem;
         }
 
@@ -225,7 +238,7 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-lg">
         <a class="navbar-brand" href="{{ route('welcome') }}">
-            <i class="fas fa-laptop-code me-2"></i>ITMSF
+            <i class="fas fa-laptop-code me-2"></i>ICTFE
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -294,7 +307,7 @@
     <div class="container-lg">
         <div class="section-title" data-aos="fade-up" data-aos-duration="700">
             <h2>Essential features for IT equipment management</h2>
-            <p>ITMSF gives your institution a polished workflow for equipment borrowing, incident reporting, and reporting insights for students and faculty.</p>
+            <p>ICTFE gives your institution a polished workflow for equipment borrowing, incident reporting, and reporting insights for students and faculty.</p>
         </div>
         <div class="feature-grid">
             <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
@@ -335,7 +348,7 @@
     <div class="container-lg">
         <div class="row align-items-center gy-4">
             <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
-                <h2>Why institutions choose ITMSF</h2>
+                <h2>Why institutions choose ICTFE</h2>
                 <p class="mb-4">A modern interface, robust features, and a responsive experience make it easier for administrators, faculty, and students to manage IT equipment every day.</p>
                 <ul class="list-unstyled">
                     <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Streamlined borrowing workflows</li>
@@ -365,7 +378,7 @@
 
 <footer class="footer">
     <div class="container-lg text-center">
-        <p class="mb-2">&copy; {{ date('Y') }} ITMSF. All rights reserved.</p>
+        <p class="mb-2">&copy; {{ date('Y') }} ICTFE. All rights reserved.</p>
         <p class="mb-0">IT equipment management built for reliable, modern educational workflows.</p>
     </div>
 </footer>

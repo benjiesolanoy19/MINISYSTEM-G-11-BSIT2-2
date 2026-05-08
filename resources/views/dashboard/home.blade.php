@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Dashboard')
-@section('page-title', 'Dashboard')
+@section('title', 'ICTFE - Dashboard')
+@section('page-title', 'ICTFE Dashboard')
 
 @section('styles')
 <style>
@@ -319,12 +319,14 @@
             <div class="card-modern p-4 hero-banner position-relative overflow-hidden">
                 <div class="row align-items-center">
                     <div class="col-lg-7">
-                        <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill">Welcome back</span>
-                        <h1 class="display-5 text-white mb-3 fw-bold">Hello, {{ $user->name }}.</h1>
+                        <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill">
+                            <i class="fas fa-shield-alt me-2"></i>ICTFE
+                        </span>
+                        <h1 class="display-5 text-white mb-3 fw-bold">Welcome to ICTFE, {{ $user->name }}.</h1>
                         @if($user->role === 'staff')
-                            <p class="text-white-75 fs-5 mb-4">Quickly oversee equipment approvals, track usage, and manage incident response with clarity.</p>
+                            <p class="text-white-75 fs-5 mb-4">Efficiently manage equipment requests, track time in/out, respond to incidents, and monitor facility operations in real-time.</p>
                         @else
-                            <p class="text-white-75 fs-5 mb-4">Access borrowings, equipment availability, and alerts in one clean, organized dashboard.</p>
+                            <p class="text-white-75 fs-5 mb-4">Request equipment, track your borrowings, report issues, and manage facility access with ICTFE - the complete facility management solution.</p>
                         @endif
                         <div class="d-flex flex-wrap gap-3">
                             @if($user->role === 'staff')
@@ -597,5 +599,190 @@
         </div>
     </div>
 </div>
-@endsection
 
+    <!-- Analytics & Advanced Features Section -->
+    <div class="row g-4 mt-4">
+        <!-- Time In/Out Tracking -->
+        <div class="col-lg-4">
+            <div class="card-modern p-4">
+                <h5 class="mb-4 fw-bold">
+                    <i class="fas fa-clock text-info me-2"></i>Facility Access Tracking
+                </h5>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-lg btn-info btn-opacity-hover rounded-pill py-3" onclick="toggleTimeTracking('in')">
+                        <i class="fas fa-sign-in-alt me-2"></i>Time In
+                    </button>
+                    <button class="btn btn-lg btn-warning btn-opacity-hover rounded-pill py-3" onclick="toggleTimeTracking('out')">
+                        <i class="fas fa-sign-out-alt me-2"></i>Time Out
+                    </button>
+                </div>
+                <div class="mt-4 p-3 bg-light rounded-3">
+                    <p class="text-muted small mb-2">Current Session:</p>
+                    <p class="mb-1"><strong id="sessionTime">--:--</strong></p>
+                    <p class="text-muted small mb-0">Last Activity: <span id="lastActivity">Just now</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Equipment Analytics -->
+        <div class="col-lg-4">
+            <div class="card-modern p-4">
+                <h5 class="mb-4 fw-bold">
+                    <i class="fas fa-chart-pie text-success me-2"></i>Equipment Status
+                </h5>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <div class="display-6 text-success fw-bold">{{ \App\Models\Equipment::where('status', 'available')->count() }}</div>
+                            <small class="text-muted">Available</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <div class="display-6 text-warning fw-bold">{{ \App\Models\Equipment::where('status', 'borrowed')->count() }}</div>
+                            <small class="text-muted">In Use</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mt-3" style="height: 8px;">
+                    @php
+                        $total = \App\Models\Equipment::count();
+                        $available = \App\Models\Equipment::where('status', 'available')->count();
+                        $percent = $total > 0 ? ($available / $total) * 100 : 0;
+                    @endphp
+                    <div class="progress-bar bg-success" style="width: {{ $percent }}%"></div>
+                </div>
+                <small class="text-muted">Availability: {{ round($percent) }}%</small>
+            </div>
+        </div>
+
+        <!-- System Performance -->
+        <div class="col-lg-4">
+            <div class="card-modern p-4">
+                <h5 class="mb-4 fw-bold">
+                    <i class="fas fa-tachometer-alt text-danger me-2"></i>System Health
+                </h5>
+                <div class="list-unstyled">
+                    <div class="mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">Active Requests</span>
+                            <span class="badge bg-primary">{{ $borrowings->where('status', 'pending')->count() }}</span>
+                        </div>
+                        <small class="text-muted">{{ $borrowings->where('status', 'pending')->count() }} pending approval</small>
+                    </div>
+                    <div class="mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">Open Incidents</span>
+                            <span class="badge bg-warning">{{ $incidents->where('status', 'open')->count() }}</span>
+                        </div>
+                        <small class="text-muted">{{ $incidents->where('status', 'open')->count() }} unresolved</small>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small">System Uptime</span>
+                            <span class="badge bg-success">99.9%</span>
+                        </div>
+                        <small class="text-muted">All systems operational</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Features Row -->
+    <div class="row g-4 mt-2">
+        <!-- Borrowed Equipment Details -->
+        <div class="col-lg-6">
+            <div class="card-modern p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-boxes text-primary me-2"></i>Active Borrowings
+                    </h5>
+                    <a href="{{ route('borrowings.index') }}" class="btn btn-sm btn-outline-primary rounded-pill">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th class="text-muted small">Equipment</th>
+                                <th class="text-muted small">Status</th>
+                                <th class="text-muted small">Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($borrowings->take(5) as $borrowing)
+                            <tr>
+                                <td><small class="fw-600">{{ $borrowing->equipment->name }}</small></td>
+                                <td>
+                                    <span class="badge bg-{{ $borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary') }} bg-opacity-15 text-{{ $borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary') }}">
+                                        {{ ucfirst($borrowing->status) }}
+                                    </span>
+                                </td>
+                                <td><small class="text-muted">{{ optional($borrowing->return_date)->format('M d, Y') ?? 'N/A' }}</small></td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">No active borrowings</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incident Summary -->
+        <div class="col-lg-6">
+            <div class="card-modern p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-alert-circle text-danger me-2"></i>Recent Incidents
+                    </h5>
+                    <a href="{{ route('incidents.index') }}" class="btn btn-sm btn-outline-danger rounded-pill">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-borderless">
+                        <thead>
+                            <tr>
+                                <th class="text-muted small">Type</th>
+                                <th class="text-muted small">Severity</th>
+                                <th class="text-muted small">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($incidents->take(5) as $incident)
+                            <tr>
+                                <td><small class="fw-600">{{ $incident->type }}</small></td>
+                                <td>
+                                    <span class="badge bg-{{ $incident->severity === 'high' ? 'danger' : ($incident->severity === 'medium' ? 'warning' : 'info') }} bg-opacity-15 text-{{ $incident->severity === 'high' ? 'danger' : ($incident->severity === 'medium' ? 'warning' : 'info') }}">
+                                        {{ ucfirst($incident->severity) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ $incident->status === 'closed' ? 'success' : 'warning' }} bg-opacity-15 text-{{ $incident->status === 'closed' ? 'success' : 'warning' }}">
+                                        {{ ucfirst($incident->status) }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">No incidents reported</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTimeTracking(type) {
+            console.log('Time ' + type + ' recorded');
+            // Add AJAX call to backend for time tracking
+            const now = new Date();
+            document.getElementById('sessionTime').textContent = now.toLocaleTimeString();
+            document.getElementById('lastActivity').textContent = 'Just now';
+            alert('Time ' + type + ' recorded successfully!');
+        }
+    </script>

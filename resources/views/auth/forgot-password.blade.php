@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Forgot Password - CLFMS')
+@section('title', 'Forgot Password - ICTFE')
 
 @section('styles')
 <style>
@@ -237,7 +237,7 @@ body {
 
 <nav class="navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand" href="{{ route('home') }}">CLFMS</a>
+    <a class="navbar-brand" href="{{ route('home') }}">ICTFE</a>
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav align-items-center">
         <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
@@ -292,7 +292,7 @@ body {
 </div>
 
 <footer class="auth-footer">
-  <p>© 2026 ITMSF | Information Technology Management for Student and Faculty</p>
+  <p>© 2026 ICTFE | ICT Facilities and Equipment</p>
 </footer>
 @endsection
 

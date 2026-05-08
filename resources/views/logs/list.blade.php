@@ -189,7 +189,7 @@
 @section('content')
 <div class="container-fluid">
   <div class="page-header" data-aos="fade-down" data-aos-duration="600">
-    <h1 class="page-title"><i class="fas fa-history"></i>Time In/Out Logs</h1>
+    <h1 class="page-title"><i class="fas fa-history"></i>Time In/Out Logs - ICTFE</h1>
   </div>
 
   @if(session('success'))
@@ -199,6 +199,52 @@
     </div>
   @endif
 
+  <!-- Time Tracking Summary -->
+  <div class="row mb-4" data-aos="fade-up" data-aos-delay="50">
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <i class="fas fa-clock fa-3x text-success mb-3"></i>
+            <h5 class="card-title">Today's Status</h5>
+            <p class="text-muted small">Current session active</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <div class="h4 mb-2 text-success">{{ \Carbon\Carbon::now()->format('H:i') }}</div>
+            <p class="text-muted small">Current time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <div class="h4 mb-2">{{ $logs->where('type', 'time_in')->count() }}</div>
+            <p class="text-muted small">Total Check-ins</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <div class="h4 mb-2">{{ $logs->where('type', 'time_out')->count() }}</div>
+            <p class="text-muted small">Total Check-outs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time In/Out Buttons -->
   <div class="row mb-4" data-aos="fade-up" data-aos-delay="100">
     <div class="col-md-6">
       <div class="card stat-card text-center">
@@ -228,6 +274,7 @@
     </div>
   </div>
 
+  <!-- Logs Table -->
   <div class="card" data-aos="fade-up" data-aos-duration="700">
     <div class="card-body">
       @if($logs->count() > 0)
@@ -236,8 +283,9 @@
             <thead>
               <tr>
                 <th><i class="fas fa-clock"></i>Type</th>
-                <th><i class="fas fa-calendar"></i>Time</th>
+                <th><i class="fas fa-calendar"></i>Date & Time</th>
                 <th><i class="fas fa-user"></i>User</th>
+                <th><i class="fas fa-desktop"></i>Location</th>
               </tr>
             </thead>
             <tbody>
@@ -245,13 +293,17 @@
               <tr data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
                 <td>
                   @if($log->type === 'time_in')
-                    <span class="badge badge-type-in"><i class="fas fa-sign-in-alt"></i>Time In</span>
+                    <span class="badge badge-type-in"><i class="fas fa-sign-in-alt"></i>Check In</span>
                   @else
-                    <span class="badge badge-type-out"><i class="fas fa-sign-out-alt"></i>Time Out</span>
+                    <span class="badge badge-type-out"><i class="fas fa-sign-out-alt"></i>Check Out</span>
                   @endif
                 </td>
-                <td><strong>{{ \Carbon\Carbon::parse($log->timestamp)->format('M d, Y') }}</strong><br><small class="text-muted">{{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}</small></td>
+                <td>
+                  <strong>{{ \Carbon\Carbon::parse($log->timestamp)->format('M d, Y') }}</strong><br>
+                  <small class="text-muted">{{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}</small>
+                </td>
                 <td>{{ $log->user->name ?? 'N/A' }}</td>
+                <td><small class="text-muted">Facility System</small></td>
               </tr>
               @endforeach
             </tbody>

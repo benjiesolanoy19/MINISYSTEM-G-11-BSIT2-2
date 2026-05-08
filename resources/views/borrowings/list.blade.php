@@ -255,97 +255,6 @@
 }
 </style>
 @endsection
-  background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-  color: white;
-  padding: 20px;
-  border: none;
-}
-
-.card-header h5 {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-}
-
-.card-body {
-  padding: 0;
-}
-
-.table {
-  margin-bottom: 0;
-}
-
-.table thead th {
-  background: #f8fafc;
-  padding: 15px;
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #64748b;
-  border: none;
-  border-bottom: 2px solid #e2e8f0;
-}
-
-.table tbody td {
-  padding: 15px;
-  border: none;
-  border-bottom: 1px solid #f1f5f9;
-  vertical-align: middle;
-}
-
-.table tbody tr {
-  transition: all 0.3s ease;
-}
-
-.table tbody tr:hover {
-  background: #f8fafc;
-  transform: scale(0.99);
-}
-
-.table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.badge-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-.badge-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-.badge-primary { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
-.badge-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: #64748b;
-}
-
-.empty-state i {
-  font-size: 48px;
-  margin-bottom: 15px;
-  color: #cbd5e1;
-}
-
-.empty-state p {
-  margin-bottom: 20px;
-}
-
-.status-icon {
-  font-size: 14px;
-  margin-right: 4px;
-}
-</style>
-@endsection
 
 @section('content')
 <div class="container-fluid" x-data="borrowingsList()">
@@ -422,7 +331,7 @@
                 @if($borrowing->return_date)
                   {{ \Carbon\Carbon::parse($borrowing->return_date)->format('M d, Y') }}
                 @else
-                  {{ \Carbon\Carbon::parse($borrowing->return_date)->format('M d, Y') }}
+                  Pending
                 @endif
               </span>
             </div>
@@ -468,12 +377,10 @@
 function borrowingsList() {
   return {
     filterBorrowings(status) {
-      // Add filtering logic here if needed
       console.log('Filtering by:', status);
     }
   }
 }
 </script>
 @endsection
-</parameter>
-</create_file>
+

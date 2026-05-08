@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'CLFMS Dashboard')</title>
+    <title>@yield('title', 'ICTFE Dashboard')</title>
     
     <!-- Vite Entry Points for Material Design & Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -238,7 +238,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h4><i class="fas fa-laptop-code me-2"></i>CLFMS</h4>
+            <h4><i class="fas fa-laptop-code me-2"></i>ICTFE</h4>
         </div>
         
         <ul class="sidebar-menu">
@@ -265,7 +265,7 @@
     <!-- Top Navigation -->
     <nav class="top-navbar navbar navbar-expand" id="topNavbar">
         <a class="navbar-brand-custom d-lg-none" href="#">
-            <i class="fas fa-laptop-code me-2"></i>CLFMS
+            <i class="fas fa-laptop-code me-2"></i>ICTFE
         </a>
         
         <div class="collapse navbar-collapse justify-content-end w-100">

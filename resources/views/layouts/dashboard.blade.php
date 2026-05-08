@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'ITMSF Dashboard')</title>
+    <title>@yield('title', 'ICTFE Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
@@ -427,6 +427,28 @@
             background: linear-gradient(135deg, #0c8ac1, #0da76e);
         }
 
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+            color: white;
+            border: none;
+            box-shadow: 0 12px 30px rgba(14, 165, 233, 0.16);
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #0c87c2, #14b8a6);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.16);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #0f766e, #0b5f54);
+        }
+
         .btn-secondary {
             background: #f8fafc;
             color: var(--text-dark);
@@ -542,7 +564,7 @@
     <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-3 w-100">
             <a class="navbar-brand-custom" href="{{ route('dashboard') }}">
-                <i class="fas fa-laptop-code me-2"></i>ITMSF
+                <i class="fas fa-laptop-code me-2"></i>ICTFE
             </a>
 
             <div class="search-wrapper d-none d-lg-flex">
@@ -649,6 +671,17 @@
                     <li><a class="dropdown-item py-2" href="{{ route('profile.index') }}">
                         <i class="fas fa-user me-2"></i>My Profile
                     </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item py-2" href="{{ route('login') }}">
+                            <i class="fas fa-right-to-bracket me-2"></i>Login
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2" href="{{ route('register') }}">
+                            <i class="fas fa-user-plus me-2"></i>Sign Up
+                        </a>
+                    </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}" class="m-0">

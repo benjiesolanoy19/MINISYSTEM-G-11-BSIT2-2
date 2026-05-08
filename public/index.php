@@ -1,6 +1,6 @@
 <?php
 /**
- * ITMSF - Information Technology Management for Student and Faculty
+ * ICTFE - ICT Facilities and Equipment
  * Laravel-style PHP Application
  */
 

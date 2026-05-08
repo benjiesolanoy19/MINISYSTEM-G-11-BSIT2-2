@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Manage Borrowings - CLFMS')
+@section('title', 'Manage Borrowings - ICTFE')
 
 @section('styles')
 <style>

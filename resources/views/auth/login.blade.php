@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login - CLFMS')
+@section('title', 'Login - ICTFE')
 
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -31,7 +31,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
             pointer-events: none;
             z-index: 0;
         }
@@ -57,7 +57,7 @@
         }
 
         .login-left {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
             padding: 60px 50px;
             display: flex;
             flex-direction: column;
@@ -74,7 +74,7 @@
             right: -50%;
             width: 500px;
             height: 500px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
             border-radius: 50%;
             animation: float 6s ease-in-out infinite;
         }
@@ -204,7 +204,7 @@
         }
 
         .form-group label i {
-            color: #667eea;
+            color: #0ea5e9;
             font-size: 16px;
         }
 
@@ -228,9 +228,9 @@
         .form-control:focus,
         .form-select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #0ea5e9;
             background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
         }
 
         .form-control:hover,
@@ -251,7 +251,7 @@
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -262,14 +262,14 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 8px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
         }
 
         .btn-login:active {
@@ -282,7 +282,7 @@
         }
 
         .forgot-password a {
-            color: #667eea;
+            color: #0ea5e9;
             font-size: 13px;
             font-weight: 600;
             text-decoration: none;
@@ -290,7 +290,7 @@
         }
 
         .forgot-password a:hover {
-            color: #764ba2;
+            color: #0284c7;
             text-decoration: underline;
         }
 
@@ -304,14 +304,14 @@
         }
 
         .signup-link a {
-            color: #667eea;
+            color: #0ea5e9;
             font-weight: 700;
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
         .signup-link a:hover {
-            color: #764ba2;
+            color: #0284c7;
             text-decoration: underline;
         }
 
@@ -354,29 +354,6 @@
             gap: 5px;
         }
 
-        .back-home {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-home:hover {
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-        }
-
         @media (max-width: 768px) {
             .login-container {
                 grid-template-columns: 1fr;
@@ -403,11 +380,6 @@
             .features-list {
                 display: none;
             }
-
-            .back-home {
-                position: static;
-                margin-bottom: 20px;
-            }
         }
     </style>
 @endsection
@@ -423,8 +395,8 @@
                             <i class="fas fa-flask-vial"></i>
                         </div>
                         <div class="logo-text">
-                            <h3>CLFMS</h3>
-                            <p>Laboratory Management System</p>
+                            <h3>ICTFE</h3>
+                            <p>ICT Facilities and Equipment</p>
                         </div>
                     </div>
 
@@ -462,10 +434,6 @@
 
             <!-- Right Side - Login Form -->
             <div class="login-right" data-aos="fade-left" data-aos-duration="1000">
-                <a href="{{ route('welcome') }}" class="back-home">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-
                 <div class="login-header">
                     <h2>Welcome Back!</h2>
                     <p>Sign in to continue to your account</p>

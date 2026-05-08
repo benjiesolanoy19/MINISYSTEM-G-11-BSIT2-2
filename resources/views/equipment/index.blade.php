@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Equipment Inventory')
+@section('title', 'Equipment Inventory - ICTFE')
 
 @section('styles')
 <style>
@@ -199,10 +199,10 @@
   <div class="page-header" data-aos="fade-down" data-aos-duration="600">
     <div>
       <h1 class="page-title" data-aos="fade-right" data-aos-delay="100">
-        <i class="fas fa-tools"></i>Equipment Inventory
+        <i class="fas fa-tools"></i>Equipment Inventory - ICTFE
       </h1>
       <p class="page-subtitle" data-aos="fade-right" data-aos-delay="150">
-        Manage all laboratory equipment and resources
+        Manage all facility equipment and resources
       </p>
     </div>
     <a href="{{ route('equipment.create') }}" class="btn btn-primary" data-aos="fade-up" data-aos-delay="100">
@@ -216,6 +216,70 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
   @endif
+
+  <!-- Equipment Statistics -->
+  <div class="row mb-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="h4 mb-1">{{ $equipment->count() }}</div>
+              <small class="text-muted">Total Equipment</small>
+            </div>
+            <div style="font-size: 2rem; color: #0ea5e9; opacity: 0.2;">
+              <i class="fas fa-cube"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="h4 mb-1" style="color: #10b981;">{{ $equipment->where('status', 'available')->count() }}</div>
+              <small class="text-muted">Available</small>
+            </div>
+            <div style="font-size: 2rem; color: #10b981; opacity: 0.2;">
+              <i class="fas fa-check-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="h4 mb-1" style="color: #3b82f6;">{{ $equipment->where('status', 'borrowed')->count() }}</div>
+              <small class="text-muted">In Borrowing</small>
+            </div>
+            <div style="font-size: 2rem; color: #3b82f6; opacity: 0.2;">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="h4 mb-1" style="color: #f59e0b;">{{ $equipment->where('status', 'maintenance')->count() }}</div>
+              <small class="text-muted">In Maintenance</small>
+            </div>
+            <div style="font-size: 2rem; color: #f59e0b; opacity: 0.2;">
+              <i class="fas fa-wrench"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="card" data-aos="fade-up" data-aos-duration="700">
     <div class="card-header">

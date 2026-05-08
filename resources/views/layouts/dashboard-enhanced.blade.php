@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'CLFMS Dashboard')</title>
+    <title>@yield('title', 'ICTFE Dashboard')</title>
     
     <!-- Material Design Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -462,7 +462,7 @@
     <!-- Sidebar -->
     <aside class="sidebar animate-slide-in-left" :class="sidebarOpen ? 'active' : ''">
         <div class="sidebar-header">
-            <h4><i class="fas fa-laptop-code me-2"></i>CLFMS</h4>
+            <h4><i class="fas fa-laptop-code me-2"></i>ICTFE</h4>
         </div>
         
         <ul class="sidebar-menu">

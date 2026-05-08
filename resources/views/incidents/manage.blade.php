@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Manage Incidents - CLFMS')
+@section('title', 'Manage Incidents - ICTFE')
 
 @section('styles')
 <style>

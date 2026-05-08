@@ -14,7 +14,9 @@
 }
 
 .page-title i {
-  color: #0ea5e9;
+  background: linear-gradient(135deg, #0ea5e9, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 1.4rem;
 }
 
@@ -44,8 +46,8 @@
 }
 
 .summary-chip {
-  background: #f8fafc;
-  border: 1px solid rgba(226, 232, 240, 1);
+  background: #eff6ff;
+  border: 1px solid rgba(14, 165, 233, 0.16);
   border-radius: 18px;
   padding: 16px 20px;
   min-width: 140px;
@@ -60,7 +62,7 @@
 }
 
 .summary-chip span {
-  color: #64748b;
+  color: #475569;
   font-size: 0.92rem;
 }
 
@@ -70,8 +72,8 @@
 }
 
 .summary-out {
-  background: #fef2f2;
-  border-color: #fecaca;
+  background: #dbeafe;
+  border-color: #93c5fd;
 }
 
 .filter-panel {
@@ -247,7 +249,7 @@
   background: #ffffff;
   border-radius: 22px;
   padding: 24px;
-  border: 1px solid rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.18);
   margin-bottom: 24px;
 }
 
@@ -315,8 +317,8 @@
 }
 
 .selection-note {
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
+  background: #eef2ff;
+  border: 1px dashed #93c5fd;
   border-radius: 18px;
   padding: 18px 20px;
   color: #475569;

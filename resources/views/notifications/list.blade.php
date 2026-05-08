@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Notifications')
+@section('title', 'Notifications - ICTFE')
 
 @section('styles')
 <style>
@@ -30,6 +30,18 @@
   opacity: 0.95;
 }
 
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.notification-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .btn-mark-all-read {
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid white;
@@ -50,6 +62,32 @@
   color: #10b981;
 }
 
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.filter-tab:hover,
+.filter-tab.active {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
 .card {
   border: none;
   border-radius: 20px;
@@ -65,6 +103,19 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 15px;
+}
+
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  flex-shrink: 0;
 }
 
 .notification-item:hover {
@@ -140,6 +191,33 @@
   color: white;
 }
 
+.notification-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-badge {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
 .empty-state {
   text-align: center;
   padding: 80px 20px;
@@ -170,13 +248,18 @@
 @section('content')
 <div class="container-fluid">
   <div class="page-header" data-aos="fade-down" data-aos-duration="600">
-    <h1 class="page-title"><i class="fas fa-bell"></i>Notifications</h1>
-    @if($notifications->where('is_read', false)->count() > 0)
-    <form method="POST" action="{{ route('notifications.readAll') }}">
-      @csrf
-      <button type="submit" class="btn-mark-all-read"><i class="fas fa-check-double"></i>Mark All as Read</button>
-    </form>
-    @endif
+    <div>
+      <h1 class="page-title"><i class="fas fa-bell"></i>Notifications</h1>
+      <p class="page-subtitle">ICTFE - Facility Management System</p>
+    </div>
+    <div class="notification-controls">
+      @if($notifications->where('is_read', false)->count() > 0)
+      <form method="POST" action="{{ route('notifications.readAll') }}">
+        @csrf
+        <button type="submit" class="btn-mark-all-read"><i class="fas fa-check-double"></i>Mark All as Read</button>
+      </form>
+      @endif
+    </div>
   </div>
 
   @if(session('success'))
@@ -186,10 +269,29 @@
     </div>
   @endif
 
+  <!-- Notification Statistics -->
+  <div class="notification-stats" data-aos="fade-up">
+    <div class="stat-badge">
+      <div class="stat-value">{{ $notifications->where('is_read', false)->count() }}</div>
+      <div class="stat-label">Unread</div>
+    </div>
+    <div class="stat-badge">
+      <div class="stat-value">{{ $notifications->count() }}</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-badge">
+      <div class="stat-value">{{ $notifications->where('is_read', true)->count() }}</div>
+      <div class="stat-label">Read</div>
+    </div>
+  </div>
+
   <div class="card" data-aos="fade-up" data-aos-duration="700">
     @if($notifications->count() > 0)
         @foreach($notifications as $notification)
         <div class="notification-item {{ $notification->is_read ? '' : 'unread' }}" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
+          <div class="notification-icon">
+            <i class="fas fa-info-circle"></i>
+          </div>
           <div class="notification-content">
             @if(!$notification->is_read)
               <span class="notification-badge-new"><i class="fas fa-star me-1"></i>New</span>

@@ -5,8 +5,8 @@
     </div>
     
     <div class="sidebar-header">
-        <h4><i class="fas fa-laptop-code me-2"></i>ITMSF</h4>
-        <p class="sidebar-subtitle">Information Technology Management</p>
+        <h4><i class="fas fa-laptop-code me-2"></i>ICTFE</h4>
+        <p class="sidebar-subtitle">ICT Facilities Management</p>
     </div>
     
     <ul class="sidebar-menu">
