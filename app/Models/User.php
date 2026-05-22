@@ -31,10 +31,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-public function borrowings()
-    {
-        return $this->hasMany(Borrowing::class);
-    }
+
 
     public function logs()
     {
@@ -66,3 +63,4 @@ public function borrowings()
         return in_array($this->role, ['admin', 'staff']);
     }
 }
+

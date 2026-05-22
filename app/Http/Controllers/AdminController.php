@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Borrowing;
+
 use App\Models\Equipment;
 use App\Models\Log;
 use App\Models\Incident;
@@ -15,7 +15,8 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
-        $borrowings = Borrowing::with('user', 'equipment')->get();
+        $borrowings = \App\Models\BorrowRequest::with('student', 'equipment')->get();
+
         $equipment = Equipment::all();
         $logs = Log::with('user')->orderBy('timestamp', 'desc')->take(50)->get();
         $incidents = Incident::with('user', 'equipment')->get();
@@ -25,6 +26,7 @@ class AdminController extends Controller
             'total_equipment' => $equipment->count(),
             'total_borrowings' => $borrowings->count(),
             'pending_borrowings' => $borrowings->where('status', 'pending')->count(),
+
             'active_incidents' => $incidents->where('status', '!=', 'closed')->count(),
         ];
 
@@ -58,7 +60,8 @@ class AdminController extends Controller
 
     public function usage()
     {
-        $borrowings_by_equipment = Borrowing::with('equipment')->get()->groupBy('equipment_id')->map->count();
+        $borrowings_by_equipment = \App\Models\BorrowRequest::with('equipment')->get()->groupBy('equipment_id')->map->count();
+
         $user_activity = Log::with('user')->selectRaw('user_id, count(*) as logs_count')->groupBy('user_id')->get();
         return view('admin.reports.usage', compact('borrowings_by_equipment', 'user_activity'));
     }
@@ -71,7 +74,8 @@ class AdminController extends Controller
 
     public function transactions()
     {
-        $transactions = Borrowing::with(['user', 'equipment'])->orderBy('created_at', 'desc')->get();
+        $transactions = \App\Models\BorrowRequest::with(['student', 'equipment'])->orderBy('request_date', 'desc')->get();
+
         return view('admin.reports.transactions', compact('transactions'));
     }
 }

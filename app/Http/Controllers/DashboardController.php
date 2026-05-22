@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Borrowing;
+use App\Models\BorrowRequest;
 use App\Models\Equipment;
 use App\Models\Laboratory;
 use App\Models\User;
@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Limit queries to improve performance
-        $borrowings = Borrowing::where('user_id', $user->id)
-            ->orderBy('borrow_date', 'desc')
+        $borrowings = BorrowRequest::where('student_id', $user->id)
+            ->orderBy('request_date', 'desc')
             ->limit(10)
             ->get();
             
@@ -51,8 +51,8 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Limit queries to improve performance
-        $borrowings = Borrowing::where('user_id', $user->id)
-            ->orderBy('borrow_date', 'desc')
+        $borrowings = BorrowRequest::where('student_id', $user->id)
+            ->orderBy('request_date', 'desc')
             ->limit(10)
             ->get();
             

@@ -24,10 +24,7 @@ class Equipment extends Model
         'available_quantity' => 'integer',
     ];
 
-    public function borrowings()
-    {
-        return $this->hasMany(Borrowing::class);
-    }
+
 
     public function incidents()
     {

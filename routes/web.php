@@ -7,13 +7,22 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogController;
+
+require_once __DIR__ . '/borrowings.php';
+
+// Backward-compatible route names for dashboard UI
+// Map legacy route names to new borrowing system endpoints
+Route::get('/borrowings', [\App\Http\Controllers\BorrowRequestController::class, 'indexEquipment'])->name('borrowings.index');
+Route::get('/borrowings/create', [\App\Http\Controllers\BorrowRequestController::class, 'indexEquipment'])->name('borrowings.create');
+
+
+// NOTE: Legacy /borrowings/* routes were removed; new borrow flow is implemented in routes/borrowings.php.
 
 // Public Routes
 Route::get('/', [AuthController::class, 'welcome'])->name('welcome');
@@ -59,18 +68,7 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-// Borrowings
-    Route::get('/borrowings/create', [BorrowingController::class, 'create'])->name('borrowings.create');
-    Route::post('/borrowings', [BorrowingController::class, 'store'])->name('borrowings.store');
-    Route::get('/borrowings', [BorrowingController::class, 'index'])->name('borrowings.index');
-    Route::get('/borrowings/list', [BorrowingController::class, 'index'])->name('borrowings.list');
-    Route::get('/borrowings/manage', [BorrowingController::class, 'manage'])->name('borrowings.manage');
-    Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve'])->name('borrowings.approve');
-    Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'return'])->name('borrowings.return');
-    Route::post('/borrowings/{borrowing}/damaged', [BorrowingController::class, 'markDamaged'])->name('borrowings.damaged');
-    Route::post('/borrowings/{borrowing}/lost', [BorrowingController::class, 'markLost'])->name('borrowings.lost');
-    
-    // Equipment
+// Equipment (legacy UI for equipment management)
     Route::get('/equipment', [EquipmentController::class, 'index'])->name('equipment.index');
     Route::get('/equipment/create', [EquipmentController::class, 'create'])->name('equipment.create');
     Route::post('/equipment', [EquipmentController::class, 'store'])->name('equipment.store');
@@ -103,7 +101,7 @@ Route::middleware(['auth'])->group(function () {
 
     
     // Admin Routes (Admin only)
-    Route::middleware(['admin'])->group(function () {
+Route::middleware(['admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
         Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
         Route::get('/reports/usage', [AdminController::class, 'usage'])->name('reports.usage');

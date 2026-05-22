@@ -1,8 +1,8 @@
-﻿@extends('layouts.dashboard')
+﻿
 
-@section('title', 'Borrow Equipment')
+<?php $__env->startSection('title', 'Borrow Equipment'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .borrow-page {
         min-height: calc(100vh - 4.5rem);
@@ -154,11 +154,11 @@
                     </div>
                     <div class="col-lg-5 text-lg-end">
                         <div class="d-flex justify-content-lg-end gap-2 flex-wrap">
-                            @if(Auth::user() && Auth::user()->role === 'admin')
-                                <a href="{{ route('equipment.create') }}" class="btn btn-outline-primary btn-lg">
+                            <?php if(Auth::user() && Auth::user()->role === 'admin'): ?>
+                                <a href="<?php echo e(route('equipment.create')); ?>" class="btn btn-outline-primary btn-lg">
                                     <i class="bi bi-plus-lg me-2"></i> Add Equipment
                                 </a>
-                            @endif
+                            <?php endif; ?>
                             <button type="button" class="btn btn-primary btn-lg" @click.prevent="resetFilters()">
                                 <i class="bi bi-arrow-clockwise me-2"></i> Reset Filters
                             </button>
@@ -312,8 +312,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body pt-0">
-                    <form action="{{ route('borrow.create') }}" method="POST" class="row g-4">
-                        @csrf
+                    <form action="<?php echo e(route('borrow.create')); ?>" method="POST" class="row g-4">
+                        <?php echo csrf_field(); ?>
                         <input type="hidden" name="equipment_id" :value="selectedItem.id">
                         <input type="hidden" name="status" value="pending">
 
@@ -360,7 +360,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="form-label">Requested By</label>
-                                    <input type="text" class="form-control form-control-lg" value="{{ Auth::user()->name }}" disabled>
+                                    <input type="text" class="form-control form-control-lg" value="<?php echo e(Auth::user()->name); ?>" disabled>
                                 </div>
                             </div>
                         </div>
@@ -377,9 +377,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 <script>
     function borrowForm() {
         return {
@@ -391,8 +391,8 @@
             borrowDate: new Date().toISOString().split('T')[0],
             returnDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0],
             borrowQuantity: 1,
-            categories: {!! json_encode($equipment->pluck('category')->unique()->sort()->values()->all()) !!},
-            equipmentData: {!! $equipment->map(function ($item) {
+            categories: <?php echo json_encode($equipment->pluck('category')->unique()->sort()->values()->all()); ?>,
+            equipmentData: <?php echo $equipment->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
@@ -405,7 +405,7 @@
                     'price' => $item->price ?? null,
                     'updated_at' => optional($item->updated_at)->format('M d, Y'),
                 ];
-            })->toJson() !!},
+            })->toJson(); ?>,
 
             init() {
                 if (this.equipmentData.length) {
@@ -471,4 +471,6 @@
         };
     }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CLMFS_GROUP11 - Copy (2)\resources\views/borrowings/create.blade.php ENDPATH**/ ?>
