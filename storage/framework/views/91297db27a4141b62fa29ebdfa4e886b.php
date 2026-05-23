@@ -14,7 +14,7 @@
 <li class="sidebar-item">
             <a href="<?php echo e(route('dashboard')); ?>" class="sidebar-link <?php echo e(Request::is('dashboard') ? 'active' : ''); ?>">
                 <i class="fas fa-home"></i>
-                <span>Dashboard Home</span>
+                <span>Home</span>
             </a>
         </li>
         

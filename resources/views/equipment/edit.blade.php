@@ -299,7 +299,7 @@
       <h5 style="margin: 0;"><i class="fas fa-wrench me-2"></i>Equipment Information</h5>
     </div>
     <div class="card-body p-4">
-      <form method="POST" action="{{ route('equipment.update', $equipment->id) }}" enctype="multipart/form-data" x-data="equipmentForm($wire)" @submit="loading = true">
+<form method="POST" action="{{ route('equipment.update', $equipment->getRouteKey()) }}" enctype="multipart/form-data" x-data="equipmentForm($wire)" @submit="loading = true">
         @csrf
         @method('PUT')
 

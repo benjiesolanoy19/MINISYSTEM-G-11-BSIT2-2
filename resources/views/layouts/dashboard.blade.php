@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'ICTFE Dashboard')</title>
+    <title>@yield('title', 'ICTFE Home')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
@@ -38,14 +38,23 @@
             height: var(--topbar-height);
             position: fixed;
             top: 0;
-            left: var(--sidebar-width);
+            left: 0;
             right: 0;
+            width: 100%;
             z-index: 1000;
-            transition: left 0.3s ease;
+            transition: box-shadow 0.3s ease;
         }
-        
-        .top-navbar.sidebar-collapsed {
-            left: var(--sidebar-collapsed);
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            transition: grid-template-columns 0.3s ease;
+            min-height: calc(100vh - var(--topbar-height));
+            margin-top: var(--topbar-height);
+        }
+
+        body.sidebar-collapsed .app-shell {
+            grid-template-columns: var(--sidebar-collapsed) 1fr;
         }
         
         .navbar-brand-custom {
@@ -244,22 +253,80 @@
 
         /* Sidebar */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
+            position: sticky;
+            top: var(--topbar-height);
+            height: calc(100vh - var(--topbar-height));
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--primary-dark), var(--primary));
             color: white;
             z-index: 1001;
-            transition: width 0.3s ease;
+            transition: width 0.3s ease, transform 0.3s ease;
             overflow-y: auto;
         }
         
         .sidebar.sidebar-collapsed {
             width: var(--sidebar-collapsed);
         }
-        
+
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            z-index: 1001;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar {
+            transform: translateX(0);
+        }
+
+        body.sidebar-open .sidebar {
+            transform: translateX(0);
+        }
+
+        .topbar-mobile-toggle {
+            display: none;
+        }
+
+        @media (max-width: 991.98px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                width: var(--sidebar-width);
+                transform: translateX(-110%);
+                top: 0;
+                height: 100vh;
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+                z-index: 1002;
+            }
+
+            body.sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                z-index: 1000;
+            }
+
+            .topbar-mobile-toggle {
+                display: inline-flex;
+            }
+
+            .search-wrapper {
+                display: none !important;
+            }
+        }
+
         .sidebar-header {
             padding: 20px;
             text-align: center;
@@ -336,16 +403,18 @@
 
         /* Main Content */
         .main-content {
-            margin-left: var(--sidebar-width);
-            margin-top: var(--topbar-height);
-            padding: 30px;
+            padding: 28px 30px 40px;
             min-height: calc(100vh - var(--topbar-height));
-            transition: margin-left 0.3s ease;
+            transition: padding 0.3s ease, width 0.3s ease;
             background: linear-gradient(180deg, rgba(248,250,252,0.95), rgba(224,242,254,0.75));
+            width: 100%;
+            box-sizing: border-box;
         }
-        
-        .main-content.sidebar-collapsed {
-            margin-left: var(--sidebar-collapsed);
+
+        .main-content > .container-fluid,
+        .main-content > .container {
+            max-width: 1360px;
+            margin: 0 auto;
         }
 
         /* Modern cards */
@@ -547,7 +616,14 @@
 </head>
 <body>
 
-@include('layouts.sidebar')
+<div class="app-shell">
+    @include('layouts.sidebar')
+    <main class="main-content" id="mainContent">
+        @yield('content')
+    </main>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 @php
     $globalNotifications = \App\Models\Notification::where('user_id', Auth::id())
@@ -563,6 +639,9 @@
 <nav class="top-navbar navbar navbar-expand" id="topNavbar">
     <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-3 w-100">
+            <button class="topbar-icon d-lg-none topbar-mobile-toggle" type="button" id="mobileSidebarOpen" aria-label="Open sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
             <a class="navbar-brand-custom" href="{{ route('dashboard') }}">
                 <i class="fas fa-laptop-code me-2"></i>ICTFE
             </a>
@@ -697,11 +776,6 @@
     </div>
 </nav>
 
-<!-- Main Content -->
-<main class="main-content" id="mainContent">
-    @yield('content')
-</main>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -727,17 +801,43 @@
         }
     });
 
+    const body = document.body;
     const sidebar = document.getElementById('sidebar');
     const topNavbar = document.getElementById('topNavbar');
     const mainContent = document.getElementById('mainContent');
     const toggleBtn = document.getElementById('sidebarToggle');
+    const mobileToggle = document.getElementById('mobileSidebarOpen');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const mobileBreakpoint = 992;
+
+    const isMobile = () => window.innerWidth < mobileBreakpoint;
+
+    const openMobileSidebar = () => {
+        body.classList.add('sidebar-open');
+        sidebar.classList.add('sidebar-open');
+        sidebarOverlay?.classList.add('active');
+    };
+
+    const closeMobileSidebar = () => {
+        body.classList.remove('sidebar-open');
+        sidebar.classList.remove('sidebar-open');
+        sidebarOverlay?.classList.remove('active');
+    };
 
     if (toggleBtn) {
         const toggleIcon = toggleBtn.querySelector('i');
         toggleBtn.addEventListener('click', () => {
-            const collapsed = sidebar.classList.toggle('sidebar-collapsed');
-            topNavbar.classList.toggle('sidebar-collapsed');
-            mainContent.classList.toggle('sidebar-collapsed');
+            if (isMobile()) {
+                if (body.classList.contains('sidebar-open')) {
+                    closeMobileSidebar();
+                } else {
+                    openMobileSidebar();
+                }
+                return;
+            }
+
+            const collapsed = body.classList.toggle('sidebar-collapsed');
+            sidebar.classList.toggle('sidebar-collapsed');
             if (collapsed) {
                 toggleIcon.classList.remove('fa-chevron-left');
                 toggleIcon.classList.add('fa-chevron-right');
@@ -747,6 +847,20 @@
             }
         });
     }
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', openMobileSidebar);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeMobileSidebar);
+    }
+
+    window.addEventListener('resize', () => {
+        if (!isMobile()) {
+            closeMobileSidebar();
+        }
+    });
 
     // Notification functions
     function markAsRead(notificationId) {

@@ -14,7 +14,7 @@
 <li class="sidebar-item">
             <a href="{{ route('dashboard') }}" class="sidebar-link {{ Request::is('dashboard') ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
-                <span>Dashboard Home</span>
+                <span>Home</span>
             </a>
         </li>
         
