@@ -203,6 +203,101 @@
   background: rgba(239, 68, 68, 0.1);
   color: #991b1b;
 }
+
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 40px 20px;
+  background: rgba(248, 250, 252, 0.5);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.upload-area:hover {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.05);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.upload-area.drag-over {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+  transform: scale(1.02);
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover .upload-icon,
+.upload-area.drag-over .upload-icon {
+  color: #f59e0b;
+  transform: translateY(-5px);
+}
+
+.image-preview-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  border: 2px solid #e2e8f0;
+}
+
+.image-preview {
+  max-width: 400px;
+  max-height: 300px;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  background: rgba(239, 68, 68, 0.9);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.btn-remove-image:hover {
+  background: rgba(239, 68, 68, 1);
+  transform: scale(1.1);
+}
+
+.upload-content {
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 </style>
 @endsection
 
@@ -244,8 +339,66 @@
       <h5 style="margin: 0;"><i class="fas fa-wrench me-2"></i>Equipment Details</h5>
     </div>
     <div class="card-body p-4">
-      <form method="POST" action="{{ route('equipment.store') }}" x-data="{ loading: false }" @submit="loading = true">
+      <form method="POST" action="{{ route('equipment.store') }}" enctype="multipart/form-data" x-data="equipmentForm()" @submit="loading = true">
         @csrf
+        
+        <!-- Image Upload Section -->
+        <div class="mb-4" data-aos="fade-in" data-aos-delay="100">
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-image me-1" style="color: #f59e0b;"></i>Equipment Image</label>
+            <div class="mt-3">
+              <div 
+                class="upload-area" 
+                :class="{ 'drag-over': isDragging }"
+                @dragover.prevent="isDragging = true"
+                @dragleave.prevent="isDragging = false"
+                @drop.prevent="
+                  isDragging = false;
+                  if ($event.dataTransfer.files.length) {
+                    const input = document.getElementById('imageInput');
+                    input.files = $event.dataTransfer.files;
+                    handleImageSelect($event);
+                  }
+                "
+              >
+                <input 
+                  type="file" 
+                  id="imageInput"
+                  name="image"
+                  class="d-none"
+                  accept="image/jpeg,image/png,image/jpg,image/webp"
+                  @change="handleImageSelect($event)"
+                >
+                <div class="upload-content">
+                  <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                  <h6 class="mt-3 mb-2">Drag and drop your image here</h6>
+                  <p class="text-muted mb-3">or</p>
+                  <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" @click="document.getElementById('imageInput').click()">
+                    <i class="fas fa-folder-open me-1"></i> Choose Image
+                  </button>
+                  <p class="text-muted small mt-3 mb-0">JPG, PNG, JPEG, WEBP up to 2MB</p>
+                </div>
+              </div>
+
+              <!-- Image Preview -->
+              <template x-if="imagePreview">
+                <div class="mt-4">
+                  <div class="image-preview-container">
+                    <img :src="imagePreview" alt="Preview" class="image-preview">
+                    <button type="button" class="btn-remove-image" @click.prevent="removeImage()">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                  <p class="text-muted small mt-2">Image preview - click trash icon to change</p>
+                </div>
+              </template>
+
+              @error('image')
+                <small class="text-danger d-block mt-2"><i class="fas fa-exclamation-circle"></i> {{ $message }}</small>
+              @enderror
+            </div>
+          </div>
+        </div>
         
         <div class="row">
           <div class="col-md-6 mb-4" data-aos="fade-in" data-aos-delay="100">
@@ -367,3 +520,49 @@
   </div>
 </div>
 @endsection
+
+@section('scripts')
+<script>
+function equipmentForm() {
+  return {
+    loading: false,
+    imagePreview: null,
+    isDragging: false,
+
+    handleImageSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please select a valid image file (JPG, PNG, JPEG, WEBP)');
+        document.getElementById('imageInput').value = '';
+        return;
+      }
+
+      // Validate file size (2MB max)
+      const maxSize = 2 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert('File size must be less than 2MB');
+        document.getElementById('imageInput').value = '';
+        return;
+      }
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+
+    removeImage() {
+      this.imagePreview = null;
+      document.getElementById('imageInput').value = '';
+    }
+  };
+}
+</script>
+@endsection
+

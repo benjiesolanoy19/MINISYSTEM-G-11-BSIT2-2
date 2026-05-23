@@ -17,12 +17,24 @@ class Equipment extends Model
         'quantity',
         'available_quantity',
         'status',
+        'image',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'available_quantity' => 'integer',
     ];
+
+    public function getImageUrl(): string
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+        // Fallback default image
+        return 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80';
+    }
+
+
 
 
 

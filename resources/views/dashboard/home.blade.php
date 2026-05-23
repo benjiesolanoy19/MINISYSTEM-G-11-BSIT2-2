@@ -447,15 +447,17 @@
                                 </span>
                             </div>
                             <div class="activity-meta">
-                                <span>{{ $borrowing->borrow_date->format('M d, Y') }}</span>
+                                <span>{{ optional($borrowing->borrow_date)->format('M d, Y') ?? 'N/A' }}</span>
+
                                 @if($borrowing->purpose)
+
                                 <span class="mx-2">•</span>
                                 <span>{{ Str::limit($borrowing->purpose, 40) }}</span>
                                 @endif
                             </div>
                         </div>
-                        <div class="activity-time">
-                            {{ $borrowing->borrow_date->diffForHumans() }}
+<div class="activity-time">
+                            {{ optional($borrowing->borrow_date)->diffForHumans() ?? 'N/A' }}
                         </div>
                     </div>
                     @empty

@@ -447,15 +447,17 @@
                                 </span>
                             </div>
                             <div class="activity-meta">
-                                <span><?php echo e($borrowing->borrow_date->format('M d, Y')); ?></span>
+                                <span><?php echo e(optional($borrowing->borrow_date)->format('M d, Y') ?? 'N/A'); ?></span>
+
                                 <?php if($borrowing->purpose): ?>
+
                                 <span class="mx-2">•</span>
                                 <span><?php echo e(Str::limit($borrowing->purpose, 40)); ?></span>
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="activity-time">
-                            <?php echo e($borrowing->borrow_date->diffForHumans()); ?>
+<div class="activity-time">
+                            <?php echo e(optional($borrowing->borrow_date)->diffForHumans() ?? 'N/A'); ?>
 
                         </div>
                     </div>

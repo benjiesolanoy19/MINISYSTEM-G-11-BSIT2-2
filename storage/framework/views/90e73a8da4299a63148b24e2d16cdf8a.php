@@ -281,8 +281,8 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body pt-0">
-                    <form action="<?php echo e(route('borrow.create')); ?>" method="POST" class="row g-4">
+<div class="modal-body pt-0">
+<form method="POST" action="<?php echo e(url('/borrow')); ?>">
                         <?php echo csrf_field(); ?>
                         <input type="hidden" name="equipment_id" :value="selectedItem.id">
                         <input type="hidden" name="status" value="pending">
@@ -350,6 +350,56 @@
 </div>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('styles'); ?>
+<style>
+    /* Modal two-column layout */
+    .borrow-modal-card{
+        border-radius: 24px;
+        border: 1px solid rgba(226,232,240,.9);
+        background: rgba(255,255,255,.96);
+        box-shadow: 0 25px 70px rgba(15,23,42,.10);
+        overflow: hidden;
+    }
+    .borrow-modal-shadow{ box-shadow: 0 18px 45px rgba(15,23,42,.08); }
+    .borrow-modal-img-wrap{
+        height: 360px;
+        background: #f8fafc;
+        border-radius: 18px;
+        border: 1px solid rgba(226,232,240,.9);
+        overflow: hidden;
+    }
+    .borrow-modal-img-wrap img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display:block;
+        transform: scale(1.01);
+    }
+
+    .borrow-modal-body{ padding: 1.25rem; }
+    .borrow-modal-field{
+        border: 1px solid rgba(226,232,240,.95);
+        border-radius: 16px;
+    }
+
+    .borrow-modal-actions{
+        display:flex;
+        justify-content: flex-end;
+        gap: .75rem;
+        flex-wrap: wrap;
+        margin-top: 6px;
+    }
+
+    .borrow-modal-actions .btn{ border-radius: 999px; padding-left: 1.2rem; padding-right: 1.2rem; }
+
+    .borrow-modal-form .form-label{ color:#475569; font-weight:600; font-size:.95rem; margin-bottom:.35rem; }
+    .borrow-modal-form .form-control{ border-radius:16px; }
+
+    @media (max-width: 991.98px){
+        .borrow-modal-img-wrap{ height: 260px; }
+    }
+</style>
+
 <?php $__env->startSection('scripts'); ?>
 <script>
     function borrowPage() {
@@ -363,7 +413,7 @@
                     'status' => $item->status,
                     'quantity' => $item->quantity,
                     'available_quantity' => $item->available_quantity,
-                    'image' => null,
+                    'image' => $item->getImageUrl(),
                 ];
             })->toJson(); ?>,
             searchQuery: '',

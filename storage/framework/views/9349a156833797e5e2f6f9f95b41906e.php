@@ -1,0 +1,263 @@
+
+
+<?php $__env->startSection('title', 'My Incidents'); ?>
+
+<?php $__env->startSection('styles'); ?>
+<style>
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 30px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2);
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.page-title i {
+  font-size: 36px;
+  opacity: 0.95;
+}
+
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin: 5px 0 0 51px;
+}
+
+.card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border-top: 4px solid #ef4444;
+}
+
+.card-body {
+  padding: 0;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%);
+  padding: 15px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #dc2626;
+  border: none;
+  border-bottom: 2px solid #ef4444;
+}
+
+.table thead th i {
+  margin-right: 8px;
+  opacity: 0.8;
+}
+
+.table tbody td {
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background: #fef2f2;
+  box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.05);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.badge {
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-severity-low {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.badge-severity-medium {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.badge-severity-high {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.badge-severity-critical {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+}
+
+.badge-status-open {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.badge-status-investigating {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.badge-status-closed {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  text-decoration: none;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  color: white;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #64748b;
+}
+
+.empty-state i {
+  font-size: 64px;
+  color: #fecaca;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.empty-state h4 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 20px 0 10px 0;
+}
+
+.empty-state p {
+  margin-bottom: 30px;
+  font-size: 15px;
+}
+</style>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="container-fluid">
+  <div class="page-header" data-aos="fade-down" data-aos-duration="600">
+    <div>
+      <h1 class="page-title"><i class="fas fa-exclamation-triangle"></i>My Incidents</h1>
+      <p class="page-subtitle">Track and manage reported incidents</p>
+    </div>
+    <a href="<?php echo e(route('incidents.report')); ?>" class="btn btn-primary"><i class="fas fa-plus"></i>Report Incident</a>
+  </div>
+
+  <?php if(session('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" data-aos="fade-down">
+      <i class="fas fa-check-circle me-2"></i><?php echo e(session('success')); ?>
+
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <div class="card" data-aos="fade-up" data-aos-duration="700">
+    <div class="card-body">
+      <?php if($incidents->count() > 0): ?>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><i class="fas fa-microchip"></i>Equipment</th>
+                <th><i class="fas fa-align-left"></i>Description</th>
+                <th><i class="fas fa-fire"></i>Severity</th>
+                <th><i class="fas fa-circle-info"></i>Status</th>
+                <th><i class="fas fa-calendar"></i>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php $__currentLoopData = $incidents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $incident): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <tr data-aos="fade-up" data-aos-delay="<?php echo e($loop->index * 50); ?>">
+                <td><strong><?php echo e($incident->equipment->name ?? 'N/A'); ?></strong></td>
+                <td><?php echo e(Str::limit($incident->description, 50)); ?></td>
+                <td>
+                  <?php if($incident->severity === 'low'): ?>
+                    <span class="badge badge-severity-low"><i class="fas fa-check"></i>Low</span>
+                  <?php elseif($incident->severity === 'medium'): ?>
+                    <span class="badge badge-severity-medium"><i class="fas fa-exclamation"></i>Medium</span>
+                  <?php elseif($incident->severity === 'high'): ?>
+                    <span class="badge badge-severity-high"><i class="fas fa-exclamation-circle"></i>High</span>
+                  <?php else: ?>
+                    <span class="badge badge-severity-critical"><i class="fas fa-fire"></i>Critical</span>
+                  <?php endif; ?>
+                </td>
+                <td>
+                  <?php if($incident->status === 'open'): ?>
+                    <span class="badge badge-status-open"><i class="fas fa-lock-open"></i>Open</span>
+                  <?php elseif($incident->status === 'investigating'): ?>
+                    <span class="badge badge-status-investigating"><i class="fas fa-magnifying-glass"></i>Investigating</span>
+                  <?php else: ?>
+                    <span class="badge badge-status-closed"><i class="fas fa-lock"></i>Closed</span>
+                  <?php endif; ?>
+                </td>
+                <td><?php echo e(\Carbon\Carbon::parse($incident->created_at)->format('M d, Y')); ?></td>
+              </tr>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </tbody>
+          </table>
+        </div>
+      <?php else: ?>
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <h4>No Incidents Reported</h4>
+          <p>All systems are running smoothly! Report any issues you encounter.</p>
+          <a href="<?php echo e(route('incidents.report')); ?>" class="btn btn-primary"><i class="fas fa-plus"></i>Report an Incident</a>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<?php $__env->stopSection(); ?>
+</parameter>
+</create_file>
+
+<?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CLMFS_GROUP11 - Copy (2)\resources\views/incidents/list.blade.php ENDPATH**/ ?>

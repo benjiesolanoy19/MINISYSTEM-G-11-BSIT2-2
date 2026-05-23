@@ -14,8 +14,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/staff/approve/{request_id}', [BorrowRequestController::class, 'staffApprove'])->name('staff.approve');
         Route::post('/staff/reject/{request_id}', [BorrowRequestController::class, 'staffReject'])->name('staff.reject');
 
+        Route::post('/staff/ready-to-claim/{request_id}', [BorrowRequestController::class, 'staffReadyToClaim'])->name('staff.ready-to-claim');
+        Route::post('/staff/mark-claimed/{request_id}', [BorrowRequestController::class, 'staffMarkClaimed'])->name('staff.mark-claimed');
+        Route::post('/staff/mark-returned/{request_id}', [BorrowRequestController::class, 'staffMarkReturned'])->name('staff.mark-returned');
+
         // Staff/Admin full list
         Route::get('/borrows', [BorrowRequestController::class, 'allBorrows'])->name('borrows.index');
+
     });
 
     // Admin routes (delegated to controller methods - minimal views to implement)

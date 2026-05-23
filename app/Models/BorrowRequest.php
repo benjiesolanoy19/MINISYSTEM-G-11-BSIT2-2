@@ -19,13 +19,19 @@ class BorrowRequest extends Model
         'request_date',
         'approval_date',
         'approved_by',
+        'claimed_at',
+        'returned_at',
+        'remarks',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'request_date' => 'datetime',
         'approval_date' => 'datetime',
+        'claimed_at' => 'datetime',
+        'returned_at' => 'datetime',
     ];
+
 
     public function student()
     {
