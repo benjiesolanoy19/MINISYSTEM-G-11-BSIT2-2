@@ -1,15 +1,19 @@
 <!-- Sidebar -->
 <nav class="sidebar" id="sidebar">
-    <div class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar">
-        <i class="fas fa-chevron-left"></i>
+    <div class="sidebar-toggle-wrap" aria-hidden="false">
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar" aria-controls="mainContent" aria-expanded="false">
+            <i class="fas fa-chevron-left"></i>
+        </button>
     </div>
-    
+
     <div class="sidebar-header">
         <h4><i class="fas fa-laptop-code me-2"></i>ICTFE</h4>
         <p class="sidebar-subtitle">ICT Facilities Management</p>
     </div>
-    
-    <ul class="sidebar-menu">
+
+    <div class="sidebar-scroll" aria-label="Sidebar navigation">
+        <ul class="sidebar-menu">
+
         <!-- Common Menu Items -->
 <li class="sidebar-item">
             <a href="{{ route('dashboard') }}" class="sidebar-link {{ Request::is('dashboard') ? 'active' : '' }}">
@@ -126,11 +130,13 @@
                 </button>
             </form>
         </li>
-    </ul>
+        </ul>
+    </div>
 </nav>
 
+
 <style>
-    .sidebar-subtitle {
+.sidebar-subtitle {
         font-size: 0.75rem;
         color: rgba(255, 255, 255, 0.6);
         margin: 0;
@@ -141,6 +147,66 @@
     .sidebar-item {
         margin-bottom: 3px;
     }
+
+    /* Sidebar toggle (fixed/floating, never clipped)
+       The actual toggle button is rendered inside the sidebar markup.
+       We keep it in a dedicated non-clipping layer. */
+    .sidebar-toggle-wrap {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+    }
+
+    .sidebar-toggle {
+        pointer-events: auto;
+        position: absolute;
+        top: 50%;
+        right: -19px;
+        transform: translateY(-50%);
+        z-index: 1003;
+        overflow: visible;
+    }
+
+    /* Ensure sidebar content never hides the floating toggle */
+    .sidebar {
+        overflow: visible !important;
+    }
+
+    /* Internal scroll container for full viewport height */
+    .sidebar-scroll {
+        height: calc(100vh - var(--topbar-height, 70px));
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 24px; /* prevent footer overlap / cutoff */
+        scroll-behavior: smooth;
+
+        /* Prevent scrollbar jitter across browsers */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Modern scrollbar styling */
+    .sidebar-scroll::-webkit-scrollbar {
+        width: 10px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.25);
+        border-radius: 999px;
+        border: 2px solid rgba(0,0,0,0);
+        background-clip: padding-box;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.35);
+        border: 2px solid rgba(0,0,0,0);
+        background-clip: padding-box;
+    }
+
+
 
     .sidebar-link {
         display: flex;

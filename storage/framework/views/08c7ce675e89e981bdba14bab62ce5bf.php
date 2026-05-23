@@ -252,7 +252,7 @@
         }
 
         /* Sidebar */
-        .sidebar {
+.sidebar {
             position: sticky;
             top: var(--topbar-height);
             height: calc(100vh - var(--topbar-height));
@@ -261,8 +261,11 @@
             color: white;
             z-index: 1001;
             transition: width 0.3s ease, transform 0.3s ease;
-            overflow-y: auto;
+
+            /* Sidebar scroll is handled by .sidebar-scroll */
+            overflow: hidden;
         }
+
         
         .sidebar.sidebar-collapsed {
             width: var(--sidebar-collapsed);
@@ -338,22 +341,58 @@
             margin: 0;
         }
         
+/* Floating sidebar toggle button (robust positioning; no clipping)
+   Note: base positioning is defined in sidebar.blade.php. */
         .sidebar-toggle {
-            position: absolute;
-            top: 20px;
-            right: -15px;
-            width: 30px;
-            height: 30px;
+            width: 38px;
+            height: 38px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18);
             color: var(--primary);
-            z-index: 1002;
+            border: none;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, background 0.25s ease;
+            font-size: 1rem;
+            outline: none;
+            padding: 0;
+            will-change: transform;
         }
+
+
+.sidebar-toggle:hover {
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+            transform: translateY(-50%) scale(1.08);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+        }
+
+        .sidebar-toggle:active {
+            transform: translateY(-50%) scale(0.96);
+        }
+
+
+        .sidebar-toggle i {
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            will-change: transform;
+        }
+
+
+        body.sidebar-collapsed .sidebar-toggle i {
+            transform: rotate(180deg);
+        }
+
+        /* Prevent reflow jitter during sidebar transitions */
+        .sidebar, .app-shell, .main-content {
+            backface-visibility: hidden;
+        }
+
         
         .sidebar-menu {
             list-style: none;
@@ -611,6 +650,89 @@
             color: var(--primary);
             margin-bottom: 1rem;
         }
+    /* Preloader styles */
+        .ictfe-preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(1200px circle at 50% 20%, rgba(14,165,233,0.18), rgba(16,185,129,0.10) 35%, rgba(248,250,252,0.98) 70%);
+            transition: opacity 220ms ease, visibility 220ms ease;
+        }
+
+        .ictfe-preloader[aria-hidden="true"] {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .ictfe-preloader__content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 28px 24px;
+            border-radius: 26px;
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(226,232,240,0.85);
+            box-shadow: 0 24px 80px rgba(15,23,42,0.12);
+            backdrop-filter: blur(10px);
+        }
+
+        .ictfe-preloader__logo {
+            position: relative;
+            width: 130px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+        }
+
+        .ictfe-preloader__logo-mark {
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.1rem;
+            text-align: center;
+            animation: ictfeLogoFloat 1.6s ease-in-out infinite;
+        }
+
+        @keyframes ictfeLogoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .ictfe-preloader__spinner {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 4px solid rgba(2,132,199,0.18);
+            border-top-color: var(--primary);
+            border-right-color: var(--secondary);
+            animation: ictfeSpin 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+            will-change: transform;
+        }
+
+        @keyframes ictfeSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .ictfe-preloader__hint {
+            font-size: 0.92rem;
+            color: rgba(30,41,59,0.75);
+            font-weight: 600;
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            .ictfe-preloader__logo-mark, .ictfe-preloader__spinner {
+                animation: none !important;
+            }
+        }
+
     </style>
     <?php echo $__env->yieldContent('styles'); ?>
 </head>
@@ -625,7 +747,20 @@
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+<!-- Global preloader (ICTFE) -->
+<div id="ictfePreloader" class="ictfe-preloader" aria-live="polite" aria-busy="true">
+    <div class="ictfe-preloader__bg"></div>
+    <div class="ictfe-preloader__content">
+        <div class="ictfe-preloader__logo">
+            <span class="ictfe-preloader__logo-mark">ICTFE</span>
+        </div>
+        <div class="ictfe-preloader__spinner" role="status" aria-label="Loading"></div>
+        <div class="ictfe-preloader__hint">Loading system…</div>
+    </div>
+</div>
+
 <?php
+
     $globalNotifications = \App\Models\Notification::where('user_id', Auth::id())
         ->orderBy('created_at', 'desc')
         ->limit(5)
@@ -815,6 +950,31 @@
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const mobileBreakpoint = 992;
 
+    // Preloader: single instance across pages
+    const preloader = document.getElementById('ictfePreloader');
+    let preloaderDone = false;
+
+    const hidePreloader = () => {
+        if (!preloader || preloaderDone) return;
+        preloaderDone = true;
+        // Fade out
+        preloader.setAttribute('aria-hidden', 'true');
+        // Remove from DOM after transition
+        setTimeout(() => {
+            preloader.remove();
+        }, 260);
+    };
+
+    // Defer hide until page is fully loaded; also allows later integration
+    window.addEventListener('load', () => {
+        // Small buffer to ensure dashboard data render has started
+        setTimeout(hidePreloader, 180);
+    });
+
+    // Pages can optionally dispatch a custom event when dashboard data is ready.
+    document.addEventListener('ictfe:data:ready', hidePreloader);
+
+
     const isMobile = () => window.innerWidth < mobileBreakpoint;
 
     const openMobileSidebar = () => {
@@ -843,6 +1003,11 @@
 
             const collapsed = body.classList.toggle('sidebar-collapsed');
             sidebar.classList.toggle('sidebar-collapsed');
+            // Keep toggle accessible & in sync
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-expanded', (!collapsed).toString());
+            }
+
             if (collapsed) {
                 toggleIcon.classList.remove('fa-chevron-left');
                 toggleIcon.classList.add('fa-chevron-right');
@@ -850,6 +1015,7 @@
                 toggleIcon.classList.remove('fa-chevron-right');
                 toggleIcon.classList.add('fa-chevron-left');
             }
+
         });
     }
 
