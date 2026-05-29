@@ -244,8 +244,14 @@
               @foreach($users as $user)
               <tr data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
                 <td>
-                  <div style="display: flex; align-items: center;">
-                    <div class="user-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="user-avatar">
+                      @if($user->profile_picture_url)
+                        <img src="{{ $user->profile_picture_url }}" alt="{{ $user->name }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+                      @else
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                      @endif
+                    </div>
                     <strong>{{ $user->name }}</strong>
                   </div>
                 </td>

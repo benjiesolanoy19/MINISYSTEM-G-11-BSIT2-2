@@ -1,4 +1,4 @@
-@php
+<?php
     $status = $status ?? '';
     $statusLower = strtolower($status);
 
@@ -39,7 +39,7 @@
             $label = 'Overdue';
             break;
     }
-@endphp
+?>
 
 <style>
     /* Local helper (won't break existing theme) */
@@ -66,7 +66,9 @@
     }
 </style>
 
-<span class="status-pill {{ $class }}" title="{{ $label }}">
-    {{ $label }}
+<span class="status-pill <?php echo e($class); ?>" title="<?php echo e($label); ?>">
+    <?php echo e($label); ?>
+
 </span>
 
+<?php /**PATH C:\xampp\htdocs\CLMFS_GROUP11 - Copy (2)\resources\views/components/borrow-status-badge.blade.php ENDPATH**/ ?>

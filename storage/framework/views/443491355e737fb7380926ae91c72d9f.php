@@ -137,6 +137,103 @@
   color: #94a3b8;
 }
 
+.profile-picture-card {
+  border: 2px dashed rgba(59, 130, 246, 0.4);
+  border-radius: 18px;
+  padding: 24px;
+  background: rgba(239, 246, 255, 0.9);
+  transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+}
+
+.profile-picture-card:hover {
+  border-color: rgba(59, 130, 246, 0.75);
+  transform: translateY(-1px);
+  background: rgba(239, 246, 255, 1);
+}
+
+.profile-avatar-large {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0f2fe, #dbeafe);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  position: relative;
+  overflow: hidden;
+  color: #1d4ed8;
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.profile-avatar-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.18);
+}
+
+.upload-zone {
+  border: 2px dashed rgba(148, 163, 184, 0.65);
+  border-radius: 18px;
+  padding: 24px;
+  background: #f8fafc;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.upload-zone.dragover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.upload-zone h5 {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.upload-zone p {
+  color: #475569;
+  margin-bottom: 0;
+}
+
+.upload-zone small {
+  color: #94a3b8;
+}
+
+.upload-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.upload-actions .btn {
+  border-radius: 999px;
+}
+
+.remove-avatar-btn {
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  color: #dc2626;
+}
+
 .btn-primary {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border: none;
@@ -212,10 +309,49 @@
           <i class="fas fa-id-card"></i> Profile Information
         </div>
         <div class="card-body">
-          <form method="POST" action="<?php echo e(route('profile.update')); ?>">
+          <form method="POST" action="<?php echo e(route('profile.update')); ?>" enctype="multipart/form-data">
             <?php echo csrf_field(); ?>
             <?php echo method_field('PUT'); ?>
-            
+
+            <div class="text-center mb-4" data-aos="fade-up" data-aos-delay="100">
+              <div class="profile-avatar-large">
+                <?php if($user->profile_picture_url): ?>
+                  <img src="<?php echo e($user->profile_picture_url); ?>" alt="<?php echo e($user->name); ?>">
+                <?php else: ?>
+                  <?php echo e($user->profile_initial); ?>
+
+                <?php endif; ?>
+                <div class="avatar-badge">
+                  <i class="fas fa-camera"></i>
+                </div>
+              </div>
+              <div class="upload-zone" id="uploadZone">
+                <h5>Upload Profile Picture</h5>
+                <p>Drag & drop an image here, or click to browse.</p>
+                <small>Supported: JPG, JPEG, PNG, WEBP | Max 2MB</small>
+                <input type="file" name="profile_picture" id="profilePictureInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+                <input type="hidden" name="remove_profile_picture" id="removeProfilePictureInput" value="0">
+                <?php if($user->profile_picture_url): ?>
+                  <div class="upload-actions">
+                    <button type="button" class="btn btn-outline-danger remove-avatar-btn" id="removeProfilePictureButton">
+                      <i class="fas fa-trash-alt"></i> Remove Picture
+                    </button>
+                  </div>
+                <?php endif; ?>
+              </div>
+
+              <?php $__errorArgs = ['profile_picture'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                  <div class="alert alert-danger mt-3"><?php echo e($message); ?></div>
+              <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+            </div>
+
             <div class="form-group" data-aos="fade-up" data-aos-delay="150">
               <label for="name" class="form-label"><i class="fas fa-user"></i>Full Name</label>
               <input type="text" name="name" id="name" class="form-control" value="<?php echo e($user->name); ?>" required>
@@ -307,6 +443,76 @@ function togglePassword(inputId, iconId) {
     toggleIcon.classList.add('fa-eye');
   }
 }
+
+function initProfileUpload() {
+  const uploadZone = document.getElementById('uploadZone');
+  const fileInput = document.getElementById('profilePictureInput');
+  const removeInput = document.getElementById('removeProfilePictureInput');
+  const removeButton = document.getElementById('removeProfilePictureButton');
+
+  if (!uploadZone || !fileInput) {
+    return;
+  }
+
+  uploadZone.addEventListener('click', () => fileInput.click());
+
+  uploadZone.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    uploadZone.classList.add('dragover');
+  });
+
+  uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('dragover');
+  });
+
+  uploadZone.addEventListener('drop', (event) => {
+    event.preventDefault();
+    uploadZone.classList.remove('dragover');
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      fileInput.files = dataTransfer.files;
+      previewSelectedImage(file);
+      removeInput.value = '0';
+    }
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) {
+      previewSelectedImage(fileInput.files[0]);
+      removeInput.value = '0';
+    }
+  });
+
+  if (removeButton) {
+    removeButton.addEventListener('click', () => {
+      removeInput.value = '1';
+      fileInput.value = '';
+      const avatar = document.querySelector('.profile-avatar-large');
+      if (avatar) {
+        avatar.innerHTML = '<span><?php echo e($user->profile_initial); ?></span><div class="avatar-badge"><i class="fas fa-camera"></i></div>';
+      }
+    });
+  }
+}
+
+function previewSelectedImage(file) {
+  if (!file.type.startsWith('image/')) {
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const avatar = document.querySelector('.profile-avatar-large');
+    if (avatar) {
+      avatar.innerHTML = '<img src="' + event.target.result + '" alt="Preview"><div class="avatar-badge"><i class="fas fa-camera"></i></div>';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+window.addEventListener('DOMContentLoaded', initProfileUpload);
 </script>
 <?php $__env->stopSection(); ?>
 </parameter>

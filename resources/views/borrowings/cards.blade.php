@@ -172,16 +172,32 @@
                     </div>
                     <div class="col-lg-5 text-lg-end">
                         <div class="d-flex justify-content-lg-end gap-2 flex-wrap">
-                            @if(Auth::user() && Auth::user()->role === 'admin')
-                                <a href="{{ route('equipment.create') }}" class="btn btn-outline-primary btn-lg">
-                                    <i class="bi bi-plus-lg me-2"></i> Add Equipment
-                                </a>
-                            @endif
+                            <a href="{{ route('borrowings.index') }}" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-list-ul me-2"></i> My Requests
+                            </a>
                             <button type="button" class="btn btn-primary btn-lg" @click="resetFilters()">
                                 <i class="bi bi-arrow-clockwise me-2"></i> Reset Filters
                             </button>
                         </div>
                     </div>
+                </div>
+
+                <div class="mt-4">
+                    @if(session('success'))
+                        <div class="alert alert-success rounded-4">{{ session('success') }}</div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger rounded-4">{{ session('error') }}</div>
+                    @endif
+                    @if($errors->any())
+                        <div class="alert alert-danger rounded-4">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="row mt-4 borrow-toolbar gx-3 gy-3">
@@ -282,7 +298,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 <div class="modal-body pt-0">
-<form method="POST" action="{{ url('/borrow') }}">
+<form method="POST" action="{{ route('borrow.create') }}">
                         @csrf
                         <input type="hidden" name="equipment_id" :value="selectedItem.id">
                         <input type="hidden" name="status" value="pending">

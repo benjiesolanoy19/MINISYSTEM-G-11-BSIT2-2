@@ -4,25 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Models\BorrowRequest;
 use App\Models\Equipment;
+use App\Models\Notification;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Validation\Rule;
 
 class BorrowRequestController extends Controller
 {
     public function indexEquipment()
     {
+        // Student borrow equipment page only.
+        // Staff/admin should use the admin inventory page, while students use /borrowings/create or /borrowings/equipment.
+        $this->authorizeStudentOnly();
+
         $equipment = Equipment::query()->get();
 
         return view('borrowings.cards', compact('equipment'));
     }
 
+
+
+    public function index(Request $request)
+    {
+        $role = Auth::user()->role ?? null;
+
+        if ($role === 'staff' ) {
+            return $this->allBorrows($request);
+        }
+
+        if ($role === 'admin') {
+            return $this->allBorrows($request);
+        }
+
+        return $this->myRequests($request);
+    }
+
+
     public function createBorrow(Request $request)
     {
+        $role = Auth::user()->role ?? null;
+        if (in_array($role, ['staff', 'admin'])) {
+            abort(403);
+        }
+
         $validated = $request->validate([
+
             'equipment_id' => ['required', 'integer', 'exists:equipment,id'],
             'quantity' => ['required', 'integer', 'min:1'],
+            'borrow_date' => ['required', 'date', 'after_or_equal:today'],
+            'return_date' => ['required', 'date', 'after:borrow_date'],
+            'purpose' => ['required', 'string', 'max:255'],
+            'notes' => ['nullable', 'string', 'max:500'],
         ]);
 
         $studentId = Auth::id();
@@ -37,8 +70,6 @@ class BorrowRequestController extends Controller
             return back()->with('error', 'You already have a pending request for this equipment.');
         }
 
-        // Per spec: do NOT decrement available_quantity until approved.
-        // Also per spec: if quantity > available, error.
         $equipment = Equipment::findOrFail($validated['equipment_id']);
         if ($validated['quantity'] > $equipment->available_quantity) {
             return back()->with('error', 'Requested quantity exceeds available quantity.');
@@ -50,14 +81,232 @@ class BorrowRequestController extends Controller
             'quantity' => $validated['quantity'],
             'status' => 'pending',
             'request_date' => now(),
+            'borrow_date' => $validated['borrow_date'],
+            'return_date' => $validated['return_date'],
+            'purpose' => $validated['purpose'],
+            'notes' => $validated['notes'] ?? null,
         ]);
 
-        return redirect()->route('equipment.index')->with('success', 'Borrow request submitted successfully.');
+        $this->notifyStaff('New borrow request from ' . Auth::user()->name . ' for ' . $equipment->name . '.');
+
+        return redirect()->route('borrowings.equipment.index')->with('success', 'Borrow request submitted successfully.');
+    }
+
+    public function myRequests(Request $request)
+    {
+        $role = Auth::user()->role ?? null;
+        if (in_array($role, ['staff', 'admin'])) {
+            abort(403);
+        }
+
+        $this->syncOverdueStatuses();
+
+        $requests = BorrowRequest::query()
+            ->where('student_id', Auth::id())
+            ->with(['equipment', 'approvedBy'])
+            ->latest('request_date')
+            ->get();
+
+        return view('borrowings.my-borrow-requests', compact('requests'));
+    }
+
+
+    public function showReturnEquipment(Request $request)
+    {
+        $role = Auth::user()->role ?? null;
+        if (in_array($role, ['staff', 'admin'])) {
+            abort(403);
+        }
+
+        $this->syncOverdueStatuses();
+        $userId = Auth::id();
+
+
+        $borrowedItems = BorrowRequest::query()
+            ->where('student_id', $userId)
+            ->where('status', 'claimed')
+            ->with(['equipment', 'approvedBy'])
+            ->latest('claimed_at')
+            ->get();
+
+        $activeBorrowings = BorrowRequest::where('student_id', $userId)
+            ->whereIn('status', ['claimed', 'return_requested'])
+            ->count();
+
+        $pendingReturns = BorrowRequest::where('student_id', $userId)
+            ->where('status', 'return_requested')
+            ->count();
+
+        $completedReturns = BorrowRequest::where('student_id', $userId)
+            ->where('status', 'returned')
+            ->count();
+
+        $overdueItems = BorrowRequest::where('student_id', $userId)
+            ->where('status', 'overdue')
+            ->count();
+
+        $returnHistory = BorrowRequest::query()
+            ->where('student_id', $userId)
+            ->whereIn('status', ['returned', 'overdue'])
+            ->with(['equipment'])
+            ->latest('returned_at')
+            ->limit(10)
+            ->get();
+
+        return view('borrowings.return-equipment', compact(
+            'borrowedItems',
+            'activeBorrowings',
+            'pendingReturns',
+            'completedReturns',
+            'overdueItems',
+            'returnHistory'
+        ));
+    }
+
+    public function submitReturn(Request $request)
+    {
+        $role = Auth::user()->role ?? null;
+        if (in_array($role, ['staff', 'admin'])) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+
+            'request_id' => ['required', 'integer', 'exists:borrow_requests,id'],
+            'condition' => ['required', 'in:good,minor_damage,major_damage'],
+            'return_notes' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $borrowing = BorrowRequest::query()
+            ->where('student_id', Auth::id())
+            ->findOrFail($validated['request_id']);
+
+        if ($borrowing->status !== 'claimed') {
+            return back()->with('error', 'Only claimed equipment can be submitted for return.');
+        }
+
+        $borrowing->update([
+            'status' => 'return_requested',
+            'return_requested_at' => now(),
+            'return_condition' => $validated['condition'],
+            'remarks' => $validated['return_notes'] ?? null,
+        ]);
+
+        $this->notifyStaff('Return request from ' . Auth::user()->name . ' for ' . $borrowing->equipment->name . '.');
+
+        return back()->with('success', 'Return request submitted successfully. Staff will verify the equipment shortly.');
+    }
+
+    public function showReturnManagement(Request $request)
+    {
+        $this->authorizeStaff();
+        $this->syncOverdueStatuses();
+
+        $pendingReturns = BorrowRequest::where('status', 'return_requested')
+            ->count();
+
+        $completedToday = \Schema::hasColumn('borrow_requests', 'returned_at')
+            ? BorrowRequest::where('status', 'returned')
+                ->whereDate('returned_at', now()->toDateString())
+                ->count()
+            : 0;
+
+
+        $damagedItems = \Schema::hasColumn('borrow_requests', 'return_condition')
+            ? BorrowRequest::whereIn('status', ['return_requested', 'returned'])
+                ->whereIn('return_condition', ['minor_damage', 'major_damage'])
+                ->count()
+            : 0;
+
+
+        $overdueItems = BorrowRequest::where('status', 'overdue')
+            ->count();
+
+        $orderColumn = \Schema::hasColumn('borrow_requests', 'return_requested_at')
+            ? 'return_requested_at'
+            : (\Schema::hasColumn('borrow_requests', 'request_date') ? 'request_date' : null);
+
+        $returnRequestsQuery = BorrowRequest::query()
+            ->where('status', 'return_requested')
+            ->with(['student', 'equipment', 'approvedBy'])
+            ->when($request->query('q'), function ($query, $term) {
+                $term = '%' . trim($term) . '%';
+                return $query->where(function ($sub) use ($term) {
+                    $sub->whereHas('student', function ($q) use ($term) {
+                        $q->where('name', 'like', $term);
+                    })
+                    ->orWhereHas('equipment', function ($q) use ($term) {
+                        $q->where('name', 'like', $term);
+                    });
+                });
+            })
+            ->when(
+                $request->query('condition') && \Schema::hasColumn('borrow_requests', 'return_condition'),
+                function ($query) use ($request) {
+                    return $query->where('return_condition', $request->query('condition'));
+                }
+            );
+
+        if ($orderColumn) {
+            $returnRequestsQuery->orderBy($orderColumn, 'desc');
+        }
+
+        $returnRequests = $returnRequestsQuery->get();
+
+
+
+
+
+
+
+        $recentReturns = \Schema::hasColumn('borrow_requests', 'returned_at')
+            ? BorrowRequest::query()
+                ->where('status', 'returned')
+                ->with(['student', 'equipment'])
+                ->latest('returned_at')
+                ->limit(10)
+                ->get()
+            : collect();
+
+
+
+        // If return_requested_at column doesn't exist, avoid any ordering that can break.
+        // This is defensive against schema drift.
+
+        return view('staff.return-management', compact(
+            'pendingReturns',
+            'completedToday',
+            'damagedItems',
+            'overdueItems',
+            'returnRequests',
+            'recentReturns'
+        ));
+    }
+
+    public function studentRequestReturn(Request $request, int $request_id)
+    {
+        $borrowRequest = BorrowRequest::query()
+            ->where('student_id', Auth::id())
+            ->findOrFail($request_id);
+
+        if ($borrowRequest->status !== 'claimed') {
+            return back()->with('error', 'Return request can only be submitted after equipment has been claimed.');
+        }
+
+        $borrowRequest->update([
+            'status' => 'return_requested',
+            'return_requested_at' => now(),
+        ]);
+
+        $this->notifyStaff('Return requested for ' . $borrowRequest->equipment->name . ' by ' . Auth::user()->name . '.');
+
+        return back()->with('success', 'Return request submitted. Staff will confirm the return shortly.');
     }
 
     public function staffPendingRequests()
     {
         $this->authorizeStaff();
+        $this->syncOverdueStatuses();
 
         $requests = BorrowRequest::query()
             ->where('status', 'pending')
@@ -72,7 +321,7 @@ class BorrowRequestController extends Controller
     {
         $this->authorizeStaff();
 
-        $borrowRequest = BorrowRequest::query()->with('equipment')->findOrFail($request_id);
+        $borrowRequest = BorrowRequest::query()->with('equipment', 'student')->findOrFail($request_id);
         if ($borrowRequest->status !== 'pending') {
             return back()->with('error', 'This request is not pending.');
         }
@@ -84,9 +333,14 @@ class BorrowRequestController extends Controller
             return back()->with('error', 'Cannot approve: requested quantity exceeds current available quantity.');
         }
 
-        $db->transaction(function () use ($borrowRequest) {
-            $borrowRequest->refresh();
-            // Do NOT decrement inventory on approval (spec: deduct only when claimed physically)
+        $db->transaction(function () use ($borrowRequest, $equipment) {
+            $equipment->refresh();
+            if ($borrowRequest->quantity > $equipment->available_quantity) {
+                throw new \RuntimeException('Quantity exceeds available quantity.');
+            }
+
+            $equipment->decrement('available_quantity', $borrowRequest->quantity);
+
             $borrowRequest->update([
                 'status' => 'approved',
                 'approval_date' => now(),
@@ -94,32 +348,14 @@ class BorrowRequestController extends Controller
             ]);
         });
 
+        $this->notifyUser($borrowRequest->student_id, 'Your borrow request for ' . $equipment->name . ' has been approved.');
+
         return back()->with('success', 'Borrow request approved.');
-    }
-
-    public function staffReadyToClaim(Request $request, int $request_id)
-    {
-        $this->authorizeStaff();
-
-        $borrowRequest = BorrowRequest::query()->with('equipment', 'student')->findOrFail($request_id);
-        if ($borrowRequest->status !== 'approved') {
-            return back()->with('error', 'This request is not in an approved state.');
-        }
-
-        $borrowRequest->update([
-            'status' => 'ready_to_claim',
-        ]);
-
-        return back()->with('success', 'Request marked as Ready to Claim.');
     }
 
     public function staffReject(Request $request, int $request_id)
     {
         $this->authorizeStaff();
-
-        $validated = $request->validate([
-            'remarks' => ['nullable', 'string', 'max:5000'],
-        ]);
 
         $borrowRequest = BorrowRequest::findOrFail($request_id);
         if ($borrowRequest->status !== 'pending') {
@@ -128,72 +364,110 @@ class BorrowRequestController extends Controller
 
         $borrowRequest->update([
             'status' => 'rejected',
-            'remarks' => $validated['remarks'] ?? $borrowRequest->remarks,
         ]);
+
+        $this->notifyUser($borrowRequest->student_id, 'Your borrow request for ' . $borrowRequest->equipment->name . ' has been rejected.');
 
         return back()->with('success', 'Borrow request rejected.');
     }
 
-
-    public function staffMarkClaimed(Request $request, int $request_id, DatabaseManager $db)
+    public function staffReadyToClaim(Request $request, int $request_id)
     {
         $this->authorizeStaff();
 
-        $borrowRequest = BorrowRequest::query()->with('equipment')->findOrFail($request_id);
-        if ($borrowRequest->status !== 'ready_to_claim') {
-            return back()->with('error', 'This request is not ready to be claimed.');
+        $borrowRequest = BorrowRequest::findOrFail($request_id);
+        if ($borrowRequest->status !== 'approved') {
+            return back()->with('error', 'Request must be approved before it can be marked ready to claim.');
         }
 
-        $quantity = $borrowRequest->quantity;
-        $equipment = $borrowRequest->equipment;
+        $borrowRequest->update(['status' => 'ready_to_claim']);
+        $this->notifyUser($borrowRequest->student_id, 'Your equipment request for ' . $borrowRequest->equipment->name . ' is ready to claim.');
 
-        $db->transaction(function () use ($borrowRequest, $quantity, $equipment) {
-            $equipment->refresh();
-
-            if ($quantity > $equipment->available_quantity) {
-                throw new \RuntimeException('Cannot mark as Claimed: insufficient inventory quantity.');
-            }
-
-            // Deduct only now (physical claiming confirmed)
-            $equipment->decrement('available_quantity', $quantity);
-
-            $borrowRequest->update([
-                'status' => 'claimed',
-                'claimed_at' => now(),
-            ]);
-        });
-
-        return back()->with('success', 'Equipment marked as Claimed.');
+        return back()->with('success', 'Borrow request marked ready to claim.');
     }
 
-    public function staffMarkReturned(Request $request, int $request_id, DatabaseManager $db)
+    public function staffMarkClaimed(Request $request, int $request_id)
     {
         $this->authorizeStaff();
 
-        $borrowRequest = BorrowRequest::query()->with('equipment')->findOrFail($request_id);
-        if ($borrowRequest->status !== 'claimed') {
-            return back()->with('error', 'This request is not in a claimed state.');
+        $borrowRequest = BorrowRequest::findOrFail($request_id);
+        if ($borrowRequest->status !== 'ready_to_claim') {
+            return back()->with('error', 'Request must be ready to claim before it can be marked as claimed.');
         }
 
-        $quantity = $borrowRequest->quantity;
-        $equipment = $borrowRequest->equipment;
+        $borrowRequest->update([
+            'status' => 'claimed',
+            'claimed_at' => now(),
+        ]);
 
-        $db->transaction(function () use ($borrowRequest, $quantity, $equipment) {
-            $equipment->refresh();
+        $this->notifyUser($borrowRequest->student_id, 'Your equipment request for ' . $borrowRequest->equipment->name . ' has been marked as claimed.');
 
-            // Restore quantity
-            $equipment->increment('available_quantity', $quantity);
+        return back()->with('success', 'Equipment marked as claimed.');
+    }
 
+    public function staffApproveReturn(Request $request, int $request_id, DatabaseManager $db)
+    {
+        $this->authorizeStaff();
+
+        $borrowRequest = BorrowRequest::query()->with('equipment', 'student')->findOrFail($request_id);
+        if ($borrowRequest->status !== 'return_requested') {
+            return back()->with('error', 'This request has not been marked for return.');
+        }
+
+        $db->transaction(function () use ($borrowRequest) {
+            $borrowRequest->equipment->increment('available_quantity', $borrowRequest->quantity);
             $borrowRequest->update([
                 'status' => 'returned',
                 'returned_at' => now(),
             ]);
         });
 
-        return back()->with('success', 'Borrow marked as Returned.');
+        $this->notifyUser($borrowRequest->student_id, 'Your return request for ' . $borrowRequest->equipment->name . ' has been approved and completed.');
+
+        return back()->with('success', 'Return approved and inventory updated.');
     }
 
+    public function staffRejectReturn(Request $request, int $request_id)
+    {
+        $this->authorizeStaff();
 
+        $borrowRequest = BorrowRequest::query()->with('equipment')->findOrFail($request_id);
+        if ($borrowRequest->status !== 'return_requested') {
+            return back()->with('error', 'No return request exists for this borrowing.');
+        }
+
+        $borrowRequest->update([
+            'status' => 'claimed',
+            'remarks' => $request->input('remarks', 'Return request rejected by staff.'),
+        ]);
+
+        $this->notifyUser($borrowRequest->student_id, 'Your return request for ' . $borrowRequest->equipment->name . ' was rejected. Please speak with staff.');
+
+        return back()->with('success', 'Return request rejected.');
+    }
+
+    public function staffMarkReturned(Request $request, int $request_id, DatabaseManager $db)
+    {
+        $this->authorizeStaff();
+
+        $borrowRequest = BorrowRequest::query()->with('equipment', 'student')->findOrFail($request_id);
+        if (!in_array($borrowRequest->status, ['claimed', 'return_requested', 'overdue'])) {
+            return back()->with('error', 'This borrowing cannot be marked returned at this stage.');
+        }
+
+        $db->transaction(function () use ($borrowRequest, $request) {
+            $borrowRequest->equipment->increment('available_quantity', $borrowRequest->quantity);
+            $borrowRequest->update([
+                'status' => 'returned',
+                'returned_at' => now(),
+                'remarks' => $request->input('remarks', 'Return processed by staff.'),
+            ]);
+        });
+
+        $this->notifyUser($borrowRequest->student_id, 'Your borrowing for ' . $borrowRequest->equipment->name . ' has been marked as returned.');
+
+        return back()->with('success', 'Equipment return completed successfully.');
+    }
 
 
     public function allBorrows(Request $request)
@@ -203,8 +477,25 @@ class BorrowRequestController extends Controller
             abort(403);
         }
 
+        $this->syncOverdueStatuses();
+
         $requests = BorrowRequest::query()
             ->with(['student', 'equipment', 'approvedBy'])
+            ->when($request->query('status'), function ($query, $status) {
+                return $query->where('status', $status);
+            })
+            ->when($request->query('q'), function ($query, $term) {
+                $term = '%' . trim($term) . '%';
+                return $query->where(function ($sub) use ($term) {
+                    $sub->whereHas('student', function ($q) use ($term) {
+                        $q->where('name', 'like', $term);
+                    })
+                    ->orWhereHas('equipment', function ($q) use ($term) {
+                        $q->where('name', 'like', $term);
+                    })
+                    ->orWhere('purpose', 'like', $term);
+                });
+            })
             ->latest('request_date')
             ->get();
 
@@ -233,8 +524,6 @@ class BorrowRequestController extends Controller
         if (!in_array($role, ['staff', 'admin'])) {
             abort(403);
         }
-        // Per spec: Admin and Staff can review/approve/reject.
-        // Do not block admin here.
     }
 
     private function authorizeAdmin(): void
@@ -243,6 +532,59 @@ class BorrowRequestController extends Controller
         if ($role !== 'admin') {
             abort(403);
         }
+    }
+
+    private function authorizeStudentOnly(): void
+    {
+        $role = Auth::user()->role ?? null;
+        if (in_array($role, ['staff', 'admin'])) {
+            abort(403);
+        }
+    }
+
+
+    private function syncOverdueStatuses(): void
+    {
+        // Prevent 500s if the DB schema doesn't contain the expected column.
+        if (!\Schema::hasColumn('borrow_requests', 'return_date')) {
+            return;
+        }
+
+        $overdueRequests = BorrowRequest::query()
+            ->whereIn('status', ['approved', 'ready_to_claim', 'claimed', 'return_requested'])
+            ->whereNotNull('return_date')
+            ->whereDate('return_date', '<', now()->toDateString())
+            ->get();
+
+        foreach ($overdueRequests as $request) {
+            $request->update(['status' => 'overdue']);
+            $this->notifyUser(
+                $request->student_id,
+                'Your borrow request for ' . $request->equipment->name . ' is overdue. Please return it immediately.'
+            );
+        }
+    }
+
+
+    private function notifyStaff(string $message, string $type = 'info'): void
+    {
+        $staffUsers = \App\Models\User::whereIn('role', ['staff', 'admin'])->get();
+        foreach ($staffUsers as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => $message,
+                'type' => $type,
+            ]);
+        }
+    }
+
+    private function notifyUser(int $userId, string $message, string $type = 'info'): void
+    {
+        Notification::create([
+            'user_id' => $userId,
+            'message' => $message,
+            'type' => $type,
+        ]);
     }
 }
 

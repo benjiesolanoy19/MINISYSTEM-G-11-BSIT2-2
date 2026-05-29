@@ -76,8 +76,18 @@ class AuthController extends Controller
                 'username' => 'required|string|max:50|unique:users|alpha_dash',
                 'email' => 'required|email|unique:users',
                 'role' => 'required|in:student,staff',
-                'password' => 'required|min:6'
+                'password' => 'required|min:6',
+                'secret_code' => 'nullable|string'
             ]);
+
+            if (($validated['role'] ?? 'student') === 'staff') {
+                $secret = $request->input('secret_code');
+                if (empty($secret) || $secret !== 'chmsubin') {
+                    return back()
+                        ->withErrors(['secret_code' => 'Invalid staff secret code.'])
+                        ->withInput($request->except('password'));
+                }
+            }
 
             $user = User::create([
                 'name' => $validated['name'],
@@ -86,6 +96,7 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
                 'role' => $validated['role'] ?? 'student'
             ]);
+
 
             Auth::login($user);
             $request->session()->regenerate();

@@ -73,12 +73,16 @@
                                             <div class="fw-bold">{{ $r->student->name }}</div>
                                             <div class="text-muted small">Equipment: <strong class="text-dark">{{ $r->equipment->name }}</strong></div>
                                             <div class="text-muted small">Qty: <strong class="text-dark">{{ $r->quantity }}</strong></div>
-                                            <div class="text-muted small">Requested: {{ $r->request_date }}</div>
+                                            <div class="text-muted small">Borrow: <strong class="text-dark">{{ optional($r->borrow_date)->format('M d, Y') }}</strong></div>
+                                            <div class="text-muted small">Return: <strong class="text-dark">{{ optional($r->return_date)->format('M d, Y') }}</strong></div>
+                                            <div class="text-muted small">Purpose: <strong class="text-dark">{{ Str::limit($r->purpose, 45) }}</strong></div>
+
+                                            <div class="text-muted small">Requested: {{ optional($r->request_date)->format('M d, Y H:i') }}</div>
                                         </div>
                                     </div>
 
                                     <div class="ms-lg-auto d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2">
-                                        <x-borrow-status-badge status="pending" />
+<x-borrow-status-badge status="pending" />
                                         <div class="text-muted small">Available: <strong class="text-dark">{{ $r->equipment->available_quantity }}</strong></div>
                                     </div>
 

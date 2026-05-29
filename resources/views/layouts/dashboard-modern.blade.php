@@ -277,7 +277,11 @@
                 <div class="dropdown">
                     <a class="d-flex align-items-center text-decoration-none gap-2 cursor-pointer" style="cursor: pointer;" role="button" data-bs-toggle="dropdown">
                         <div class="user-avatar">
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            @if(Auth::user()->profile_picture_url)
+                                <img src="{{ Auth::user()->profile_picture_url }}" alt="{{ Auth::user()->name }}">
+                            @else
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            @endif
                         </div>
                         <div class="d-none d-md-block">
                             <div style="font-weight: 500; font-size: 0.9rem;">{{ Auth::user()->name }}</div>

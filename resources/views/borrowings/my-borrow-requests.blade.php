@@ -101,6 +101,19 @@
                                         <div class="text-muted small mb-0">Staff remarks: <span class="fw-semibold text-dark">{{ $r->remarks }}</span></div>
                                     </div>
                                 @endif
+
+                                @if($r->status === 'claimed')
+                                    <div class="w-100">
+                                        <form method="POST" action="{{ route('borrowings.request-return', ['request_id' => $r->id]) }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill mt-3">Request Return</button>
+                                        </form>
+                                    </div>
+                                @elseif($r->status === 'return_requested')
+                                    <div class="w-100">
+                                        <span class="badge bg-info text-white">Return requested</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @empty

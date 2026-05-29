@@ -186,6 +186,14 @@
             color: white;
             font-weight: 600;
             font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         
         .user-avatar:hover {
@@ -500,7 +508,11 @@
             <div class="dropdown" x-data="{ open: false }">
                 <div class="user-menu" @click="open = !open">
                     <div class="user-avatar">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        @if(Auth::user()->profile_picture_url)
+                            <img src="{{ Auth::user()->profile_picture_url }}" alt="{{ Auth::user()->name }}">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        @endif
                     </div>
                     <div>
                         <div style="font-weight: 500;">{{ Auth::user()->name }}</div>

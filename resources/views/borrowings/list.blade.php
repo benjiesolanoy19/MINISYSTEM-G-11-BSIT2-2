@@ -353,7 +353,7 @@
             </form>
             @endif
 
-            <a href="{{ route('equipment.index') }}" class="btn-card btn-outline-secondary">
+            <a href="{{ route('borrowings.equipment.index') }}" class="btn-card btn-outline-secondary">
               <i class="fas fa-eye"></i>View Equipment
             </a>
           </div>

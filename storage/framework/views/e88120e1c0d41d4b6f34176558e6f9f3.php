@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Register - ICTFE'); ?>
 
-@section('title', 'Register - ICTFE')
-
-@section('styles')
+<?php $__env->startSection('styles'); ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -382,9 +380,9 @@
             }
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="register-wrapper" data-aos="fade-in" data-aos-duration="1000">
         <div class="register-container">
             <!-- Left Side - Branding -->
@@ -439,15 +437,15 @@
                     <p>Join ICTFE and manage facilities efficiently</p>
                 </div>
 
-                @if($errors->any())
+                <?php if($errors->any()): ?>
                     <div class="error-alert" data-aos="fade-in">
                         <i class="fas fa-exclamation-circle"></i>
-                        <span>{{ $errors->first() }}</span>
+                        <span><?php echo e($errors->first()); ?></span>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                <form method="POST" action="{{ route('register') }}" class="form-section">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('register')); ?>" class="form-section">
+                    <?php echo csrf_field(); ?>
 
                     <div class="form-group" data-aos="fade-up" data-aos-delay="100">
                         <label for="register-name">
@@ -460,11 +458,18 @@
                             class="form-control" 
                             placeholder="Enter your full name"
                             required
-                            value="{{ old('name') }}"
+                            value="<?php echo e(old('name')); ?>"
                         >
-                        @error('name')
-                            <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="form-error"><i class="fas fa-times-circle"></i> <?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <div class="form-group" data-aos="fade-up" data-aos-delay="150">
@@ -478,11 +483,18 @@
                             class="form-control" 
                             placeholder="Choose a unique username"
                             required
-                            value="{{ old('username') }}"
+                            value="<?php echo e(old('username')); ?>"
                         >
-                        @error('username')
-                            <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['username'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="form-error"><i class="fas fa-times-circle"></i> <?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <div class="form-group" data-aos="fade-up" data-aos-delay="200">
@@ -496,11 +508,18 @@
                             class="form-control" 
                             placeholder="Enter your email address"
                             required
-                            value="{{ old('email') }}"
+                            value="<?php echo e(old('email')); ?>"
                         >
-                        @error('email')
-                            <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="form-error"><i class="fas fa-times-circle"></i> <?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <div class="form-group" data-aos="fade-up" data-aos-delay="250">
@@ -509,12 +528,19 @@
                         </label>
                         <select id="register-role" name="role" class="form-select" required>
                             <option value="">Select your account type</option>
-                            <option value="student" {{ old('role') === 'student' ? 'selected' : '' }}>Student</option>
-                            <option value="staff" {{ old('role') === 'staff' ? 'selected' : '' }}>Teacher / Staff</option>
+                            <option value="student" <?php echo e(old('role') === 'student' ? 'selected' : ''); ?>>Student</option>
+                            <option value="staff" <?php echo e(old('role') === 'staff' ? 'selected' : ''); ?>>Teacher / Staff</option>
                         </select>
-                        @error('role')
-                            <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['role'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="form-error"><i class="fas fa-times-circle"></i> <?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <div class="form-group staff-secret" data-aos="fade-up" data-aos-delay="280" style="display: none;">
@@ -529,9 +555,16 @@
                             placeholder="Enter staff secret code"
                             autocomplete="off"
                         >
-                        @error('secret_code')
-                            <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['secret_code'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="form-error"><i class="fas fa-times-circle"></i> <?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <div class="form-text small text-muted mt-1">Required only for staff registration.</div>
                     </div>
 
@@ -549,9 +582,16 @@
                             required
                             autocomplete="new-password"
                         >
-                        @error('password')
-                            <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
-                        @enderror
+                        <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <div class="form-error"><i class="fas fa-times-circle"></i> <?php echo e($message); ?></div>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <button 
@@ -565,14 +605,14 @@
                 </form>
 
                 <div class="login-link" data-aos="fade-up" data-aos-delay="400">
-                    <p>Already have an account? <a href="{{ route('login') }}">Sign in here</a></p>
+                    <p>Already have an account? <a href="<?php echo e(route('login')); ?>">Sign in here</a></p>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
@@ -596,4 +636,6 @@
             roleSelect?.addEventListener('change', toggleSecret);
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\CLMFS_GROUP11 - Copy (2)\resources\views/auth/register.blade.php ENDPATH**/ ?>

@@ -21,16 +21,24 @@ class AdminController extends Controller
         $logs = Log::with('user')->orderBy('timestamp', 'desc')->take(50)->get();
         $incidents = Incident::with('user', 'equipment')->get();
 
+        // Fix undefined variable in resources/views/admin/index.blade.php
+        // The view expects $reservations and iterates them.
+        $reservations = \App\Models\BorrowRequest::query()
+            ->with(['student', 'equipment'])
+            ->latest('request_date')
+            ->limit(10)
+            ->get();
+
         $stats = [
             'total_users' => $users->count(),
             'total_equipment' => $equipment->count(),
             'total_borrowings' => $borrowings->count(),
             'pending_borrowings' => $borrowings->where('status', 'pending')->count(),
-
+            'total_reservations' => $reservations->count(),
             'active_incidents' => $incidents->where('status', '!=', 'closed')->count(),
         ];
 
-        return view('admin.index', compact('stats', 'users', 'borrowings', 'equipment', 'logs', 'incidents'));
+        return view('admin.index', compact('stats', 'users', 'borrowings', 'equipment', 'logs', 'incidents', 'reservations'));
     }
 
     public function users()

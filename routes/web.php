@@ -18,7 +18,7 @@ require_once __DIR__ . '/borrowings.php';
 
 // Backward-compatible route names for dashboard UI
 // Map legacy route names to new borrowing system endpoints
-Route::get('/borrowings', [\App\Http\Controllers\BorrowRequestController::class, 'indexEquipment'])->name('borrowings.index');
+Route::get('/borrowings', [\App\Http\Controllers\BorrowRequestController::class, 'index'])->name('borrowings.index');
 Route::get('/borrowings/create', [\App\Http\Controllers\BorrowRequestController::class, 'indexEquipment'])->name('borrowings.create');
 
 

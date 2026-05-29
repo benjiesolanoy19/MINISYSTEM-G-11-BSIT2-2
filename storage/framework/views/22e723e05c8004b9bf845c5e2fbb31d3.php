@@ -5,145 +5,288 @@
 
 <?php $__env->startSection('styles'); ?>
 <style>
-.dashboard-header {
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.96);
-    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+.dashboard-hero {
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(235,245,255,0.95));
+    padding: 2rem;
+    border: 1px solid rgba(226,232,240,0.95);
 }
-.dashboard-header .header-meta {
-    font-size: 0.78rem;
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #0c4a6e;
     text-transform: uppercase;
     letter-spacing: 0.18em;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+.hero-title {
+    font-size: clamp(2rem, 2.4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+.hero-copy {
+    color: #475569;
+    max-width: 680px;
+}
+.hero-meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    background: #f8fbff;
+    border-radius: 999px;
+    border: 1px solid rgba(14, 165, 233, 0.14);
+    color: #334155;
+    font-size: 0.88rem;
+}
+.hero-status-card {
+    min-width: 220px;
+    background: white;
+    border-radius: 24px;
+    border: 1px solid rgba(226,232,240,0.95);
+    padding: 1.4rem;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.05);
+}
+.hero-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(16,185,129,0.18));
+    color: #0c4a6e;
+    font-size: 1.25rem;
+}
+.hero-status-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: #0ea5e9;
-    margin-bottom: 0.8rem;
     font-weight: 700;
 }
-.dashboard-header h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+.hero-status-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
 }
-.dashboard-header p {
-    color: #64748b;
-    margin-bottom: 0;
-}
-.dashboard-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-.dashboard-stats-grid {
+.stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 1.8rem;
 }
-.dashboard-stat-card {
-    background: #ffffff;
+@media (min-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+.stat-card {
+    background: white;
+    border: 1px solid rgba(226,232,240,0.95);
     border-radius: 22px;
-    padding: 1.35rem 1.4rem;
-    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.06);
-    border: 1px solid rgba(226, 232, 240, 0.95);
+    padding: 1.2rem 1.3rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.dashboard-stat-card .stat-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #64748b;
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 54px rgba(15, 23, 42, 0.08);
+}
+.stat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: #475569;
     margin-bottom: 0.75rem;
 }
-.dashboard-stat-card .stat-value {
-    font-size: 2rem;
+.stat-card-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+.stat-card-note {
+    color: #64748b;
+    margin-top: 0.7rem;
+    font-size: 0.88rem;
+}
+.stat-card-soft {
+    background: #f8fbff;
+}
+.section-title {
+    font-size: 1.05rem;
     font-weight: 700;
     color: #0f172a;
 }
-.dashboard-stat-card .stat-note {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-top: 0.65rem;
+.badge-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
 }
-.quick-actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
+.badge-primary {
+    background: rgba(14, 165, 233, 0.12);
+    color: #0c4a6e;
 }
-.quick-action-card {
+.badge-soft {
+    background: rgba(15, 23, 42, 0.06);
+    color: #334155;
+}
+.mini-metric-card {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.85rem;
+    background: #f8fbff;
+    border-radius: 20px;
     padding: 1rem;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    text-decoration: none;
-    color: #0f172a;
+    border: 1px solid rgba(226,232,240,0.95);
 }
-.quick-action-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-    border-color: rgba(14, 165, 233, 0.4);
+.bg-blue-soft {
+    background: rgba(14,165,233,0.08);
 }
-.action-icon {
+.bg-warning-soft {
+    background: rgba(251,191,36,0.12);
+}
+.mini-metric-icon {
     width: 44px;
     height: 44px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #0ea5e9, #10b981);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1.05rem;
+    font-size: 1rem;
 }
-.action-title {
-    font-weight: 600;
-    font-size: 0.95rem;
+.mini-metric-label {
+    font-size: 0.82rem;
+    color: #475569;
     margin-bottom: 0.2rem;
 }
-.action-subtitle {
-    font-size: 0.8rem;
-    color: #64748b;
+.mini-metric-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
 }
-.notifications-preview {
+.chart-card {
+    background: white;
+    border-radius: 24px;
+    border: 1px solid rgba(226,232,240,0.95);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.04);
+}
+.chart-card-header {
+    align-items: center;
+}
+.timeline-card {
+    border-radius: 24px;
+    border: 1px solid rgba(226,232,240,0.95);
+    background: white;
+    padding: 1.25rem;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.04);
+}
+.timeline-step {
     display: grid;
+    grid-template-columns: auto 1fr;
     gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(226,232,240,0.95);
 }
-.notification-preview-item {
-    display: flex;
-    align-items: flex-start;
+.timeline-step:last-child {
+    border-bottom: none;
+}
+.timeline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+.timeline-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(14,165,233,0.12);
+    color: #0e7490;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.quick-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.9rem;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    padding: 1rem;
 }
-.notification-preview-item.unread {
-    background: rgba(14, 165, 233, 0.07);
+.quick-action-card {
+    border-radius: 20px;
+    padding: 1rem;
+    background: white;
+    border: 1px solid rgba(226,232,240,0.95);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    text-decoration: none;
+}
+.quick-action-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
     border-color: rgba(14, 165, 233, 0.3);
 }
-.notification-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-    background: rgba(14, 165, 233, 0.12);
-    display: flex;
+.notification-avatar {
+    min-width: 42px;
+    min-height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: rgba(14,165,233,0.12);
+    color: #0c4a6e;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.notification-preview-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.notification-preview-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+}
+.notification-preview-item.unread {
+    border-color: rgba(14,165,233,0.3);
+    background: rgba(14,165,233,0.06);
+}
+.empty-state {
+    padding: 2.5rem;
+    text-align: center;
+    border-radius: 24px;
+    border: 1px dashed rgba(148,163,184,0.5);
+    background: rgba(255,255,255,0.95);
+}
+.empty-state i {
+    font-size: 2.5rem;
     color: #0ea5e9;
-    font-size: 0.95rem;
 }
-.notification-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #0f172a;
-    margin-bottom: 0.2rem;
+.table-responsive {
+    overflow-x: auto;
 }
-.notification-time {
-    font-size: 0.78rem;
-    color: #64748b;
+.table th,
+.table td {
+    vertical-align: middle;
 }
-@media (max-width: 991.98px) {
-    .dashboard-header h2 {
-        font-size: 1.75rem;
+.hero-meta-pill i,
+.stat-card-title i,
+.mini-metric-icon i {
+    width: 18px;
+    text-align: center;
+}
+@media (max-width: 767.98px) {
+    .hero-status-card {
+        width: 100%;
+    }
+    .quick-action-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -151,92 +294,198 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid py-4">
-    <div class="row g-4 align-items-center mb-4">
+    <div class="row g-4">
         <div class="col-12">
-            <div class="card-modern p-4">
-                <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
+            <div class="card-modern dashboard-hero hover-lift">
+                <div class="d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center gap-4">
                     <div>
-                        <div class="text-uppercase text-primary fw-semibold mb-2" style="letter-spacing:0.18em; font-size:0.78rem;">Home overview</div>
-                        <h2 class="mb-2 fw-bold">Welcome back, <?php echo e($user->name); ?>.</h2>
-                        <p class="text-muted mb-0">Quick access to equipment, requests, incidents, and notifications from one place.</p>
+                        <span class="section-badge">Home overview</span>
+                        <h1 id="dashboardGreeting" class="hero-title mt-3 mb-2">Welcome back, <?php echo e($user->name); ?>.</h1>
+                        <p class="hero-copy mb-3">Quick access to equipment, requests, incidents and notifications — all in one modern workspace.</p>
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="hero-meta-pill"><i class="fas fa-calendar-day"></i><span id="dashboardLocalDate"><?php echo e(now()->format('F j, Y')); ?></span></span>
+                            <span class="hero-meta-pill"><i class="fas fa-clock"></i><span id="dashboardLocalTime"><?php echo e(now()->format('g:i A')); ?></span></span>
+                            <span class="hero-meta-pill"><i class="fas fa-user-tag"></i><?php echo e(ucfirst($user->role)); ?></span>
+                        </div>
                     </div>
-                    <div class="d-flex flex-wrap align-items-center gap-2">
-                        <a href="<?php echo e(route('notifications.index')); ?>" class="btn btn-outline-primary rounded-pill">Notifications</a>
-                        <?php if($user->role === 'staff'): ?>
-                            <a href="<?php echo e(route('borrowings.index')); ?>" class="btn btn-primary rounded-pill">Review Requests</a>
-                        <?php else: ?>
-                            <a href="<?php echo e(route('borrowings.create')); ?>" class="btn btn-primary rounded-pill">Borrow Equipment</a>
-                        <?php endif; ?>
+                    <div class="hero-status-card text-end">
+                        <div class="d-flex justify-content-end align-items-center gap-3 mb-3">
+                            <div class="hero-avatar"><i class="fas fa-laptop-code"></i></div>
+                            <div class="text-end">
+                                <div class="hero-status-label">System status</div>
+                                <div class="hero-status-value">Live & smooth</div>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0"><?php echo e($reasonMessage); ?></p>
                     </div>
                 </div>
 
-                <div class="dashboard-stats-grid mt-4">
-                    <div class="dashboard-stat-card">
-                        <div class="stat-label">Active borrowings</div>
-                        <div class="stat-value"><?php echo e($borrowings->count()); ?></div>
-                        <div class="stat-note"><?php echo e($borrowings->where('status', 'pending')->count()); ?> pending</div>
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-boxes"></i> Total equipment</div>
+                        <div class="stat-card-value"><?php echo e($totalEquipment); ?></div>
+                        <div class="stat-card-note">Full inventory in the system</div>
                     </div>
-                    <div class="dashboard-stat-card">
-                        <div class="stat-label">Unread notifications</div>
-                        <div class="stat-value"><?php echo e($unreadCount); ?></div>
-                        <div class="stat-note">Latest updates waiting</div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-check-circle"></i> Available</div>
+                        <div class="stat-card-value"><?php echo e($availableEquipment); ?></div>
+                        <div class="stat-card-note">Ready to borrow</div>
                     </div>
-                    <div class="dashboard-stat-card">
-                        <div class="stat-label">Reported incidents</div>
-                        <div class="stat-value"><?php echo e($incidents->count()); ?></div>
-                        <div class="stat-note"><?php echo e($incidents->where('status', 'open')->count()); ?> open</div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-hand-holding-box"></i> Borrowed</div>
+                        <div class="stat-card-value"><?php echo e($borrowedEquipment); ?></div>
+                        <div class="stat-card-note">Currently in use</div>
                     </div>
-                    <div class="dashboard-stat-card">
-                        <div class="stat-label">Total equipment</div>
-                        <div class="stat-value"><?php echo e(\App\Models\Equipment::count()); ?></div>
-                        <div class="stat-note">Inventory overview</div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-hourglass-half"></i> Pending requests</div>
+                        <div class="stat-card-value"><?php echo e($pendingApprovals); ?></div>
+                        <div class="stat-card-note">Awaiting staff action</div>
+                    </div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-undo-alt"></i> Return requests</div>
+                        <div class="stat-card-value"><?php echo e($returnRequests); ?></div>
+                        <div class="stat-card-note">Processing returns</div>
+                    </div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-user-friends"></i> Active users</div>
+                        <div class="stat-card-value"><?php echo e($activeUsers); ?></div>
+                        <div class="stat-card-note">Participants in the system</div>
+                    </div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-bug"></i> Incident reports</div>
+                        <div class="stat-card-value"><?php echo e($incidentReports); ?></div>
+                        <div class="stat-card-note">Open and logged issues</div>
+                    </div>
+                    <div class="stat-card stat-card-soft">
+                        <div class="stat-card-title"><i class="fas fa-exclamation-triangle"></i> Overdue items</div>
+                        <div class="stat-card-value"><?php echo e($overdueEquipment); ?></div>
+                        <div class="stat-card-note">Need follow-up</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mt-3">
         <div class="col-xl-8">
-            <div class="card-modern p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="card-modern p-4 hover-lift">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
                     <div>
-                        <h5 class="mb-1 fw-bold"><i class="fas fa-history text-primary me-2"></i>Recent Activity</h5>
-                        <p class="text-muted small mb-0">Your latest borrowings and requests</p>
+                        <h5 class="section-title mb-1">Analytics overview</h5>
+                        <p class="text-muted small mb-0">Fresh insight into borrowing and incident patterns.</p>
                     </div>
-                    <a href="<?php echo e(route('borrowings.index')); ?>" class="btn btn-outline-primary btn-sm rounded-pill">View All</a>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <span class="badge-pill badge-primary">Trends</span>
+                        <span class="badge-pill badge-soft">Updated now</span>
+                    </div>
                 </div>
 
-                <div class="activity-timeline">
-                    <?php $__empty_1 = true; $__currentLoopData = $borrowings->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $borrowing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <i class="fas fa-laptop"></i>
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6">
+                        <div class="mini-metric-card bg-blue-soft">
+                            <div class="mini-metric-icon text-primary"><i class="fas fa-hourglass-half"></i></div>
+                            <div>
+                                <div class="mini-metric-label">Pending requests</div>
+                                <div class="mini-metric-value"><?php echo e($pendingApprovals); ?></div>
                             </div>
-                            <div class="activity-content">
-                                <div class="activity-title">
-                                    Borrowed <?php echo e($borrowing->equipment->name); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mini-metric-card bg-warning-soft">
+                            <div class="mini-metric-icon text-warning"><i class="fas fa-undo-alt"></i></div>
+                            <div>
+                                <div class="mini-metric-label">Return requests</div>
+                                <div class="mini-metric-value"><?php echo e($returnRequests); ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                    <span class="badge bg-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary')); ?> bg-opacity-15 text-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary')); ?> ms-2">
-                                        <?php echo e(ucfirst($borrowing->status)); ?>
-
-                                    </span>
+                <div class="row g-3">
+                    <div class="col-lg-12">
+                        <div class="chart-card p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">System insights</h6>
+                                    <p class="text-muted small mb-0">Quick operational snapshot</p>
                                 </div>
-                                <div class="activity-meta">
-                                    <span><?php echo e(optional($borrowing->borrow_date)->format('M d, Y') ?? 'N/A'); ?></span>
-                                    <?php if($borrowing->purpose): ?>
-                                        <span class="mx-2">•</span>
-                                        <span><?php echo e(Str::limit($borrowing->purpose, 40)); ?></span>
-                                    <?php endif; ?>
+                                <span class="badge-pill badge-soft">Updated now</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="mini-metric-card bg-blue-soft h-100">
+                                        <div class="mini-metric-icon text-primary"><i class="fas fa-clipboard-check"></i></div>
+                                        <div>
+                                            <div class="mini-metric-label">Recent borrow requests</div>
+                                            <div class="mini-metric-value"><?php echo e($recentBorrowRequestsCount ?? 0); ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mini-metric-card bg-warning-soft h-100">
+                                        <div class="mini-metric-icon text-warning"><i class="fas fa-people-group"></i></div>
+                                        <div>
+                                            <div class="mini-metric-label">Active users</div>
+                                            <div class="mini-metric-value"><?php echo e($activeUsers); ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mini-metric-card bg-blue-soft h-100">
+                                        <div class="mini-metric-icon text-primary"><i class="fas fa-boxes"></i></div>
+                                        <div>
+                                            <div class="mini-metric-label">Available equipment</div>
+                                            <div class="mini-metric-value"><?php echo e($availableEquipment); ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mini-metric-card bg-warning-soft h-100">
+                                        <div class="mini-metric-icon text-warning"><i class="fas fa-exclamation-triangle"></i></div>
+                                        <div>
+                                            <div class="mini-metric-label">Recent incident reports</div>
+                                            <div class="mini-metric-value"><?php echo e($recentIncidentReportsCount ?? 0); ?></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="activity-time"><?php echo e(optional($borrowing->borrow_date)->diffForHumans() ?? 'N/A'); ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-modern p-4 hover-lift mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="section-title mb-1">Recent activity</h5>
+                        <p class="text-muted small mb-0">Your latest requests and borrow updates.</p>
+                    </div>
+                    <a href="<?php echo e(route('borrowings.index')); ?>" class="btn btn-sm btn-outline-primary rounded-pill">View all</a>
+                </div>
+                <div class="timeline-card">
+                    <?php $__empty_1 = true; $__currentLoopData = $borrowings->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $borrowing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <div class="timeline-step">
+                            <div class="timeline-dot bg-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : ($borrowing->status === 'overdue' ? 'danger' : 'secondary'))); ?>"></div>
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start gap-3 mb-1">
+                                    <div>
+                                        <div class="fw-semibold"><?php echo e($borrowing->equipment->name); ?></div>
+                                        <small class="text-muted"><?php echo e(optional($borrowing->borrow_date)->format('M d, Y') ?? 'N/A'); ?></small>
+                                    </div>
+                                    <span class="badge badge-pill badge-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : ($borrowing->status === 'overdue' ? 'danger' : 'secondary'))); ?>"><?php echo e(ucfirst($borrowing->status)); ?></span>
+                                </div>
+                                <p class="text-muted mb-2"><?php echo e(Str::limit($borrowing->purpose ?? 'No purpose provided', 90)); ?></p>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="timeline-avatar"><?php echo e(strtoupper(substr(optional($borrowing->student)->name ?? $user->name, 0, 1))); ?></span>
+                                    <small class="text-muted"><?php echo e(optional($borrowing->borrow_date)->diffForHumans() ?? 'Just now'); ?></small>
+                                </div>
+                            </div>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <div class="text-center py-5">
-                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                            <h6 class="text-muted">No recent activity</h6>
-                            <p class="text-muted small">Your borrowing history will appear here</p>
+                        <div class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <h5 class="mt-3">No recent activity yet</h5>
+                            <p class="text-muted">Your borrowing history and actions will appear here.</p>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -244,178 +493,112 @@
         </div>
 
         <div class="col-xl-4">
-            <div class="row g-4">
-                <div class="col-12">
-                    <div class="card-modern p-4">
-                        <h5 class="mb-1 fw-bold"><i class="fas fa-bolt text-warning me-2"></i>Quick Actions</h5>
-                        <p class="text-muted small mb-4">Frequently used actions</p>
-                        <div class="quick-actions-grid">
-                            <?php if($user->role === 'staff'): ?>
-                                <a href="<?php echo e(route('borrowings.index')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-clipboard-check"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">Review Requests</div>
-                                        <div class="action-subtitle">Approve borrowings</div>
-                                    </div>
-                                </a>
-                                <a href="<?php echo e(route('equipment.index')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-cogs"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">Equipment</div>
-                                        <div class="action-subtitle">Manage inventory</div>
-                                    </div>
-                                </a>
-                                <a href="<?php echo e(route('incidents.index')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">Incidents</div>
-                                        <div class="action-subtitle">Handle reports</div>
-                                    </div>
-                                </a>
-                                <a href="<?php echo e(route('logs.index')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-history"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">Activity Logs</div>
-                                        <div class="action-subtitle">System history</div>
-                                    </div>
-                                </a>
-                            <?php else: ?>
-                                <a href="<?php echo e(route('borrowings.create')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-plus"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">New Borrowing</div>
-                                        <div class="action-subtitle">Request equipment</div>
-                                    </div>
-                                </a>
-                                <a href="<?php echo e(route('borrowings.index')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-list"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">My Borrowings</div>
-                                        <div class="action-subtitle">Track requests</div>
-                                    </div>
-                                </a>
-                                <a href="<?php echo e(route('incidents.report')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-exclamation-circle"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">Report Issue</div>
-                                        <div class="action-subtitle">Equipment problems</div>
-                                    </div>
-                                </a>
-                                <a href="<?php echo e(route('profile.index')); ?>" class="quick-action-card">
-                                    <div class="action-icon"><i class="fas fa-user"></i></div>
-                                    <div class="action-content">
-                                        <div class="action-title">Profile</div>
-                                        <div class="action-subtitle">Account settings</div>
-                                    </div>
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="card-modern p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                                <h5 class="mb-1 fw-bold"><i class="fas fa-bell text-info me-2"></i>Notifications</h5>
-                                <p class="text-muted small mb-0">Latest updates</p>
-                            </div>
-                            <a href="<?php echo e(route('notifications.index')); ?>" class="btn btn-outline-info btn-sm rounded-pill">View All</a>
-                        </div>
-                        <div class="notifications-preview">
-                            <?php $__empty_1 = true; $__currentLoopData = $notifications->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <div class="notification-preview-item <?php echo e($notification->is_read ? '' : 'unread'); ?>">
-                                    <div class="notification-icon"><i class="fas fa-info-circle"></i></div>
-                                    <div class="notification-content">
-                                        <div class="notification-title"><?php echo e(Str::limit($notification->message, 50)); ?></div>
-                                        <div class="notification-time"><?php echo e($notification->created_at->diffForHumans()); ?></div>
-                                    </div>
-                                </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                <div class="text-center py-3">
-                                    <i class="fas fa-bell-slash fa-2x text-muted mb-2"></i>
-                                    <p class="text-muted small mb-0">No new notifications</p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-4">
-        <div class="col-lg-4">
-            <div class="card-modern p-4">
-                <h5 class="mb-4 fw-bold"><i class="fas fa-clock text-info me-2"></i>Facility Access Tracking</h5>
-                <div class="d-grid gap-2">
-                    <button class="btn btn-lg btn-info rounded-pill py-3" onclick="toggleTimeTracking('in')">
-                        <i class="fas fa-sign-in-alt me-2"></i>Time In
-                    </button>
-                    <button class="btn btn-lg btn-warning rounded-pill py-3" onclick="toggleTimeTracking('out')">
-                        <i class="fas fa-sign-out-alt me-2"></i>Time Out
-                    </button>
-                </div>
-                <div class="mt-4 p-3 bg-light rounded-3">
-                    <p class="text-muted small mb-2">Current Session:</p>
-                    <p class="mb-1"><strong id="sessionTime">--:--</strong></p>
-                    <p class="text-muted small mb-0">Last Activity: <span id="lastActivity">Just now</span></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card-modern p-4">
-                <h5 class="mb-4 fw-bold"><i class="fas fa-chart-pie text-success me-2"></i>Equipment Status</h5>
-                <div class="row text-center">
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <div class="display-6 text-success fw-bold"><?php echo e(\App\Models\Equipment::where('status', 'available')->count()); ?></div>
-                            <small class="text-muted">Available</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <div class="display-6 text-warning fw-bold"><?php echo e(\App\Models\Equipment::where('status', 'borrowed')->count()); ?></div>
-                            <small class="text-muted">In Use</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="progress mt-3" style="height: 8px;">
-                    <?php
-                        $total = \App\Models\Equipment::count();
-                        $available = \App\Models\Equipment::where('status', 'available')->count();
-                        $percent = $total > 0 ? ($available / $total) * 100 : 0;
-                    ?>
-                    <div class="progress-bar bg-success" style="width: <?php echo e($percent); ?>%"></div>
-                </div>
-                <small class="text-muted">Availability: <?php echo e(round($percent)); ?>%</small>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card-modern p-4">
-                <h5 class="mb-4 fw-bold"><i class="fas fa-tachometer-alt text-danger me-2"></i>System Health</h5>
-                <div class="list-unstyled">
-                    <div class="mb-3 pb-3 border-bottom">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="small">Active Requests</span>
-                            <span class="badge bg-primary"><?php echo e($borrowings->where('status', 'pending')->count()); ?></span>
-                        </div>
-                        <small class="text-muted"><?php echo e($borrowings->where('status', 'pending')->count()); ?> pending approval</small>
-                    </div>
-                    <div class="mb-3 pb-3 border-bottom">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="small">Open Incidents</span>
-                            <span class="badge bg-warning"><?php echo e($incidents->where('status', 'open')->count()); ?></span>
-                        </div>
-                        <small class="text-muted"><?php echo e($incidents->where('status', 'open')->count()); ?> unresolved</small>
-                    </div>
+            <div class="card-modern p-4 hover-lift mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="small">System Uptime</span>
-                            <span class="badge bg-success">99.9%</span>
-                        </div>
-                        <small class="text-muted">All systems operational</small>
+                        <h5 class="section-title mb-1">Quick actions</h5>
+                        <p class="text-muted small mb-0">Jump into core workflows.</p>
                     </div>
+                </div>
+                <div class="quick-action-grid">
+                    <?php if($user->role === 'staff'): ?>
+                        <a href="<?php echo e(route('staff.pending-requests')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-primary"><i class="fas fa-clipboard-check"></i></div>
+                            <div>
+                                <div class="action-title">Review requests</div>
+                                <div class="action-subtitle">Approve borrowings</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('equipment.index')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-info"><i class="fas fa-cogs"></i></div>
+                            <div>
+                                <div class="action-title">View inventory</div>
+                                <div class="action-subtitle">Manage equipment</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('incidents.index')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-warning"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div>
+                                <div class="action-title">Incident reports</div>
+                                <div class="action-subtitle">Review issues</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('borrowings.return-equipment')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-success"><i class="fas fa-undo"></i></div>
+                            <div>
+                                <div class="action-title">Return management</div>
+                                <div class="action-subtitle">Verify returns</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('notifications.index')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-secondary"><i class="fas fa-chart-line"></i></div>
+                            <div>
+                                <div class="action-title">Reports</div>
+                                <div class="action-subtitle">View analytics</div>
+                            </div>
+                        </a>
+                    <?php else: ?>
+                        <a href="<?php echo e(route('borrowings.create')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-primary"><i class="fas fa-plus"></i></div>
+                            <div>
+                                <div class="action-title">Request equipment</div>
+                                <div class="action-subtitle">Create a borrowing</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('borrowings.index')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-info"><i class="fas fa-list"></i></div>
+                            <div>
+                                <div class="action-title">My borrowings</div>
+                                <div class="action-subtitle">Track progress</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('incidents.report')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-warning"><i class="fas fa-exclamation-circle"></i></div>
+                            <div>
+                                <div class="action-title">Report issue</div>
+                                <div class="action-subtitle">Log equipment faults</div>
+                            </div>
+                        </a>
+                        <a href="<?php echo e(route('notifications.index')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-success"><i class="fas fa-bell"></i></div>
+                            <div>
+                                <div class="action-title">Notifications</div>
+                                <div class="action-subtitle">Recent updates</div>
+                            </div>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="card-modern p-4 hover-lift">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="section-title mb-1">Notifications</h5>
+                        <p class="text-muted small mb-0">Latest alerts and unread updates.</p>
+                    </div>
+                    <a href="<?php echo e(route('notifications.index')); ?>" class="text-primary small">See all</a>
+                </div>
+                <div class="notifications-preview">
+                    <?php $__empty_1 = true; $__currentLoopData = $notifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <div class="notification-preview-item <?php echo e($notification->is_read ? '' : 'unread'); ?>">
+                            <div class="notification-avatar"><?php echo e(strtoupper(substr($notification->title ?? 'N', 0, 1))); ?></div>
+                            <div class="grow">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                    <div>
+                                        <div class="notification-title"><?php echo e(Str::limit($notification->title ?? 'Notification', 45)); ?></div>
+                                    </div>
+                                    <small class="notification-time"><?php echo e($notification->created_at->diffForHumans()); ?></small>
+                                </div>
+                                <p class="text-muted small mb-0"><?php echo e(Str::limit($notification->message, 80)); ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-bell-slash"></i>
+                            <h5 class="mt-3">No notifications yet</h5>
+                            <p class="text-muted">We will show important updates here.</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -423,30 +606,28 @@
 
     <div class="row g-4 mt-2">
         <div class="col-lg-6">
-            <div class="card-modern p-4">
+            <div class="card-modern p-4 hover-lift">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="mb-0 fw-bold"><i class="fas fa-boxes text-primary me-2"></i>Active Borrowings</h5>
-                    <a href="<?php echo e(route('borrowings.index')); ?>" class="btn btn-sm btn-outline-primary rounded-pill">View All</a>
+                    <div>
+                        <h5 class="section-title mb-1">Active borrowings</h5>
+                        <p class="text-muted small mb-0">Track the most recent loans.</p>
+                    </div>
+                    <a href="<?php echo e(route('borrowings.index')); ?>" class="btn btn-sm btn-outline-primary rounded-pill">View all</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover table-borderless">
+                    <table class="table table-hover table-borderless align-middle mb-0">
                         <thead>
                             <tr>
                                 <th class="text-muted small">Equipment</th>
                                 <th class="text-muted small">Status</th>
-                                <th class="text-muted small">Due Date</th>
+                                <th class="text-muted small">Due date</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $__empty_1 = true; $__currentLoopData = $borrowings->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $borrowing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <tr>
-                                    <td><small class="fw-600"><?php echo e($borrowing->equipment->name); ?></small></td>
-                                    <td>
-                                        <span class="badge bg-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary')); ?> bg-opacity-15 text-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary')); ?>">
-                                            <?php echo e(ucfirst($borrowing->status)); ?>
-
-                                        </span>
-                                    </td>
+                                    <td><span class="fw-semibold"><?php echo e($borrowing->equipment->name); ?></span></td>
+                                    <td><span class="badge bg-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary')); ?> bg-opacity-15 text-<?php echo e($borrowing->status === 'approved' ? 'success' : ($borrowing->status === 'pending' ? 'warning' : 'secondary')); ?> rounded-pill"><?php echo e(ucfirst($borrowing->status)); ?></span></td>
                                     <td><small class="text-muted"><?php echo e(optional($borrowing->return_date)->format('M d, Y') ?? 'N/A'); ?></small></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -460,13 +641,16 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="card-modern p-4">
+            <div class="card-modern p-4 hover-lift">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="mb-0 fw-bold"><i class="fas fa-alert-circle text-danger me-2"></i>Recent Incidents</h5>
-                    <a href="<?php echo e(route('incidents.index')); ?>" class="btn btn-sm btn-outline-danger rounded-pill">View All</a>
+                    <div>
+                        <h5 class="section-title mb-1">Recent incidents</h5>
+                        <p class="text-muted small mb-0">Latest equipment issue reports.</p>
+                    </div>
+                    <a href="<?php echo e(route('incidents.index')); ?>" class="btn btn-sm btn-outline-danger rounded-pill">View all</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover table-borderless">
+                    <table class="table table-hover table-borderless align-middle mb-0">
                         <thead>
                             <tr>
                                 <th class="text-muted small">Type</th>
@@ -477,19 +661,9 @@
                         <tbody>
                             <?php $__empty_1 = true; $__currentLoopData = $incidents->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $incident): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <tr>
-                                    <td><small class="fw-600"><?php echo e($incident->type); ?></small></td>
-                                    <td>
-                                        <span class="badge bg-<?php echo e($incident->severity === 'high' ? 'danger' : ($incident->severity === 'medium' ? 'warning' : 'info')); ?> bg-opacity-15 text-<?php echo e($incident->severity === 'high' ? 'danger' : ($incident->severity === 'medium' ? 'warning' : 'info')); ?>">
-                                            <?php echo e(ucfirst($incident->severity)); ?>
-
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-<?php echo e($incident->status === 'closed' ? 'success' : 'warning'); ?> bg-opacity-15 text-<?php echo e($incident->status === 'closed' ? 'success' : 'warning'); ?>">
-                                            <?php echo e(ucfirst($incident->status)); ?>
-
-                                        </span>
-                                    </td>
+                                    <td><span class="fw-semibold"><?php echo e($incident->type); ?></span></td>
+                                    <td><span class="badge bg-<?php echo e($incident->severity === 'high' ? 'danger' : ($incident->severity === 'medium' ? 'warning' : 'info')); ?> bg-opacity-15 text-<?php echo e($incident->severity === 'high' ? 'danger' : ($incident->severity === 'medium' ? 'warning' : 'info')); ?> rounded-pill"><?php echo e(ucfirst($incident->severity)); ?></span></td>
+                                    <td><span class="badge bg-<?php echo e($incident->status === 'closed' ? 'success' : 'warning'); ?> bg-opacity-15 text-<?php echo e($incident->status === 'closed' ? 'success' : 'warning'); ?> rounded-pill"><?php echo e(ucfirst($incident->status)); ?></span></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <tr>
@@ -504,13 +678,68 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    function toggleTimeTracking(type) {
-        const now = new Date();
-        document.getElementById('sessionTime').textContent = now.toLocaleTimeString();
-        document.getElementById('lastActivity').textContent = 'Just now';
-        alert('Time ' + type + ' recorded successfully!');
+    function getGreeting(hour) {
+        if (hour < 12) return 'Good Morning';
+        if (hour < 17) return 'Good Afternoon';
+        return 'Good Evening';
     }
+
+    function updateDashboardHeader() {
+        const now = new Date();
+        const greeting = getGreeting(now.getHours());
+        document.getElementById('dashboardGreeting').textContent = `${greeting}, <?php echo e($user->name); ?>.`;
+        document.getElementById('dashboardLocalTime').textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        document.getElementById('dashboardLocalDate').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
+    function renderChart(id, labels, data, color) {
+        const ctx = document.getElementById(id);
+        if (!ctx) return;
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels.length ? labels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Count',
+                    data: data.length ? data : [0, 0, 0, 0, 0, 0],
+                    borderColor: color,
+                    backgroundColor: color.replace('rgb(', 'rgba(').replace(')', ', 0.16)'),
+                    fill: true,
+                    tension: 0.32,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: color,
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#64748b' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(226,232,240,0.9)' },
+                        ticks: { color: '#64748b', precision: 0 }
+                    }
+                }
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateDashboardHeader();
+        setInterval(updateDashboardHeader, 1000);
+
+
+    });
 </script>
 <?php $__env->stopSection(); ?>
 

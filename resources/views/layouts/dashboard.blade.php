@@ -17,8 +17,8 @@
             --text-muted: #64748b;
             --light-bg: #f8fafc;
             --border-color: #e2e8f0;
-            --sidebar-width: 220px;
-            --sidebar-collapsed: 70px;
+            --sidebar-width: 270px;
+            --sidebar-collapsed: 78px;
             --topbar-height: 70px;
         }
         
@@ -104,6 +104,90 @@
             color: var(--primary-dark);
         }
 
+        .user-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(14, 165, 233, 0.18);
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(16, 185, 129, 0.12));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .user-avatar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 26px rgba(14, 165, 233, 0.18);
+        }
+
+        .user-status-dot {
+            position: absolute;
+            right: 2px;
+            bottom: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.16);
+        }
+
+        .profile-dropdown-menu {
+            min-width: 220px;
+            border-radius: 18px;
+            overflow: hidden;
+            transition: opacity 0.22s ease, transform 0.22s ease;
+            transform-origin: top right;
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .dropdown-menu.show.profile-dropdown-menu {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown-menu .dropdown-item {
+            padding: 0.9rem 1.25rem;
+        }
+
+        .profile-dropdown-line {
+            border-top: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .profile-menu-title {
+            font-size: 0.85rem;
+            color: #475569;
+            padding: 0.85rem 1.25rem 0.4rem;
+            font-weight: 600;
+        }
+
+        .profile-dropdown-menu .dropdown-item:hover {
+            background: rgba(14, 165, 233, 0.08);
+        }
+
+        .dropdown-menu.notifications {
+            transition: opacity 0.22s ease, transform 0.22s ease;
+            transform-origin: top right;
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .dropdown-menu.show.notifications {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .notification-badge {
             position: absolute;
             top: 6px;
@@ -130,88 +214,179 @@
         }
 
         .dropdown-menu.notifications {
-            min-width: 340px;
+            min-width: 320px;
             max-width: 420px;
+            width: min(94vw, 420px);
             border-radius: 22px;
             padding: 0;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.16);
+            background: transparent;
         }
 
         .notification-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            padding: 1.2rem 1.35rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.95);
             background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        }
+
+        .notification-header h6 {
+            font-size: 0.95rem;
+            letter-spacing: -0.02em;
+        }
+
+        .notification-header p {
+            margin-bottom: 0;
+            font-size: 0.82rem;
+            color: #64748b;
+            line-height: 1.5;
         }
 
         .notification-list {
             background: #ffffff;
+            max-height: 360px;
+            overflow-y: auto;
+        }
+
+        .notification-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .notification-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .notification-list::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.45);
+            border-radius: 999px;
+        }
+
+        .notification-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.7);
         }
 
         .notification-item {
-            padding: 1rem 1.5rem;
-            border-radius: 0;
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
+            padding: 1rem 1.35rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            transition: background 0.22s ease, transform 0.22s ease;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
         }
 
         .notification-item:hover {
             background: rgba(14, 165, 233, 0.06);
-            border-left-color: var(--primary);
+            transform: translateY(-1px);
         }
 
         .notification-item.unread {
-            background: rgba(14, 165, 233, 0.08);
-            border-left-color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
         }
 
         .notification-item.unread:hover {
-            background: rgba(14, 165, 233, 0.12);
+            background: rgba(14, 165, 233, 0.14);
         }
 
         .notification-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 1rem;
             flex-shrink: 0;
+            background: rgba(14, 165, 233, 0.12);
         }
 
         .notification-icon i {
-            color: white;
+            color: currentColor;
+        }
+
+        .notification-content {
+            min-width: 0;
         }
 
         .notification-title {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             line-height: 1.4;
+            margin-bottom: 0.35rem;
+        }
+
+        .notification-time {
+            font-size: 0.78rem;
+            color: #64748b;
+            white-space: nowrap;
         }
 
         .notification-message {
-            font-size: 0.8rem;
-            line-height: 1.4;
-            margin-bottom: 0.5rem !important;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            margin-bottom: 0.55rem;
+            color: #525252;
+            overflow-wrap: anywhere;
+        }
+
+        .notification-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.01em;
         }
 
         .notification-footer {
-            padding: 1rem 1.5rem;
-            border-top: 1px solid rgba(226, 232, 240, 0.9);
+            padding: 1rem 1.35rem;
+            border-top: 1px solid rgba(226, 232, 240, 0.95);
             background: #f8fafc;
         }
 
+        .notification-footer .btn {
+            min-height: 40px;
+        }
+
         .hover-lift {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        @media (max-width: 575px) {
+            .dropdown-menu.notifications {
+                width: min(100vw - 32px, 100%);
+                min-width: auto;
+                max-width: 100%;
+                margin: 0 12px;
+            }
+
+            .notification-header,
+            .notification-footer,
+            .notification-item {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .notification-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .notification-header > div,
+            .notification-footer {
+                width: 100%;
+            }
+
+            .notification-footer .d-flex {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
+            }
         }
 
         .hover-lift:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar.sidebar-collapsed .sidebar-toggle i {
-            transform: rotate(180deg);
         }
 
         .sidebar.sidebar-collapsed .sidebar-header h4,
@@ -381,11 +556,6 @@
             align-items: center;
             justify-content: center;
             will-change: transform;
-        }
-
-
-        body.sidebar-collapsed .sidebar-toggle i {
-            transform: rotate(180deg);
         }
 
         /* Prevent reflow jitter during sidebar transitions */
@@ -795,10 +965,10 @@
                         <span class="notification-badge pulse">{{ $globalUnreadCount }}</span>
                     @endif
                 </button>
-                <div class="dropdown-menu dropdown-menu-end notifications shadow-lg border-0 mt-3" aria-labelledby="notificationDropdown" style="width: 380px; max-height: 500px;">
-                    <div class="notification-header d-flex align-items-center justify-content-between p-3 border-bottom">
+                <div class="dropdown-menu dropdown-menu-end notifications shadow-lg border-0 mt-3" aria-labelledby="notificationDropdown">
+                    <div class="notification-header d-flex align-items-center justify-content-between gap-3">
                         <div>
-                            <h6 class="mb-1 fw-bold text-dark">
+                            <h6 class="fw-bold text-dark mb-0">
                                 <i class="fas fa-bell text-primary me-2"></i>Notifications
                             </h6>
                             <p class="text-muted small mb-0">
@@ -810,15 +980,15 @@
                             </p>
                         </div>
                         @if($globalUnreadCount > 0)
-                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="markAllAsRead()">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-2" onclick="markAllAsRead()">
                                 <i class="fas fa-check-double me-1"></i>Mark all read
                             </button>
                         @endif
                     </div>
 
-                    <div class="notification-list" style="max-height: 350px; overflow-y: auto;">
+                    <div class="notification-list">
                         @forelse($globalNotifications as $notification)
-                            <div class="notification-item {{ $notification->is_read ? '' : 'unread' }} p-3 border-bottom hover-lift" onclick="markAsRead({{ $notification->id }})" style="cursor: pointer;">
+                            <div class="notification-item {{ $notification->is_read ? '' : 'unread' }} hover-lift" onclick="markAsRead({{ $notification->id }})" style="cursor: pointer;">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="notification-icon">
                                         @if(str_contains($notification->message, 'approved'))
@@ -831,18 +1001,18 @@
                                             <i class="fas fa-info-circle text-primary"></i>
                                         @endif
                                     </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div class="notification-content w-100">
+                                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2 flex-wrap">
                                             <h6 class="notification-title mb-0 fw-semibold text-dark">
-                                                {{ \Illuminate\Support\Str::limit($notification->title ?? 'Notification', 35) }}
+                                                {{ \Illuminate\Support\Str::limit($notification->title ?? 'Notification', 45) }}
                                             </h6>
-                                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                            <small class="notification-time text-muted">{{ $notification->created_at->diffForHumans() }}</small>
                                         </div>
-                                        <p class="notification-message text-muted small mb-2">
-                                            {{ \Illuminate\Support\Str::limit($notification->message ?? 'No details available.', 85) }}
+                                        <p class="notification-message text-muted mb-2">
+                                            {{ \Illuminate\Support\Str::limit($notification->message ?? 'No details available.', 100) }}
                                         </p>
                                         @if(!$notification->is_read)
-                                            <span class="badge bg-primary bg-opacity-15 text-primary small px-2 py-1 rounded-pill">
+                                            <span class="badge notification-status bg-primary bg-opacity-15 text-primary small px-2 py-1 rounded-pill">
                                                 <i class="fas fa-circle me-1" style="font-size: 6px;"></i>New
                                             </span>
                                         @endif
@@ -850,21 +1020,21 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-5">
+                            <div class="text-center py-5 px-3">
                                 <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
                                 <h6 class="text-muted mb-2">No notifications yet</h6>
-                                <p class="text-muted small">We'll notify you when there's something new</p>
+                                <p class="text-muted small mb-0">We'll notify you when there's something new</p>
                             </div>
                         @endforelse
                     </div>
 
                     <div class="notification-footer p-3 border-top bg-light">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{ route('notifications.index') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                        <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                            <a href="{{ route('notifications.index') }}" class="btn btn-primary btn-sm rounded-pill px-3 py-2">
                                 <i class="fas fa-eye me-1"></i>View All
                             </a>
-                            <small class="text-muted">
-                                <i class="fas fa-clock me-1"></i>{{ now()->format('g:i A') }}
+                            <small class="text-muted d-flex align-items-center gap-1 mb-0">
+                                <i class="fas fa-clock"></i>{{ now()->format('g:i A') }}
                             </small>
                         </div>
                     </div>
@@ -872,37 +1042,30 @@
             </div>
 
             <div class="dropdown">
-                <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <div class="user-avatar me-3">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                <button class="btn btn-sm p-0 d-flex align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar me-2">
+                        @if(Auth::user()->profile_picture_url)
+                            <img src="{{ Auth::user()->profile_picture_url }}" alt="{{ Auth::user()->name }}" />
+                        @else
+                            <span class="text-primary fw-bold" style="font-size:1rem;">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                        @endif
+                        <span class="user-status-dot"></span>
                     </div>
-                    <div class="d-none d-md-block text-end">
-                        <div class="fw-semibold">{{ Auth::user()->name }}</div>
-                        <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
+                    <div class="d-none d-md-flex flex-column text-start">
+                        <span class="fw-semibold" style="font-size:0.95rem;">{{ Auth::user()->name }}</span>
+                        <small class="text-muted" style="font-size:0.79rem;">{{ ucfirst(Auth::user()->role) }}</small>
                     </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-3">
-                    <li><a class="dropdown-item py-2" href="{{ route('profile.index') }}">
-                        <i class="fas fa-user me-2"></i>My Profile
-                    </a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item py-2" href="{{ route('login') }}">
-                            <i class="fas fa-right-to-bracket me-2"></i>Login
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item py-2" href="{{ route('register') }}">
-                            <i class="fas fa-user-plus me-2"></i>Sign Up
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 profile-dropdown-menu mt-3">
+                    <li><div class="profile-menu-title">Account</div></li>
+                    <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i class="fas fa-user me-2"></i>View Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i class="fas fa-edit me-2"></i>Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                    <li><hr class="dropdown-divider profile-dropdown-line"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}" class="m-0">
                             @csrf
-                            <button type="submit" class="dropdown-item py-2 text-danger">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </button>
+                            <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
                         </form>
                     </li>
                 </ul>

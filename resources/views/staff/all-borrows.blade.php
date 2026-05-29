@@ -51,6 +51,31 @@
                 </div>
 
                 <div class="mt-4">
+                    <form method="GET" action="{{ route('borrowings.index') }}" class="row g-3 align-items-end mb-4">
+                        <div class="col-sm-5">
+                            <label class="form-label small text-muted">Search</label>
+                            <input type="search" name="q" class="form-control" placeholder="Search by student, equipment, or purpose" value="{{ request('q') }}">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label small text-muted">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All statuses</option>
+                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
+                                <option value="ready_to_claim" {{ request('status') === 'ready_to_claim' ? 'selected' : '' }}>Ready to Claim</option>
+                                <option value="claimed" {{ request('status') === 'claimed' ? 'selected' : '' }}>Claimed</option>
+                                <option value="return_requested" {{ request('status') === 'return_requested' ? 'selected' : '' }}>Return Requested</option>
+                                <option value="returned" {{ request('status') === 'returned' ? 'selected' : '' }}>Returned</option>
+                                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>Overdue</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 text-sm-end">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4">Filter</button>
+                            <a href="{{ route('borrowings.index') }}" class="btn btn-outline-secondary rounded-pill px-4">Clear</a>
+                        </div>
+                    </form>
+
                     @if (session('success'))
                         <div class="alert alert-success rounded-4 mb-3">{{ session('success') }}</div>
                     @endif
@@ -72,29 +97,31 @@
                                             <div class="fw-bold">{{ $r->student->name }}</div>
                                             <div class="text-muted small">{{ $r->equipment->name }}</div>
                                             <div class="text-muted small">Qty: <strong class="text-dark">{{ $r->quantity }}</strong></div>
+                                            <div class="text-muted small">Purpose: <strong>{{ \\Illuminate\\Support\\Str::limit($r->purpose, 40) }}</strong></div>
                                         </div>
                                     </div>
 
                                     <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 ms-lg-auto">
                                         <x-borrow-status-badge :status="$r->status" />
                                         <div class="text-muted small">
-                                            Requested: {{ optional($r->request_date)->format('M d, Y') }}
-                                            @if(in_array($r->status, ['approved','ready_to_claim','claimed','returned']))
-                                                @if($r->approval_date)
-                                                    • Approved: {{ optional($r->approval_date)->format('M d, Y') }}
-                                                @endif
+                                            Requested: {{ optional($r->request_date)->format('M d, Y') }}<br>
+                                            Borrow: {{ optional($r->borrow_date)->format('M d, Y') }} • Due: {{ optional($r->return_date)->format('M d, Y') }}
+                                            @if($r->approval_date)
+                                                <br>Approved: {{ optional($r->approval_date)->format('M d, Y') }}
                                             @endif
                                             @if($r->status === 'claimed' && $r->claimed_at)
-                                                • Claimed: {{ optional($r->claimed_at)->format('M d, Y H:i') }}
+                                                <br>Claimed: {{ optional($r->claimed_at)->format('M d, Y H:i') }}
                                             @endif
                                             @if($r->status === 'returned' && $r->returned_at)
-                                                • Returned: {{ optional($r->returned_at)->format('M d, Y H:i') }}
+                                                <br>Returned: {{ optional($r->returned_at)->format('M d, Y H:i') }}
+                                            @endif
+                                            @if($r->status === 'return_requested' && $r->return_requested_at)
+                                                <br>Return requested: {{ optional($r->return_requested_at)->format('M d, Y H:i') }}
                                             @endif
                                         </div>
                                     </div>
 
                                     <div class="d-flex flex-wrap gap-2">
-                                        {{-- Approve / Reject (pending only) --}}
                                         @if($r->status === 'pending')
                                             <form method="POST" action="{{ route('staff.approve', ['request_id' => $r->id]) }}">
                                                 @csrf
@@ -106,15 +133,13 @@
                                             </form>
                                         @endif
 
-                                        {{-- Ready to claim (approved only) --}}
                                         @if($r->status === 'approved')
                                             <form method="POST" action="{{ route('staff.ready-to-claim', ['request_id' => $r->id]) }}">
                                                 @csrf
-                                                <button type="submit" class="btn" style="background:#7c3aed; color:white; border-radius:16px; font-weight:900; padding:.55rem .95rem;">Ready to Claim</button>
+                                                <button type="submit" class="btn action-btn" style="background:#7c3aed; color:white;">Ready to Claim</button>
                                             </form>
                                         @endif
 
-                                        {{-- Mark claimed/returned --}}
                                         @if($r->status === 'ready_to_claim')
                                             <form method="POST" action="{{ route('staff.mark-claimed', ['request_id' => $r->id]) }}">
                                                 @csrf
@@ -122,7 +147,18 @@
                                             </form>
                                         @endif
 
-                                        @if($r->status === 'claimed')
+                                        @if($r->status === 'return_requested')
+                                            <form method="POST" action="{{ route('staff.approve-return', ['request_id' => $r->id]) }}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success action-btn">Approve Return</button>
+                                            </form>
+                                            <form method="POST" action="{{ route('staff.reject-return', ['request_id' => $r->id]) }}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger action-btn">Reject Return</button>
+                                            </form>
+                                        @endif
+
+                                        @if(in_array($r->status, ['claimed', 'overdue']))
                                             <form method="POST" action="{{ route('staff.mark-returned', ['request_id' => $r->id]) }}">
                                                 @csrf
                                                 <button type="submit" class="btn btn-secondary action-btn">Mark as Returned</button>

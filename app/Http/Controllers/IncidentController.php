@@ -10,11 +10,22 @@ use App\Models\Notification;
 
 class IncidentController extends Controller
 {
+    private function authorizeStudentOnly(): void
+    {
+        $role = \Illuminate\Support\Facades\Auth::user()->role ?? null;
+        if (in_array($role, ['staff', 'admin'])) {
+            abort(403);
+        }
+    }
+
     public function report()
     {
+        $this->authorizeStudentOnly();
         $equipment = Equipment::all();
         return view('incidents.report', compact('equipment'));
     }
+
+
 
     public function create()
     {
@@ -23,6 +34,8 @@ class IncidentController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorizeStudentOnly();
+
         $validated = $request->validate([
             'equipment_id' => 'nullable|exists:equipment,id',
             'description' => 'required|string',
@@ -43,21 +56,17 @@ class IncidentController extends Controller
 
     public function index()
     {
+        $this->authorizeStudentOnly();
+
         $user = Auth::user();
-        
-        if ($user->isAdminOrStaff()) {
-            $incidents = Incident::with('user', 'equipment')
-                ->orderBy('created_at', 'desc')
-                ->get();
-        } else {
-            $incidents = Incident::where('user_id', $user->id)
-                ->with('equipment')
-                ->orderBy('created_at', 'desc')
-                ->get();
-        }
-        
+        $incidents = Incident::where('user_id', $user->id)
+            ->with('equipment')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('incidents.list', compact('incidents'));
     }
+
 
     public function manage()
     {

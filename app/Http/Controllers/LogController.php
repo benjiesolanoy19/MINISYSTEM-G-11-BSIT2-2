@@ -8,25 +8,44 @@ use App\Models\Log;
 
 class LogController extends Controller
 {
+    private function authorizeStudentOnly(): void
+    {
+        $role = Auth::user()->role ?? null;
+        // Staff/Admin may view time logs (index). Block only the student time-in/out actions.
+        // (We keep index accessible for staff/admin.)
+        if (in_array($role, ['staff', 'admin']) && request()->route() && in_array(request()->route()->getName(), ['logs.timein', 'logs.timeout'])) {
+            abort(403);
+        }
+
+    }
+
+
     public function timein()
     {
+        $this->authorizeStudentOnly();
         return redirect()->route('logs.index');
     }
 
+
+
     public function timeout()
     {
+        $this->authorizeStudentOnly();
         return redirect()->route('logs.index');
     }
 
     public function storeTimein()
     {
+        $this->authorizeStudentOnly();
         return $this->handleTimeIn();
     }
 
     public function storeTimeout()
     {
+        $this->authorizeStudentOnly();
         return $this->handleTimeOut();
     }
+
 
     public function handleTimeIn()
     {
@@ -80,14 +99,17 @@ class LogController extends Controller
 
     public function index()
     {
+        // Staff/Admin: allow access (show all logs or keep existing behavior)
         $user = Auth::user();
-        
+
         if ($user->isAdminOrStaff()) {
             $logs = Log::with('user')->orderBy('timestamp', 'desc')->get();
         } else {
             $logs = Log::where('user_id', $user->id)->orderBy('timestamp', 'desc')->get();
         }
-        
+
         return view('logs.list', compact('logs'));
     }
+
+
 }

@@ -17,21 +17,29 @@ class BorrowRequest extends Model
         'quantity',
         'status',
         'request_date',
+        'borrow_date',
+        'return_date',
+        'purpose',
+        'notes',
         'approval_date',
         'approved_by',
         'claimed_at',
+        'return_requested_at',
         'returned_at',
+        'return_condition',
         'remarks',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'request_date' => 'datetime',
+        'borrow_date' => 'date',
+        'return_date' => 'date',
         'approval_date' => 'datetime',
         'claimed_at' => 'datetime',
+        'return_requested_at' => 'datetime',
         'returned_at' => 'datetime',
     ];
-
 
     public function student()
     {

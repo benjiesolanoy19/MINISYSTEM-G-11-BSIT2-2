@@ -8,21 +8,25 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('borrow_requests', function (Blueprint $table) {
-            // Drop the existing (student_id, equipment_id, status) unique index created by the initial migration.
-            // Laravel uses the index name we specified: uq_student_equipment_status
-            $table->dropUnique('uq_student_equipment_status');
-        });
+        // Drop the existing unique index if possible.
+        // MySQL may refuse dropping when the index is needed for a foreign-key constraint.
+        // In that case, we skip dropping to keep migrations idempotent.
+        try {
+            Schema::table('borrow_requests', function (Blueprint $table) {
+                $table->dropUnique('uq_student_equipment_status');
+            });
+        } catch (\Throwable $e) {
+            // no-op
+        }
 
-        // Enforce “only one pending request per student + equipment” via a stricter unique index
-        // on pending requests. Since MySQL does not support partial indexes, we keep it simple:
-        // add a composite unique index on (student_id, equipment_id, status) ONLY for pending rows
-        // by ensuring the only allowed multiple state is non-pending; app logic will enforce.
-        // Here we re-add the same unique constraint; actual rule enforcement will happen in controller logic.
-        // This migration keeps DB consistent while logic performs the exact business rule.
-        Schema::table('borrow_requests', function (Blueprint $table) {
-            $table->unique(['student_id', 'equipment_id', 'status'], 'uq_student_equipment_status');
-        });
+        // Re-add the same unique constraint (if it doesn’t already exist).
+        try {
+            Schema::table('borrow_requests', function (Blueprint $table) {
+                $table->unique(['student_id', 'equipment_id', 'status'], 'uq_student_equipment_status');
+            });
+        } catch (\Throwable $e) {
+            // no-op
+        }
     }
 
     public function down(): void
