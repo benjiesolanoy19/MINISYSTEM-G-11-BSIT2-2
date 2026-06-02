@@ -938,6 +938,19 @@
     $globalUnreadCount = \App\Models\Notification::where('user_id', Auth::id())
         ->where('is_read', false)
         ->count();
+
+    // Messages table may not exist in fresh/partial setups.
+    // Avoid crashing dashboard if messages table/model isn't present.
+    $globalMessageUnreadCount = 0;
+    try {
+        if (class_exists('App\\Models\\Message')) {
+            $globalMessageUnreadCount = \App\Models\Message::where('receiver_id', Auth::id())
+                ->where('is_read', false)
+                ->count();
+        }
+    } catch (\Throwable $e) {
+        $globalMessageUnreadCount = 0;
+    }
 ?>
 
 <!-- Top Navigation -->
@@ -1044,6 +1057,19 @@
                     </div>
                 </div>
             </div>
+
+            <?php if(! (Auth::user() && method_exists(Auth::user(), 'isAdmin') && Auth::user()->isAdmin())): ?>
+            <a href="<?php echo e(route('bug-reports.create')); ?>" class="topbar-icon btn btn-sm p-0" title="Report Bug" aria-label="Report Bug">
+                <i class="fas fa-bug"></i>
+            </a>
+            <?php endif; ?>
+
+            <a href="<?php echo e(route('messages.index')); ?>" class="topbar-icon btn btn-sm p-0" title="Messages" aria-label="Messages">
+                <i class="fas fa-comments"></i>
+                <?php if($globalMessageUnreadCount > 0): ?>
+                    <span class="notification-badge pulse"><?php echo e($globalMessageUnreadCount); ?></span>
+                <?php endif; ?>
+            </a>
 
             <div class="dropdown">
                 <button class="btn btn-sm p-0 d-flex align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -7,8 +7,17 @@
     </div>
 
     <div class="sidebar-header">
-        <h4><i class="fas fa-laptop-code me-2"></i>ICTFE</h4>
-        <p class="sidebar-subtitle">ICT Facilities Management</p>
+        <div class="sidebar-branding">
+            <div class="sidebar-logo" style="width:56px;height:56px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);padding:6px;">
+                <?php if(file_exists(public_path('images/ictfe-logo-circle.png'))): ?>
+                    <img src="<?php echo e(asset('images/ictfe-logo-circle.png')); ?>" alt="ICTFE" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .18s ease;" />
+                <?php else: ?>
+                    <img src="<?php echo e(asset('images/ictfe-logo-circle.svg')); ?>" alt="ICTFE" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .18s ease;" />
+                <?php endif; ?>
+            </div>
+            <h4 style="margin:0;font-size:0.98rem;">ICTFE</h4>
+            <p class="sidebar-subtitle">ICT Facilities Management</p>
+        </div>
     </div>
 
     <div class="sidebar-scroll" aria-label="Sidebar navigation">
@@ -59,6 +68,20 @@
                 <a href="<?php echo e(route('incidents.report')); ?>" title="Report Incident" class="sidebar-link <?php echo e(Request::is('incidents/report') ? 'active' : ''); ?>">
                     <i class="fas fa-triangle-exclamation"></i>
                     <span>Report Incident</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="<?php echo e(route('bug-reports.create')); ?>" title="Report Bug" class="sidebar-link <?php echo e(Request::is('bug-reports/create') ? 'active' : ''); ?>">
+                    <i class="fas fa-bug"></i>
+                    <span>Report Bug</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="<?php echo e(route('messages.index')); ?>" title="Messages" class="sidebar-link <?php echo e(Request::is('messages*') ? 'active' : ''); ?>">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
                 </a>
             </li>
 
@@ -141,6 +164,13 @@
                     <span>Admin Panel</span>
                 </a>
             </li>
+
+            <li class="sidebar-item">
+                <a href="<?php echo e(route('bug-reports.index')); ?>" title="Bug Reports" class="sidebar-link <?php echo e(Request::is('bug-reports*') ? 'active' : ''); ?>">
+                    <i class="fas fa-bug"></i>
+                    <span>Bug Reports</span>
+                </a>
+            </li>
         <?php endif; ?>
         
         <div class="sidebar-divider"></div>
@@ -179,6 +209,10 @@
         letter-spacing: 0.16em;
         line-height: 1.5;
     }
+
+        .sidebar-logo img:hover {
+            transform: scale(1.06) rotate(-3deg);
+        }
 
     .sidebar-item {
         margin-bottom: 4px;

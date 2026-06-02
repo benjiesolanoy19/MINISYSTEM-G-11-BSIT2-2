@@ -10,6 +10,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\BugReportController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogController;
@@ -82,6 +84,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/incidents', [IncidentController::class, 'index'])->name('incidents.index');
     Route::get('/incidents/list', [IncidentController::class, 'index'])->name('incidents.list');
     
+    // Bug Reports
+    Route::get('/bug-reports/create', [BugReportController::class, 'create'])->name('bug-reports.create');
+    Route::post('/bug-reports', [BugReportController::class, 'store'])->name('bug-reports.store');
+
+    // Messages
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{user}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+
+    // Bug report tickets
+    Route::get('/bug-reports/{bug_report}', [BugReportController::class, 'show'])->name('bug-reports.show');
+    Route::post('/bug-reports/{bug_report}/comment', [BugReportController::class, 'comment'])->name('bug-reports.comment');
+
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
@@ -107,5 +122,8 @@ Route::middleware(['admin'])->group(function () {
         Route::get('/reports/usage', [AdminController::class, 'usage'])->name('reports.usage');
         Route::get('/reports/inventory', [AdminController::class, 'inventory'])->name('reports.inventory');
         Route::get('/reports/transactions', [AdminController::class, 'transactions'])->name('reports.transactions');
+        Route::get('/bug-reports', [BugReportController::class, 'index'])->name('bug-reports.index');
+        Route::put('/bug-reports/{bug_report}', [BugReportController::class, 'update'])->name('bug-reports.update');
+        Route::put('/bug-reports/{bug_report}/assign', [BugReportController::class, 'assign'])->name('bug-reports.assign');
     });
 });

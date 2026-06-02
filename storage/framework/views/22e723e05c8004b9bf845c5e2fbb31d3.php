@@ -8,8 +8,104 @@
 .dashboard-hero {
     border-radius: 28px;
     background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(235,245,255,0.95));
-    padding: 2rem;
+    padding: 1.4rem;
     border: 1px solid rgba(226,232,240,0.95);
+}
+.dashboard-header-grid {
+    display: grid;
+    gap: 1rem;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
+}
+@media (min-width: 992px) {
+    .dashboard-header-grid {
+        grid-template-columns: minmax(240px, 320px) minmax(260px, 360px) 1fr;
+    }
+}
+.time-widget,
+.status-widget,
+.quick-overview-card,
+.hero-status-card {
+    min-height: 168px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.time-widget,
+.status-widget,
+.quick-overview-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 24px;
+    border: 1px solid rgba(226,232,240,0.95);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.05);
+}
+.widget-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: #0c4a6e;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.95rem;
+}
+.widget-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.05;
+}
+.widget-meta,
+.widget-role,
+.widget-note {
+    color: #475569;
+}
+.widget-meta {
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+}
+.widget-role {
+    margin-top: 0.7rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #334155;
+}
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 0.75rem;
+}
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 4px rgba(34,197,94,0.12);
+}
+.quick-overview-list {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 1rem;
+}
+.quick-overview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+    background: rgba(248,250,252,0.85);
+    border: 1px solid rgba(226,232,240,0.9);
+}
+.quick-overview-item span:first-child {
+    color: #475569;
+    font-size: 0.92rem;
+}
+.quick-overview-item span:last-child {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
 }
 .section-badge {
     display: inline-flex;
@@ -21,44 +117,16 @@
     font-weight: 700;
     font-size: 0.75rem;
 }
-.hero-title {
-    font-size: clamp(2rem, 2.4vw, 3rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-}
-.hero-copy {
-    color: #475569;
-    max-width: 680px;
-}
-.hero-meta-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1rem;
-    background: #f8fbff;
-    border-radius: 999px;
-    border: 1px solid rgba(14, 165, 233, 0.14);
-    color: #334155;
-    font-size: 0.88rem;
-}
 .hero-status-card {
-    min-width: 220px;
-    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 168px;
+    background: rgba(255,255,255,0.96);
     border-radius: 24px;
     border: 1px solid rgba(226,232,240,0.95);
     padding: 1.4rem;
     box-shadow: 0 20px 45px rgba(15, 23, 42, 0.05);
-}
-.hero-avatar {
-    width: 58px;
-    height: 58px;
-    border-radius: 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(16,185,129,0.18));
-    color: #0c4a6e;
-    font-size: 1.25rem;
 }
 .hero-status-label {
     font-size: 0.8rem;
@@ -74,9 +142,19 @@
 }
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 1rem;
     margin-top: 1.8rem;
+}
+@media (min-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (min-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 }
 @media (min-width: 1200px) {
     .stats-grid {
@@ -84,11 +162,12 @@
     }
 }
 .stat-card {
-    background: white;
-    border: 1px solid rgba(226,232,240,0.95);
-    border-radius: 22px;
-    padding: 1.2rem 1.3rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(226,232,240,0.9);
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    backdrop-filter: blur(6px);
 }
 .stat-card:hover {
     transform: translateY(-3px);
@@ -103,7 +182,7 @@
     margin-bottom: 0.75rem;
 }
 .stat-card-value {
-    font-size: 2.25rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #0f172a;
 }
@@ -218,21 +297,56 @@
 }
 .quick-action-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.9rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+@media (min-width: 768px) {
+    .quick-action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (min-width: 1200px) {
+    .quick-action-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 .quick-action-card {
-    border-radius: 20px;
-    padding: 1rem;
-    background: white;
+    border-radius: 22px;
+    padding: 1.2rem;
+    background: rgba(255,255,255,0.95);
     border: 1px solid rgba(226,232,240,0.95);
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     text-decoration: none;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .quick-action-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
     border-color: rgba(14, 165, 233, 0.3);
+}
+.quick-action-card .action-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 1rem;
+}
+.quick-action-card .action-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #0f172a;
+}
+.quick-action-card .action-subtitle {
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.5;
 }
 .notification-avatar {
     min-width: 42px;
@@ -297,26 +411,26 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="card-modern dashboard-hero hover-lift">
-                <div class="d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center gap-4">
-                    <div>
-                        <span class="section-badge">Home overview</span>
-                        <h1 id="dashboardGreeting" class="hero-title mt-3 mb-2">Welcome back, <?php echo e($user->name); ?>.</h1>
-                        <p class="hero-copy mb-3">Quick access to equipment, requests, incidents and notifications — all in one modern workspace.</p>
-                        <div class="d-flex flex-wrap align-items-center gap-2">
-                            <span class="hero-meta-pill"><i class="fas fa-calendar-day"></i><span id="dashboardLocalDate"><?php echo e(now()->format('F j, Y')); ?></span></span>
-                            <span class="hero-meta-pill"><i class="fas fa-clock"></i><span id="dashboardLocalTime"><?php echo e(now()->format('g:i A')); ?></span></span>
-                            <span class="hero-meta-pill"><i class="fas fa-user-tag"></i><?php echo e(ucfirst($user->role)); ?></span>
-                        </div>
+                <div class="dashboard-header-grid">
+                    <div class="time-widget p-4 hover-lift">
+                        <div class="widget-head"><i class="fas fa-clock text-primary"></i> Current Time</div>
+                        <div class="widget-value" id="compactTime"><?php echo e(now()->format('g:i A')); ?></div>
+                        <div class="widget-meta"><i class="fas fa-calendar-day"></i> <span id="compactDate"><?php echo e(now()->format('F j, Y')); ?></span></div>
+                        <div class="widget-role"><i class="fas fa-user-tag"></i> <?php echo e(ucfirst($user->role)); ?></div>
                     </div>
-                    <div class="hero-status-card text-end">
-                        <div class="d-flex justify-content-end align-items-center gap-3 mb-3">
-                            <div class="hero-avatar"><i class="fas fa-laptop-code"></i></div>
-                            <div class="text-end">
-                                <div class="hero-status-label">System status</div>
-                                <div class="hero-status-value">Live & smooth</div>
-                            </div>
+                    <div class="status-widget p-4 hover-lift">
+                        <div class="widget-head"><i class="fas fa-desktop text-success"></i> System Status</div>
+                        <div class="status-pill"><span class="status-dot"></span> Live & Smooth</div>
+                        <p class="widget-note"><?php echo e($reasonMessage); ?></p>
+                    </div>
+                    <div class="quick-overview-card p-4 hover-lift">
+                        <div class="widget-head"><i class="fas fa-chart-simple text-info"></i> Quick Overview</div>
+                        <div class="quick-overview-list">
+                            <div class="quick-overview-item"><span>Total equipment</span><span><?php echo e($totalEquipment); ?></span></div>
+                            <div class="quick-overview-item"><span>Available</span><span><?php echo e($availableEquipment); ?></span></div>
+                            <div class="quick-overview-item"><span>Pending requests</span><span><?php echo e($pendingApprovals); ?></span></div>
+                            <div class="quick-overview-item"><span>Overdue items</span><span><?php echo e($overdueEquipment); ?></span></div>
                         </div>
-                        <p class="text-muted mb-0"><?php echo e($reasonMessage); ?></p>
                     </div>
                 </div>
 
@@ -559,6 +673,13 @@
                                 <div class="action-subtitle">Log equipment faults</div>
                             </div>
                         </a>
+                        <a href="<?php echo e(route('bug-reports.create')); ?>" class="quick-action-card">
+                            <div class="action-icon bg-danger"><i class="fas fa-bug"></i></div>
+                            <div>
+                                <div class="action-title">Report bug</div>
+                                <div class="action-subtitle">Send feedback to admin</div>
+                            </div>
+                        </a>
                         <a href="<?php echo e(route('notifications.index')); ?>" class="quick-action-card">
                             <div class="action-icon bg-success"><i class="fas fa-bell"></i></div>
                             <div>
@@ -688,10 +809,10 @@
 
     function updateDashboardHeader() {
         const now = new Date();
-        const greeting = getGreeting(now.getHours());
-        document.getElementById('dashboardGreeting').textContent = `${greeting}, <?php echo e($user->name); ?>.`;
-        document.getElementById('dashboardLocalTime').textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-        document.getElementById('dashboardLocalDate').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+        const timeEl = document.getElementById('compactTime');
+        const dateEl = document.getElementById('compactDate');
+        if (timeEl) timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (dateEl) dateEl.textContent = now.toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' });
     }
 
     function renderChart(id, labels, data, color) {
