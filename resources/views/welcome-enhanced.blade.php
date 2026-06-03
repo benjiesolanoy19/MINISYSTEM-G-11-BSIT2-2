@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'ICTFE - ICT Facilities and Equipment')
+@section('title', 'Computer Laboratory Facilities Management System (CLFMS)')
 
 @section('styles')
 <style>
@@ -24,6 +24,14 @@
         bottom: 0;
         background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
         animation: float 20s ease-in-out infinite;
+    }
+
+    [data-theme="dark"] .hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    }
+
+    [data-theme="dark"] .hero::before {
+        background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
     }
     
     @keyframes float {
@@ -85,6 +93,16 @@
         transform: translateY(-3px);
         box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
     }
+
+    [data-theme="dark"] .btn-hero-primary {
+        background: #f1f5f9;
+        color: #0284c7;
+    }
+
+    [data-theme="dark"] .btn-hero-primary:hover {
+        background: white;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
     
     .btn-hero-secondary {
         background: rgba(255, 255, 255, 0.2);
@@ -97,11 +115,25 @@
         background: rgba(255, 255, 255, 0.3);
         transform: translateY(-3px);
     }
+
+    [data-theme="dark"] .btn-hero-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    [data-theme="dark"] .btn-hero-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.4);
+    }
     
     /* Features Section */
     .features-section {
         padding: 80px 0;
         background: #f8fafc;
+    }
+
+    [data-theme="dark"] .features-section {
+        background: var(--surface-1);
     }
     
     .section-title {
@@ -118,6 +150,13 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
+
+    [data-theme="dark"] .section-title h2 {
+        background: linear-gradient(135deg, #38bdf8 0%, #10b981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
     
     .section-title p {
         font-size: 1.1rem;
@@ -125,6 +164,10 @@
         max-width: 500px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    [data-theme="dark"] .section-title p {
+        color: var(--text-muted);
     }
     
     .feature-grid {
@@ -142,6 +185,12 @@
         position: relative;
         overflow: hidden;
         cursor: pointer;
+    }
+
+    [data-theme="dark"] .feature-card {
+        background: var(--surface-2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border-color);
     }
     
     .feature-card::before {
@@ -161,6 +210,10 @@
         transform: translateY(-10px);
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
     }
+
+    [data-theme="dark"] .feature-card:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
     
     .feature-card:hover::before {
         transform: scaleX(1);
@@ -176,6 +229,13 @@
         display: inline-block;
         transition: transform 0.3s ease;
     }
+
+    [data-theme="dark"] .feature-icon {
+        background: linear-gradient(135deg, #38bdf8 0%, #10b981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
     
     .feature-card:hover .feature-icon {
         transform: scale(1.1) rotate(5deg);
@@ -187,11 +247,19 @@
         margin-bottom: 15px;
         color: #1e293b;
     }
+
+    [data-theme="dark"] .feature-card h3 {
+        color: var(--text-dark);
+    }
     
     .feature-card p {
         color: #64748b;
         line-height: 1.6;
         font-size: 0.95rem;
+    }
+
+    [data-theme="dark"] .feature-card p {
+        color: var(--text-secondary);
     }
     
     /* Stats Section */
@@ -199,6 +267,10 @@
         padding: 80px 0;
         background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #10b981 100%);
         color: white;
+    }
+
+    [data-theme="dark"] .stats-section {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
     }
     
     .stats-grid {
@@ -218,6 +290,10 @@
         font-size: 1.1rem;
         opacity: 0.9;
     }
+
+    [data-theme="dark"] .stat-item p {
+        color: rgba(255,255,255,0.8);
+    }
     
     /* CTA Section */
     .cta-section {
@@ -225,12 +301,20 @@
         background: #f8fafc;
         text-align: center;
     }
+
+    [data-theme="dark"] .cta-section {
+        background: var(--surface-1);
+    }
     
     .cta-content h2 {
         font-size: 2.5rem;
         font-weight: 800;
         margin-bottom: 20px;
         color: #1e293b;
+    }
+
+    [data-theme="dark"] .cta-content h2 {
+        color: var(--text-dark);
     }
     
     .cta-content p {
@@ -240,6 +324,10 @@
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    [data-theme="dark"] .cta-content p {
+        color: var(--text-muted);
     }
     
     /* Animation utilities for GSAP */
@@ -259,7 +347,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light" x-data="navAnimation()" x-init="init()">
     <div class="container-lg">
-        <a class="navbar-brand" href="#" @click="scrollTo('hero')">ICTFE</a>
+<a class="navbar-brand" href="#" @click="scrollTo('hero')">Computer Laboratory Facilities Management System (CLFMS)</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -293,8 +381,8 @@
 <!-- Hero Section -->
 <section class="hero" id="hero">
     <div class="hero-content" data-scroll data-aos="fade-down" data-aos-duration="600">
-        <h1 class="mb-0" x-data="{ text: 'ICTFE' }" @mouseenter="animateText" x-cloak data-aos="fade-down" data-aos-delay="100">
-            ICT Facilities and Equipment
+<h1 class="mb-0" x-data="{ text: 'Computer Laboratory Facilities Management System (CLFMS)' }" @mouseenter="animateText" x-cloak data-aos="fade-down" data-aos-delay="100">
+            Computer Laboratory Facilities Management System (CLFMS)
         </h1>
         <p data-aos="fade-up" data-aos-delay="150">Streamline equipment borrowing, incident reporting, and management operations with our modern platform for students and faculty.</p>
         <div class="hero-buttons" data-aos="zoom-in" data-aos-delay="300">
@@ -399,7 +487,7 @@
     <div class="container-lg">
         <div class="cta-content" data-scroll data-aos="fade-down" data-aos-duration="600">
             <h2 data-aos="fade-down" data-aos-delay="100">Ready to Transform Your IT Equipment Management?</h2>
-            <p data-aos="fade-up" data-aos-delay="150">Join hundreds of institutions using ICTFE to streamline their equipment operations for students and faculty.</p>
+<p data-aos="fade-up" data-aos-delay="150">Join hundreds of institutions using Computer Laboratory Facilities Management System (CLFMS) to streamline their equipment operations for students and faculty.</p>
             <div class="hero-buttons" data-aos="zoom-in" data-aos-delay="300">
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="btn btn-primary">Sign Up Today</a>
@@ -417,8 +505,8 @@
     <div class="container-lg">
         <div class="row mb-4">
             <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <h5 class="gradient-text mb-3">ICTFE</h5>
-                <p>ICT Facilities and Equipment</p>
+<h5 class="gradient-text mb-3">Computer Laboratory Facilities Management System (CLFMS)</h5>
+<p>Computer Laboratory Facilities Management System (CLFMS)</p>
             </div>
             <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="150">
                 <h5>Quick Links</h5>
@@ -438,7 +526,7 @@
             </div>
         </div>
         <hr style="border-color: rgba(255,255,255,0.1);">
-        <p class="text-center mb-0" data-aos="fade-up" data-aos-delay="300">&copy; 2026 ICTFE. All rights reserved.</p>
+&copy; 2026 Computer Laboratory Facilities Management System (CLFMS). All rights reserved.
     </div>
 </footer>
 

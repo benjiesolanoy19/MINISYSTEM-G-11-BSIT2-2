@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\BorrowRequestController;
+use App\Http\Controllers\SearchController;
 
 require_once __DIR__ . '/borrowings.php';
 
@@ -107,8 +108,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}', [NotificationController::class, 'show'])->name('notifications.show');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::delete('/notifications/read/all', [NotificationController::class, 'destroyRead'])->name('notifications.destroyRead');
+    Route::get('/api/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('api.notifications.unreadCount');
+    Route::get('/api/notifications/recent/{limit?}', [NotificationController::class, 'getRecent'])->name('api.notifications.recent');
     
     // Logs
     Route::get('/logs/timein', [LogController::class, 'timein'])->name('logs.timein');
@@ -121,6 +127,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Search Routes
+    Route::get('/search', [\App\Http\Controllers\SearchController::class, 'global'])->name('search.global');
+    Route::get('/search/equipment', [\App\Http\Controllers\SearchController::class, 'equipment'])->name('search.equipment');
 
     
     // Admin Routes (Admin only)

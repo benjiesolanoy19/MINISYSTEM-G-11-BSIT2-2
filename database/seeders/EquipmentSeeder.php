@@ -523,7 +523,8 @@ class EquipmentSeeder extends Seeder
                     'status' => $status,
                     'status_label' => $this->statusLabel($status),
                     'description' => $template['description'],
-                    'image_path' => $template['image_path'],
+'image_path' => $template['image_path'],
+                    'image' => $template['image_path'],
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
@@ -554,9 +555,7 @@ class EquipmentSeeder extends Seeder
         if ($assetId % 17 === 0) {
             return 'maintenance';
         }
-        if ($assetId % 11 === 0) {
-            return 'reserved';
-        }
+
         if ($assetId % 7 === 0) {
             return 'borrowed';
         }
@@ -568,7 +567,6 @@ class EquipmentSeeder extends Seeder
         switch ($status) {
             case 'available':
                 return $quantity;
-            case 'reserved':
             case 'borrowed':
             case 'maintenance':
             case 'lost':
@@ -597,7 +595,7 @@ class EquipmentSeeder extends Seeder
         $labels = [
             'available' => 'Available',
             'borrowed' => 'Borrowed',
-            'reserved' => 'Reserved',
+
             'maintenance' => 'Under Maintenance',
             'lost' => 'Lost',
         ];

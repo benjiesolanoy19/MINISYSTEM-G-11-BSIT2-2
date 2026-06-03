@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'ICTFE Home')</title>
+<title>@yield('title', 'Computer Laboratory Facilities Management System (CLFMS)')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
@@ -1213,7 +1213,7 @@
                 <i class="fas fa-bars"></i>
             </button>
             <a class="navbar-brand-custom" href="{{ route('dashboard') }}">
-                <i class="fas fa-laptop-code me-2"></i>ICTFE
+<i class="fas fa-laptop-code me-2"></i>Computer Laboratory Facilities Management System (CLFMS)
             </a>
 
             <div class="search-wrapper d-none d-lg-flex">
@@ -1253,18 +1253,10 @@
 
                     <div class="notification-list">
                         @forelse($globalNotifications as $notification)
-                            <div class="notification-item {{ $notification->is_read ? '' : 'unread' }} hover-lift" onclick="markAsRead({{ $notification->id }})" style="cursor: pointer;">
+                            <div class="notification-item {{ $notification->is_read ? '' : 'unread' }} hover-lift" onclick="markAsRead({{ $notification->id }}, '{{ $notification->action_url ?? '' }}')" style="cursor: pointer;" data-notification-id="{{ $notification->id }}">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="notification-icon">
-                                        @if(str_contains($notification->message, 'approved'))
-                                            <i class="fas fa-check-circle text-success"></i>
-                                        @elseif(str_contains($notification->message, 'returned'))
-                                            <i class="fas fa-undo text-info"></i>
-                                        @elseif(str_contains($notification->message, 'incident'))
-                                            <i class="fas fa-exclamation-triangle text-warning"></i>
-                                        @else
-                                            <i class="fas fa-info-circle text-primary"></i>
-                                        @endif
+                                        <i class="fas {{ $notification->icon_class ?? 'fa-info-circle' }} text-{{ $notification->color_class ?? 'primary' }}"></i>
                                     </div>
                                     <div class="notification-content w-100">
                                         <div class="d-flex justify-content-between align-items-start gap-2 mb-2 flex-wrap">
@@ -1597,6 +1589,239 @@
         if (btnLight) btnLight.addEventListener('click', () => setTheme('light'));
         if (btnDark) btnDark.addEventListener('click', () => setTheme('dark'));
     })();
+
+    // Search functionality
+    (() => {
+        const searchInput = document.querySelector('.search-input');
+        const searchWrapper = document.querySelector('.search-wrapper');
+        if (!searchInput) return;
+
+        let debounceTimer;
+        let selectedIndex = -1;
+        let searchResults = [];
+
+        // Create dropdown container
+        const dropdown = document.createElement('div');
+        dropdown.className = 'search-dropdown';
+        dropdown.innerHTML = '<div class="search-loading">Searching...</div>';
+        dropdown.style.display = 'none';
+        dropdown.style.position = 'absolute';
+        dropdown.style.top = '100%';
+        dropdown.style.left = '0';
+        dropdown.style.right = '0';
+        dropdown.style.backgroundColor = 'var(--bs-body-bg)';
+        dropdown.style.border = '1px solid var(--bs-border-color)';
+        dropdown.style.borderRadius = '0.375rem';
+        dropdown.style.marginTop = '0.5rem';
+        dropdown.style.maxHeight = '400px';
+        dropdown.style.overflowY = 'auto';
+        dropdown.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        dropdown.style.zIndex = '1050';
+
+        searchWrapper.style.position = 'relative';
+        searchWrapper.appendChild(dropdown);
+
+        function renderResults(data) {
+            if (!data || (data.equipment?.length === 0 && data.laboratories?.length === 0 && 
+                         data.users?.length === 0 && data.borrowings?.length === 0)) {
+                dropdown.innerHTML = '<div class="search-no-results" style="padding:12px 16px;color:var(--bs-text-muted);text-align:center;">No results found</div>';
+                dropdown.style.display = 'block';
+                return;
+            }
+
+            let html = '';
+            const categories = [
+                { key: 'equipment', title: '📦 Equipment', icon: 'fas fa-box' },
+                { key: 'laboratories', title: '🔬 Laboratories', icon: 'fas fa-flask' },
+                { key: 'users', title: '👤 Users', icon: 'fas fa-user' },
+                { key: 'borrowings', title: '📋 Borrowings', icon: 'fas fa-clipboard' }
+            ];
+
+            categories.forEach(cat => {
+                const items = data[cat.key] || [];
+                if (items.length > 0) {
+                    html += `<div class="search-category" style="border-bottom:1px solid var(--bs-border-color);">
+                        <div style="padding:8px 16px;background:var(--bs-gray-100);color:var(--bs-text-muted);font-size:0.85rem;font-weight:600;">${cat.title}</div>`;
+                    
+                    items.forEach((item, idx) => {
+                        html += `<a href="${item.url}" class="search-result-item" data-index="${idx}" 
+                            style="display:flex;align-items:center;padding:10px 16px;text-decoration:none;color:var(--bs-body-color);border-bottom:1px solid var(--bs-border-color-translucent);cursor:pointer;transition:background-color 0.2s;">
+                            <i style="margin-right:10px;color:var(--bs-text-muted);" class="${item.icon || 'fas fa-circle'}"></i>
+                            <div>
+                                <div style="font-weight:500;font-size:0.95rem;">${item.title}</div>
+                                <div style="font-size:0.85rem;color:var(--bs-text-muted);">${item.subtitle || ''}</div>
+                            </div>
+                        </a>`;
+                    });
+                    
+                    html += '</div>';
+                }
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.style.display = 'block';
+
+            // Add hover effects
+            document.querySelectorAll('.search-result-item').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    item.style.backgroundColor = 'var(--bs-gray-100)';
+                });
+                item.addEventListener('mouseleave', () => {
+                    item.style.backgroundColor = 'transparent';
+                });
+            });
+        }
+
+        function performSearch(query) {
+            if (query.trim().length < 2) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            dropdown.innerHTML = '<div class="search-loading" style="padding:16px;text-align:center;color:var(--bs-text-muted);">Searching...</div>';
+            dropdown.style.display = 'block';
+
+            fetch(`/search?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    searchResults = data;
+                    selectedIndex = -1;
+                    renderResults(data);
+                })
+                .catch(err => {
+                    console.error('Search error:', err);
+                    dropdown.innerHTML = '<div style="padding:16px;text-align:center;color:var(--bs-danger);">Error searching</div>';
+                });
+        }
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value.trim();
+            
+            debounceTimer = setTimeout(() => {
+                performSearch(query);
+            }, 250);
+        });
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                dropdown.style.display = 'none';
+                this.blur();
+            }
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const items = document.querySelectorAll('.search-result-item');
+                if (items.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                } else {
+                    selectedIndex = Math.max(selectedIndex - 1, -1);
+                }
+
+                items.forEach((item, idx) => {
+                    if (idx === selectedIndex) {
+                        item.style.backgroundColor = 'var(--bs-gray-100)';
+                        item.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        item.style.backgroundColor = 'transparent';
+                    }
+                });
+            }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const selectedItem = document.querySelector(`.search-result-item[data-index="${selectedIndex}"]`);
+                if (selectedItem) {
+                    window.location.href = selectedItem.href;
+                }
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchWrapper.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    })();
+
+    // =====================================
+    // NOTIFICATION SYSTEM - Real-time updates
+    // =====================================
+
+    let notificationCheckInterval;
+
+    function updateNotificationBadge() {
+        fetch('{{ route("api.notifications.unreadCount") }}')
+            .then(res => res.json())
+            .then(data => {
+                const badge = document.querySelector('.notification-badge');
+                if (badge) {
+                    if (data.count > 0) {
+                        badge.textContent = data.count;
+                        badge.style.display = 'inline-block';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            })
+            .catch(err => console.error('Error fetching unread count:', err));
+    }
+
+    function markAsRead(notificationId, actionUrl = null) {
+        fetch('{{ route("api.notifications.unreadCount") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ notification_id: notificationId })
+        })
+        .catch(err => console.error('Error marking notification as read:', err));
+
+        // Update badge
+        setTimeout(() => updateNotificationBadge(), 100);
+
+        // If there's an action URL, redirect
+        if (actionUrl) {
+            window.location.href = actionUrl;
+        }
+    }
+
+    function markAllAsRead() {
+        fetch('{{ route("notifications.readAll") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            }
+        })
+        .then(() => {
+            updateNotificationBadge();
+            // Reload dropdown or page
+            location.reload();
+        })
+        .catch(err => console.error('Error marking all as read:', err));
+    }
+
+    // Make functions globally available
+    window.markAsRead = markAsRead;
+    window.markAllAsRead = markAllAsRead;
+    window.updateNotificationBadge = updateNotificationBadge;
+
+    // Start polling for updates every 15 seconds
+    document.addEventListener('DOMContentLoaded', () => {
+        updateNotificationBadge(); // Initial load
+        
+        if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+        notificationCheckInterval = setInterval(() => {
+            updateNotificationBadge();
+        }, 15000); // Poll every 15 seconds
+    });
+
+    // Clean up on page leave
+    window.addEventListener('beforeunload', () => {
+        if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+    });
 </script>
 
 </body>

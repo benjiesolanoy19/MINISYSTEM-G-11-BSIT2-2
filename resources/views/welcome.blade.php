@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICTFE - ICT Facilities and Equipment</title>
+<title>Computer Laboratory Facilities Management System (CLFMS)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -237,8 +237,8 @@
 
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-lg">
-        <a class="navbar-brand" href="{{ route('welcome') }}">
-            <i class="fas fa-laptop-code me-2"></i>ICTFE
+<a class="navbar-brand" href="{{ route('welcome') }}">
+            <i class="fas fa-laptop-code me-2"></i>Computer Laboratory Facilities Management System (CLFMS)
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -307,7 +307,7 @@
     <div class="container-lg">
         <div class="section-title" data-aos="fade-up" data-aos-duration="700">
             <h2>Essential features for IT equipment management</h2>
-            <p>ICTFE gives your institution a polished workflow for equipment borrowing, incident reporting, and reporting insights for students and faculty.</p>
+Computer Laboratory Facilities Management System (CLFMS) gives your institution a polished workflow for equipment borrowing, incident reporting, and reporting insights for students and faculty.
         </div>
         <div class="feature-grid">
             <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
@@ -348,8 +348,8 @@
     <div class="container-lg">
         <div class="row align-items-center gy-4">
             <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
-                <h2>Why institutions choose ICTFE</h2>
-                <p class="mb-4">A modern interface, robust features, and a responsive experience make it easier for administrators, faculty, and students to manage IT equipment every day.</p>
+<h2>Why institutions choose Computer Laboratory Facilities Management System (CLFMS)</h2>
+<p class="mb-4">A modern interface, robust features, and a responsive experience make it easier for administrators, faculty, and students to manage IT equipment every day.</p>
                 <ul class="list-unstyled">
                     <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Streamlined borrowing workflows</li>
                     <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i>Comprehensive equipment tracking</li>
@@ -378,7 +378,7 @@
 
 <footer class="footer">
     <div class="container-lg text-center">
-        <p class="mb-2">&copy; {{ date('Y') }} ICTFE. All rights reserved.</p>
+<p class="mb-2">&copy; {{ date('Y') }} Computer Laboratory Facilities Management System (CLFMS). All rights reserved.</p>
         <p class="mb-0">IT equipment management built for reliable, modern educational workflows.</p>
     </div>
 </footer>

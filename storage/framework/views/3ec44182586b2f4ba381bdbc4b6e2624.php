@@ -258,7 +258,7 @@
                     <template x-for="item in filteredItems" :key="item.id">
                         <div class="col-12 col-md-6 col-xl-4" x-cloak>
                             <div class="equipment-card" @click="openModal(item)">
-                                <img :src="item.image || defaultImage" alt="Equipment preview" />
+                                <img :src="item.image || defaultImage" alt="Equipment preview" onerror="this.onerror=null;this.src='<?php echo e(asset('images/equipment/placeholder.svg')); ?>';" />
                                 <div class="equipment-card-body">
                                     <div class="d-flex justify-content-between align-items-start gap-3">
                                         <div>
@@ -285,78 +285,86 @@
         </div>
     </div>
 
-    <div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true" x-cloak>
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header border-0 pb-0">
+    <div class="modal fade borrow-modal" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content borrow-modal-content">
+                <div class="modal-header borrow-modal-header align-items-start border-0 pb-0">
                     <div>
-                        <h5 class="modal-title" id="borrowModalLabel">Borrow Equipment</h5>
-                        <p class="text-muted mb-0">Confirm the details below and submit your request.</p>
+                        <h5 class="modal-title fs-4 fw-semibold" id="borrowModalLabel">Borrow Equipment Request</h5>
+                        <p class="text-muted mb-0">Review the selected item and send a request with your preferred return date.</p>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-outline-secondary btn-icon" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-xmark"></i>
+                    </button>
                 </div>
-<div class="modal-body pt-0">
-<form method="POST" action="<?php echo e(route('borrow.create')); ?>">
-                        <?php echo csrf_field(); ?>
-                        <input type="hidden" name="equipment_id" :value="selectedItem.id">
-                        <input type="hidden" name="status" value="pending">
-
-                        <div class="col-12 col-xl-5">
-                            <div class="p-4 rounded-4 border border-1 border-primary border-opacity-15 bg-primary bg-opacity-10 h-100">
-                                <img :src="selectedItem.image || defaultImage" class="img-fluid rounded-4 mb-4" alt="Selected equipment preview">
-                                <h5 class="fw-semibold mb-2" x-text="selectedItem.name"></h5>
-                                <p class="text-muted mb-3" x-text="selectedItem.description"></p>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <span class="text-secondary">Category</span>
-                                    <strong x-text="selectedItem.category || 'General'"></strong>
-                                </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <span class="text-secondary">Available</span>
-                                    <strong x-text="selectedItem.available_quantity"></strong>
-                                </div>
-                                <div class="d-flex justify-content-between mb-0">
-                                    <span class="text-secondary">Status</span>
-                                    <span class="status-chip" :class="statusClass(selectedItem.status)" x-text="selectedItem.status"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-xl-7">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label class="form-label">Purpose</label>
-                                    <textarea class="form-control form-control-lg" name="purpose" rows="4" placeholder="Describe why you need this equipment" required></textarea>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label">Borrow Date</label>
-                                    <input type="date" class="form-control form-control-lg" name="borrow_date" x-model="borrowDate" required>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label">Return Date</label>
-                                    <input type="date" class="form-control form-control-lg" name="return_date" x-model="returnDate" required>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="number" class="form-control form-control-lg" name="quantity" min="1" :max="selectedItem.available_quantity" x-model.number="borrowQuantity" required>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label class="form-label">Requested By</label>
-                                    <input type="text" class="form-control form-control-lg" value="<?php echo e(Auth::user()->name); ?>" disabled>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">Notes</label>
-                                    <textarea class="form-control form-control-lg" name="notes" rows="3" placeholder="Optional notes for the administrator"></textarea>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-12 col-lg-5">
+                            <div class="borrow-modal-panel">
+                                <h6 class="text-uppercase text-secondary fw-semibold mb-3">Equipment Information</h6>
+                                <h5 class="mb-2" x-text="selectedItem.name"></h5>
+                                <p class="text-muted mb-4" x-text="selectedItem.description"></p>
+                                <div class="borrow-modal-meta">
+                                    <div class="borrow-modal-meta-row">
+                                        <span>Category</span>
+                                        <strong x-text="selectedItem.category || 'General'"></strong>
+                                    </div>
+                                    <div class="borrow-modal-meta-row">
+                                        <span>Status</span>
+                                        <strong x-text="selectedItem.status"></strong>
+                                    </div>
+                                    <div class="borrow-modal-meta-row">
+                                        <span>Available</span>
+                                        <strong x-text="selectedItem.available_quantity"></strong>
+                                    </div>
+                                    <div class="borrow-modal-meta-row">
+                                        <span>Total quantity</span>
+                                        <strong x-text="selectedItem.quantity"></strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 text-end">
-                            <button type="button" class="btn btn-outline-secondary btn-lg rounded-pill me-2" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill" :disabled="borrowQuantity < 1 || borrowQuantity > selectedItem.available_quantity">
-                                Submit Request
-                            </button>
+                        <div class="col-12 col-lg-7">
+                            <form method="POST" action="<?php echo e(route('borrow.create')); ?>">
+                                <?php echo csrf_field(); ?>
+                                <input type="hidden" name="equipment_id" :value="selectedItem.id">
+                                <input type="hidden" name="status" value="pending">
+                                <div class="borrow-modal-panel h-100">
+                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3">Request Details</h6>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Purpose</label>
+                                            <textarea class="form-control form-control-lg form-control-modern" name="purpose" rows="4" placeholder="Describe why you need this equipment" required></textarea>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label">Borrow Date</label>
+                                            <input type="date" class="form-control form-control-lg form-control-modern" name="borrow_date" x-model="borrowDate" required>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label">Return Date</label>
+                                            <input type="date" class="form-control form-control-lg form-control-modern" name="return_date" x-model="returnDate" required>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="number" class="form-control form-control-lg form-control-modern" name="quantity" min="1" :max="selectedItem.available_quantity" x-model.number="borrowQuantity" required>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label">Requested By</label>
+                                            <input type="text" class="form-control form-control-lg form-control-modern" value="<?php echo e(Auth::user()->name); ?>" disabled>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Notes</label>
+                                            <textarea class="form-control form-control-lg form-control-modern" name="notes" rows="3" placeholder="Optional notes for the administrator"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer borrow-modal-footer d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 mt-4">
+                                    <button type="button" class="btn btn-outline-secondary btn-lg rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-gradient btn-lg rounded-pill px-5" :disabled="borrowQuantity < 1 || borrowQuantity > selectedItem.available_quantity">Submit Request</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -366,51 +374,119 @@
 
 <?php $__env->startSection('styles'); ?>
 <style>
-    /* Modal two-column layout */
-    .borrow-modal-card{
-        border-radius: 24px;
-        border: 1px solid rgba(226,232,240,.9);
-        background: rgba(255,255,255,.96);
-        box-shadow: 0 25px 70px rgba(15,23,42,.10);
-        overflow: hidden;
-    }
-    .borrow-modal-shadow{ box-shadow: 0 18px 45px rgba(15,23,42,.08); }
-    .borrow-modal-img-wrap{
-        height: 360px;
-        background: #f8fafc;
-        border-radius: 18px;
-        border: 1px solid rgba(226,232,240,.9);
-        overflow: hidden;
-    }
-    .borrow-modal-img-wrap img{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display:block;
-        transform: scale(1.01);
+    /* CRITICAL: Modal Footer Visibility Fix */
+    #borrowModal .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
     }
 
-    .borrow-modal-body{ padding: 1.25rem; }
-    .borrow-modal-field{
-        border: 1px solid rgba(226,232,240,.95);
-        border-radius: 16px;
+    #borrowModal .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(90vh - 250px);
     }
 
-    .borrow-modal-actions{
-        display:flex;
+    #borrowModal .modal-footer {
+        display: flex !important;
         justify-content: flex-end;
-        gap: .75rem;
-        flex-wrap: wrap;
-        margin-top: 6px;
+        gap: 12px;
+        padding: 16px 20px !important;
+        border-top: 1px solid #dee2e6 !important;
+        background: #fff !important;
+        flex-shrink: 0;
     }
 
-    .borrow-modal-actions .btn{ border-radius: 999px; padding-left: 1.2rem; padding-right: 1.2rem; }
+    #borrowModal .modal-footer button {
+        display: inline-flex !important;
+        padding: 0.6rem 2rem !important;
+        font-weight: 600 !important;
+        border-radius: 999px !important;
+        min-width: 140px;
+        white-space: nowrap;
+    }
 
-    .borrow-modal-form .form-label{ color:#475569; font-weight:600; font-size:.95rem; margin-bottom:.35rem; }
-    .borrow-modal-form .form-control{ border-radius:16px; }
+    .borrow-modal-content {
+        border: none;
+        border-radius: 28px;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 28px 80px rgba(15,23,42,0.16);
+        overflow: hidden;
+    }
 
-    @media (max-width: 991.98px){
-        .borrow-modal-img-wrap{ height: 260px; }
+    .borrow-modal-header {
+        gap: 1rem;
+        padding: 1.5rem 1.75rem 0;
+    }
+
+    .borrow-modal-panel {
+        border-radius: 24px;
+        border: 1px solid rgba(148,163,184,0.18);
+        background: rgba(255,255,255,0.85);
+        padding: 1.5rem;
+    }
+
+    .borrow-modal-meta {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.25rem;
+    }
+
+    .borrow-modal-meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.15rem;
+        border-radius: 16px;
+        background: rgba(248,250,252,0.9);
+        border: 1px solid rgba(226,232,240,0.85);
+    }
+
+    .borrow-modal-footer {
+        display: flex !important;
+        padding: 1.5rem 1.75rem 1.75rem;
+        border-top: 1px solid rgba(226,232,240,0.75);
+        background: linear-gradient(180deg, rgba(255,255,255,0), rgba(248,250,252,0.95));
+    }
+
+    .btn-gradient {
+        display: inline-flex !important;
+        justify-content: center;
+        align-items: center;
+        min-width: 160px;
+        background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #4338ca 0%, #0284c7 100%);
+        color: #ffffff;
+    }
+
+    .form-control-modern {
+        border-radius: 16px;
+        border: 1px solid rgba(148,163,184,0.22);
+        background: #f8fafc;
+    }
+
+    .btn-gradient {
+        background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #4338ca 0%, #0284c7 100%);
+        color: #ffffff;
+    }
+
+    @media (max-width: 991.98px) {
+        .borrow-modal-content {
+            border-radius: 20px;
+        }
     }
 </style>
 
@@ -427,7 +503,8 @@
                     'status' => $item->status,
                     'quantity' => $item->quantity,
                     'available_quantity' => $item->available_quantity,
-                    'image' => $item->getImageUrl(), // uses Equipment::getImageUrl()
+                    'image' => $item->getImageUrl(),
+                    'imageErrorFallback' => $item->getImageUrl(),
                 ];
             })->toJson(); ?>,
             searchQuery: '',

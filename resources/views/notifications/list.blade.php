@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Notifications - ICTFE')
+@section('title', 'Notifications - Computer Laboratory Facilities Management System (CLFMS)')
 
 @section('styles')
 <style>
@@ -250,7 +250,7 @@
   <div class="page-header" data-aos="fade-down" data-aos-duration="600">
     <div>
       <h1 class="page-title"><i class="fas fa-bell"></i>Notifications</h1>
-      <p class="page-subtitle">ICTFE - Facility Management System</p>
+<p class="page-subtitle">Computer Laboratory Facilities Management System (CLFMS)</p>
     </div>
     <div class="notification-controls">
       @if($notifications->where('is_read', false)->count() > 0)

@@ -92,7 +92,7 @@
                             <div class="col-12">
                                 <div class="req-row d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3">
                                     <div class="d-flex align-items-center gap-3" style="min-width: 280px;">
-                                        <img class="img-eq" src="{{ $r->equipment->image_url ?? 'https://via.placeholder.com/128?text=EQ' }}" alt="Equipment">
+<img class="img-eq" src="{{ optional($r->equipment)->getImageUrl() ?? asset('images/equipment/placeholder.svg') }}" alt="Equipment" onerror="this.onerror=null;this.src='{{ asset('images/equipment/placeholder.svg') }}';">
                                         <div>
                                             <div class="fw-bold">{{ $r->student->name }}</div>
                                             <div class="text-muted small">{{ $r->equipment->name }}</div>

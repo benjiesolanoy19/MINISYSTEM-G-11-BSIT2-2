@@ -4,6 +4,38 @@
 
 @section('content')
 <style>
+    /* CRITICAL: Modal Footer Visibility Fix */
+    #borrowModal .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+
+    #borrowModal .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(90vh - 250px);
+    }
+
+    #borrowModal .modal-footer {
+        display: flex !important;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 16px 20px !important;
+        border-top: 1px solid #dee2e6 !important;
+        background: #fff !important;
+        flex-shrink: 0;
+    }
+
+    #borrowModal .modal-footer button {
+        display: inline-flex !important;
+        padding: 0.6rem 2rem !important;
+        font-weight: 600 !important;
+        border-radius: 999px !important;
+        min-width: 140px;
+        white-space: nowrap;
+    }
+
     .borrow-page {
         min-height: calc(100vh - 4.5rem);
         padding: 2rem 0;

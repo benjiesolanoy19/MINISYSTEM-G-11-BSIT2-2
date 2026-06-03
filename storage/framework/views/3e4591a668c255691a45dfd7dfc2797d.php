@@ -1,8 +1,6 @@
-@extends('layouts.dashboard')
+<?php $__env->startSection('title', 'Return Equipment'); ?>
 
-@section('title', 'Return Equipment')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .borrow-page {
         min-height: calc(100vh - 4.5rem);
@@ -84,12 +82,12 @@
                 </div>
 
                 <div class="mt-4">
-                    @if (session('success'))
-                        <div class="alert alert-success rounded-4 mb-3">{{ session('success') }}</div>
-                    @endif
-                    @if (session('error'))
-                        <div class="alert alert-danger rounded-4 mb-3">{{ session('error') }}</div>
-                    @endif
+                    <?php if(session('success')): ?>
+                        <div class="alert alert-success rounded-4 mb-3"><?php echo e(session('success')); ?></div>
+                    <?php endif; ?>
+                    <?php if(session('error')): ?>
+                        <div class="alert alert-danger rounded-4 mb-3"><?php echo e(session('error')); ?></div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="row mt-4 g-4">
@@ -97,36 +95,55 @@
                         <div class="card-soft p-4">
                             <h5 class="fw-bold mb-4">Currently Borrowed Equipment</h5>
                             <div class="row g-3">
-                                @forelse($borrowedItems as $borrowing)
+                                <?php $__empty_1 = true; $__currentLoopData = $borrowedItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $borrowing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="col-12">
                                         <div class="req-row d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3">
                                             <div class="d-flex align-items-center gap-3" style="min-width: 260px;">
-<img class="img-eq" src="{{ optional($borrowing->equipment)->getImageUrl() ?? asset('images/equipment/placeholder.svg') }}" alt="Equipment" onerror="this.onerror=null;this.src='{{ asset('images/equipment/placeholder.svg') }}';">
+<img class="img-eq" src="<?php echo e(optional($borrowing->equipment)->getImageUrl() ?? asset('images/equipment/placeholder.svg')); ?>" alt="Equipment" onerror="this.onerror=null;this.src='<?php echo e(asset('images/equipment/placeholder.svg')); ?>';">
                                                 <div>
-                                                    <div class="fw-bold">{{ $borrowing->equipment->name }}</div>
-                                                    <div class="text-muted small">Qty: <strong>{{ $borrowing->quantity }}</strong></div>
-                                                    <div class="text-muted small">Claimed: {{ optional($borrowing->claimed_at)->format('M d, Y') }}</div>
-                                                    <div class="text-muted small">Due: {{ optional($borrowing->return_date)->format('M d, Y') }}</div>
+                                                    <div class="fw-bold"><?php echo e($borrowing->equipment->name); ?></div>
+                                                    <div class="text-muted small">Qty: <strong><?php echo e($borrowing->quantity); ?></strong></div>
+                                                    <div class="text-muted small">Claimed: <?php echo e(optional($borrowing->claimed_at)->format('M d, Y')); ?></div>
+                                                    <div class="text-muted small">Due: <?php echo e(optional($borrowing->return_date)->format('M d, Y')); ?></div>
                                                 </div>
                                             </div>
 
                                             <div class="ms-lg-auto d-flex flex-column align-items-start align-items-sm-center gap-2">
-                                                <x-borrow-status-badge :status="$borrowing->status" />
-                                                @if(now()->toDateString() > $borrowing->return_date->toDateString())
+                                                <?php if (isset($component)) { $__componentOriginal93987516feedb77453e70083c50dc8df = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal93987516feedb77453e70083c50dc8df = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.borrow-status-badge','data' => ['status' => $borrowing->status]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('borrow-status-badge'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['status' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($borrowing->status)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal93987516feedb77453e70083c50dc8df)): ?>
+<?php $attributes = $__attributesOriginal93987516feedb77453e70083c50dc8df; ?>
+<?php unset($__attributesOriginal93987516feedb77453e70083c50dc8df); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal93987516feedb77453e70083c50dc8df)): ?>
+<?php $component = $__componentOriginal93987516feedb77453e70083c50dc8df; ?>
+<?php unset($__componentOriginal93987516feedb77453e70083c50dc8df); ?>
+<?php endif; ?>
+                                                <?php if(now()->toDateString() > $borrowing->return_date->toDateString()): ?>
                                                     <div class="text-danger small fw-semibold">
                                                         <i class="fas fa-exclamation-circle me-1"></i>Overdue
                                                     </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
 
                                             <div class="d-flex gap-2">
-                                                <button type="button" class="btn btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#returnModal" @click="selectBorrowing({{ json_encode($borrowing) }})">
+                                                <button type="button" class="btn btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#returnModal" @click="selectBorrowing(<?php echo e(json_encode($borrowing)); ?>)">
                                                     Request Return
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <div class="col-12">
                                         <div class="card-soft p-4">
                                             <div class="d-flex gap-3 align-items-start">
@@ -138,7 +155,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -150,28 +167,28 @@
                                 <div class="mb-3 pb-3 border-bottom">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span class="small text-muted">Borrowed</span>
-                                        <span class="badge bg-primary">{{ $activeBorrowings }}</span>
+                                        <span class="badge bg-primary"><?php echo e($activeBorrowings); ?></span>
                                     </div>
                                     <small class="text-muted">Currently in your possession</small>
                                 </div>
                                 <div class="mb-3 pb-3 border-bottom">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span class="small text-muted">Pending Return</span>
-                                        <span class="badge bg-warning">{{ $pendingReturns }}</span>
+                                        <span class="badge bg-warning"><?php echo e($pendingReturns); ?></span>
                                     </div>
                                     <small class="text-muted">Awaiting staff verification</small>
                                 </div>
                                 <div class="mb-3 pb-3 border-bottom">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span class="small text-muted">Returned</span>
-                                        <span class="badge bg-success">{{ $completedReturns }}</span>
+                                        <span class="badge bg-success"><?php echo e($completedReturns); ?></span>
                                     </div>
                                     <small class="text-muted">Successfully completed</small>
                                 </div>
                                 <div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span class="small text-muted">Overdue</span>
-                                        <span class="badge bg-danger">{{ $overdueItems }}</span>
+                                        <span class="badge bg-danger"><?php echo e($overdueItems); ?></span>
                                     </div>
                                     <small class="text-muted">Past the return date</small>
                                 </div>
@@ -195,20 +212,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($returnHistory as $history)
+                                        <?php $__empty_1 = true; $__currentLoopData = $returnHistory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $history): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <tr>
-                                                <td><small class="fw-600">{{ $history->equipment->name }}</small></td>
-                                                <td><small class="text-muted">{{ optional($history->claimed_at)->format('M d, Y') }}</small></td>
-                                                <td><small class="text-muted">{{ optional($history->returned_at)->format('M d, Y') }}</small></td>
+                                                <td><small class="fw-600"><?php echo e($history->equipment->name); ?></small></td>
+                                                <td><small class="text-muted"><?php echo e(optional($history->claimed_at)->format('M d, Y')); ?></small></td>
+                                                <td><small class="text-muted"><?php echo e(optional($history->returned_at)->format('M d, Y')); ?></small></td>
                                                 <td>
-                                                    <x-borrow-status-badge :status="$history->status" />
+                                                    <?php if (isset($component)) { $__componentOriginal93987516feedb77453e70083c50dc8df = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal93987516feedb77453e70083c50dc8df = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.borrow-status-badge','data' => ['status' => $history->status]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('borrow-status-badge'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['status' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($history->status)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal93987516feedb77453e70083c50dc8df)): ?>
+<?php $attributes = $__attributesOriginal93987516feedb77453e70083c50dc8df; ?>
+<?php unset($__attributesOriginal93987516feedb77453e70083c50dc8df); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal93987516feedb77453e70083c50dc8df)): ?>
+<?php $component = $__componentOriginal93987516feedb77453e70083c50dc8df; ?>
+<?php unset($__componentOriginal93987516feedb77453e70083c50dc8df); ?>
+<?php endif; ?>
                                                 </td>
                                             </tr>
-                                        @empty
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                             <tr>
                                                 <td colspan="4" class="text-center text-muted py-4">No return history yet</td>
                                             </tr>
-                                        @endforelse
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -231,8 +267,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body pt-0">
-                    <form method="POST" action="{{ route('borrowings.submit-return') }}" id="returnForm">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('borrowings.submit-return')); ?>" id="returnForm">
+                        <?php echo csrf_field(); ?>
                         <input type="hidden" name="request_id" id="modalRequestId">
 
                         <div class="p-4 rounded-4 border border-1 border-success border-opacity-15 bg-success bg-opacity-5 mb-4">
@@ -303,4 +339,6 @@
         });
     }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\MINISYSTEM-G-11-BSIT2-2\resources\views/borrowings/return-equipment.blade.php ENDPATH**/ ?>

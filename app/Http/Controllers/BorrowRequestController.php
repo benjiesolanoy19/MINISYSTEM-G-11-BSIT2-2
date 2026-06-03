@@ -80,7 +80,7 @@ class BorrowRequestController extends Controller
             return back()->with('error', 'Requested quantity exceeds available quantity.');
         }
 
-        BorrowRequest::create([
+        $borrowRequest = BorrowRequest::create([
             'student_id' => $studentId,
             'equipment_id' => $validated['equipment_id'],
             'quantity' => $validated['quantity'],
@@ -92,7 +92,14 @@ class BorrowRequestController extends Controller
             'notes' => $validated['notes'] ?? null,
         ]);
 
-        $this->notifyStaff('New borrow request from ' . Auth::user()->name . ' for ' . $equipment->name . '.');
+        $this->notifyStaff(
+            'New borrow request from ' . Auth::user()->name . ' for ' . $equipment->name . '.',
+            'borrow_request',
+            $borrowRequest->id,
+            'BorrowRequest',
+            route('borrowings.index', ['view' => 'pending']),
+            'New Borrow Request'
+        );
 
         return redirect()->route('borrowings.equipment.index')->with('success', 'Borrow request submitted successfully.');
     }
@@ -579,19 +586,23 @@ class BorrowRequestController extends Controller
         }
     }
 
-    private function notifyStaff(string $message, string $type = 'info'): void
+    private function notifyStaff(string $message, string $type = 'info', ?int $reference_id = null, ?string $reference_type = null, ?string $action_url = null, ?string $title = null): void
     {
         $staffUsers = \App\Models\User::whereIn('role', ['staff', 'admin'])->get();
         foreach ($staffUsers as $user) {
             Notification::create([
                 'user_id' => $user->id,
+                'title' => $title ?? 'New Notification',
                 'message' => $message,
                 'type' => $type,
+                'reference_id' => $reference_id,
+                'reference_type' => $reference_type,
+                'action_url' => $action_url,
             ]);
         }
     }
 
-    private function notifyUser(int $userId, string $message, string $type = 'info'): void
+    private function notifyUser(int $userId, string $message, string $type = 'info', ?int $reference_id = null, ?string $reference_type = null, ?string $action_url = null, ?string $title = null): void
     {
         // FK integrity safeguard: only create notification if user exists in the same DB.
         if (!\App\Models\User::query()->where('id', $userId)->exists()) {
@@ -600,8 +611,12 @@ class BorrowRequestController extends Controller
 
         Notification::create([
             'user_id' => $userId,
+            'title' => $title ?? 'New Notification',
             'message' => $message,
             'type' => $type,
+            'reference_id' => $reference_id,
+            'reference_type' => $reference_type,
+            'action_url' => $action_url,
         ]);
     }
 }

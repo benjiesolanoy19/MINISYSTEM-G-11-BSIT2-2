@@ -9,14 +9,19 @@
     <div class="sidebar-header">
         <div class="sidebar-branding">
             <div class="sidebar-logo" style="width:56px;height:56px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);padding:6px;">
-                <?php if(file_exists(public_path('images/ictfe-logo-circle.png'))): ?>
+                
+                <?php if(file_exists(public_path('images/logo-seal.png'))): ?>
+                    <img src="<?php echo e(asset('images/logo-seal.png')); ?>" alt="University Seal" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .18s ease;" />
+                <?php elseif(file_exists(public_path('images/logo-seal.svg'))): ?>
+                    <img src="<?php echo e(asset('images/logo-seal.svg')); ?>" alt="University Seal" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .18s ease;" />
+                <?php elseif(file_exists(public_path('images/ictfe-logo-circle.png'))): ?>
                     <img src="<?php echo e(asset('images/ictfe-logo-circle.png')); ?>" alt="ICTFE" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .18s ease;" />
                 <?php else: ?>
                     <img src="<?php echo e(asset('images/ictfe-logo-circle.svg')); ?>" alt="ICTFE" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .18s ease;" />
                 <?php endif; ?>
             </div>
-            <h4 style="margin:0;font-size:0.98rem;">ICTFE</h4>
-            <p class="sidebar-subtitle">ICT Facilities Management</p>
+<h4 style="margin:0;font-size:0.98rem;">Computer Laboratory Facilities Management System (CLFMS)</h4>
+            <p class="sidebar-subtitle">Computer Laboratory Facilities Management System</p>
         </div>
     </div>
 
@@ -258,6 +263,10 @@
         box-sizing: border-box;
     }
 
+    [data-theme="dark"] .sidebar {
+        background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(30,41,59,0.98));
+    }
+
     .sidebar.sidebar-collapsed {
         width: var(--sidebar-collapsed);
         min-width: var(--sidebar-collapsed);
@@ -304,10 +313,22 @@
         background: rgba(255,255,255,0.42);
     }
 
+    [data-theme="dark"] .sidebar-scroll::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.15);
+    }
+
+    [data-theme="dark"] .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.25);
+    }
+
     .sidebar-header {
         padding: 22px 18px 18px;
         text-align: left;
         border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    [data-theme="dark"] .sidebar-header {
+        border-bottom-color: rgba(148,163,184,0.12);
     }
 
     .sidebar-header h4 {
@@ -355,11 +376,23 @@
         box-shadow: 0 14px 28px rgba(255, 255, 255, 0.1);
     }
 
+    [data-theme="dark"] .sidebar-menu li a:hover,
+    [data-theme="dark"] .sidebar-link:hover {
+        background: rgba(148,163,184,0.15);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
+    }
+
     .sidebar-link.active,
     .sidebar-menu li a.active {
         background: rgba(255, 255, 255, 0.26);
         color: #ffffff;
         box-shadow: inset 4px 0 0 rgba(255, 255, 255, 0.75);
+    }
+
+    [data-theme="dark"] .sidebar-link.active,
+    [data-theme="dark"] .sidebar-menu li a.active {
+        background: rgba(56,189,248,0.2);
+        box-shadow: inset 4px 0 0 rgba(56,189,248,0.8);
     }
 
     .sidebar-link:hover i,
@@ -428,6 +461,11 @@
         border-top: 1px solid rgba(255, 255, 255, 0.12);
     }
 
+    [data-theme="dark"] .sidebar-footer {
+        background: rgba(0, 0, 0, 0.3);
+        border-top-color: rgba(148,163,184,0.12);
+    }
+
     .sidebar-footer .sidebar-menu {
         padding: 0 10px;
     }
@@ -438,11 +476,18 @@
         background: rgba(255, 255, 255, 0.04);
     }
 
+    [data-theme="dark"] .sidebar-footer .sidebar-link {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
     .sidebar-footer .sidebar-link:hover {
         transform: translateX(2px);
         background: rgba(255, 255, 255, 0.16);
     }
 
+    [data-theme="dark"] .sidebar-footer .sidebar-link:hover {
+        background: rgba(148,163,184,0.15);
+    }
     .sidebar-submenu {
         list-style: none;
         padding-left: 32px;

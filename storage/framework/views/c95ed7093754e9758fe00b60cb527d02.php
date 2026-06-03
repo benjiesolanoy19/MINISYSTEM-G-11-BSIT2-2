@@ -580,7 +580,7 @@
 
                     <div class="admin-square-wrapper" data-aos="fade-up" data-aos-delay="360">
                         <a href="<?php echo e(route('admin.login')); ?>" class="btn-admin-square" aria-hidden="true">
-                            <img src="/images/admin-lock.svg" alt="" class="admin-square-icon">
+                            <img src="/images/admin-lock.png" alt="Admin Login" class="admin-square-icon">
                         </a>
                     </div>
                 </div>

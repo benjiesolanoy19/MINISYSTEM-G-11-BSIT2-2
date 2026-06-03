@@ -4,6 +4,37 @@
 
 @section('styles')
 <style>
+    /* CRITICAL: Modal Footer Visibility Fix */
+    #borrowModal .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+
+    #borrowModal .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(90vh - 300px);
+    }
+
+    #borrowModal .modal-footer {
+        display: flex !important;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 16px !important;
+        border-top: 1px solid #dee2e6 !important;
+        background: #f8fbff !important;
+        flex-shrink: 0;
+    }
+
+    #borrowModal .modal-footer button {
+        display: inline-flex !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        border-radius: 10px !important;
+        min-width: 120px;
+    }
+
     /* Premium Inventory Dashboard UI (sidebar/layout safe) */
 
     .inventory-page {
@@ -556,12 +587,37 @@
 @section('scripts')
 <script>
     (function () {
+        // Required for modal bootstrap label handling
+        window.borrowModalLabelId = 'borrowModalLabel';
+
         const searchEl = document.getElementById('equipSearch');
         const categoryEl = document.getElementById('equipCategory');
         const statusEl = document.getElementById('equipStatus');
         const availabilityEl = document.getElementById('equipAvailability');
         const resetBtn = document.getElementById('resetFilters');
         const grid = document.getElementById('inventoryGrid');
+
+        // Borrow modal wiring (ensures modal opens with selected equipment)
+        const borrowModalEl = document.getElementById('borrowModal');
+        const borrowForm = document.getElementById('borrowForm');
+        const borrowEquipmentId = document.getElementById('borrowEquipmentId');
+        const borrowEquipName = document.getElementById('borrowEquipName');
+
+        document.querySelectorAll('.borrow-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name') || '';
+
+                if (borrowEquipmentId) borrowEquipmentId.value = id;
+                if (borrowEquipName) borrowEquipName.textContent = name;
+                if (borrowForm && id) borrowForm.action = `{{ url('/equipment') }}/${id}/borrow`;
+
+                if (borrowModalEl) {
+                    const modal = bootstrap.Modal.getOrCreateInstance(borrowModalEl);
+                    modal.show();
+                }
+            });
+        });
 
         function normalize(s) {
             return (s || '').toString().toLowerCase().trim();
@@ -630,38 +686,70 @@
     </div>
 </div>
 
-            <!-- Borrow modal -->
-            <div class="modal fade" id="borrowModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Borrow Equipment</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Borrow modal -->
+<div class="modal fade" id="borrowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);">
+            <div class="modal-header border-0 pb-0" style="padding: 2rem 2rem 1rem;">
+                <div>
+                    <h5 class="modal-title fw-bold" style="font-size: 1.5rem; color: #1a3a52;">Borrow Equipment Request</h5>
+                    <p class="text-muted small mt-1 mb-0">Complete the form below to submit your borrowing request</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="borrowForm" method="POST" action="{{ route('equipment.borrow', $item->id ?? '') }}">
+                @csrf
+                <div class="modal-body" style="padding: 1.5rem 2rem;">
+                    <!-- Equipment Summary -->
+                    <div class="alert alert-info border-0" style="background: linear-gradient(135deg, rgba(13, 202, 240, 0.1) 0%, rgba(13, 110, 253, 0.1) 100%); border-radius: 12px;">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-box-open me-3" style="font-size: 1.3rem; color: #0d78f2;"></i>
+                            <div>
+                                <strong style="color: #1a3a52;">Equipment Selected:</strong>
+                                <div id="borrowEquipName" class="text-primary fw-semibold" style="font-size: 1.1rem;"></div>
+                            </div>
                         </div>
-                        <form id="borrowForm" method="POST" action="">
-                            @csrf
-                            <div class="modal-body">
-                                <p>You are requesting to borrow: <strong id="borrowEquipName"></strong></p>
-                                <input type="hidden" id="borrowEquipmentId" name="equipment_id" value="" />
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Purpose</label>
-                                    <input type="text" name="purpose" class="form-control" placeholder="e.g., Project work, Exam" />
-                                </div>
+                    <input type="hidden" id="borrowEquipmentId" name="equipment_id" value="" />
 
-                                <div class="mb-3">
-                                    <label class="form-label">Return Date</label>
-                                    <input type="date" name="return_date" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Request Borrow</button>
-                            </div>
-                        </form>
+                    <!-- Form Fields -->
+                    <div class="row g-3 mt-2">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-dark">Purpose of Borrowing</label>
+                            <textarea name="purpose" class="form-control" style="border-radius: 12px; border: 2px solid #e9ecef; padding: 0.75rem;" placeholder="e.g., Project work, Lab exam, Research" rows="3" required></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Return Date</label>
+                            <input type="date" name="return_date" class="form-control" style="border-radius: 12px; border: 2px solid #e9ecef; padding: 0.75rem;" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Requested by</label>
+                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled style="border-radius: 12px; border: 2px solid #e9ecef; padding: 0.75rem; background: #f8f9fa;" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-dark">Additional Notes (Optional)</label>
+                            <textarea name="notes" class="form-control" style="border-radius: 12px; border: 2px solid #e9ecef; padding: 0.75rem;" placeholder="Any additional information for the staff..." rows="2"></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Footer with Actions -->
+                <div class="modal-footer border-top pt-3 pb-3 px-3" style="background: #f8fbff;">
+                    <button type="button" class="btn btn-outline-secondary px-4 py-2" style="border-radius: 10px; font-weight: 600;" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary px-4 py-2" style="border-radius: 10px; font-weight: 600; background: linear-gradient(135deg, #0d78f2 0%, #0ea5e9 100%); border: none;">
+                        <i class="fas fa-check me-2"></i>Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
