@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="240" viewBox="0 0 200 240">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect x="80" y="40" width="40" height="100" rx="20" fill="#0b1220"/>
+  <rect x="90" y="150" width="20" height="50" rx="6" fill="#0f172a"/>
+  <text x="100" y="225" font-family="Arial" font-size="14" fill="#374151" text-anchor="middle">Microphone</text>
+</svg>

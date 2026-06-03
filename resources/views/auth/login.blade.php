@@ -354,6 +354,156 @@
             gap: 5px;
         }
 
+        .admin-portal-divider {
+            margin: 32px 0 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cbd5e1;
+        }
+
+        .admin-portal-divider::before,
+        .admin-portal-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #cbd5e1;
+        }
+
+        .admin-portal-divider span {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-admin-portal {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-admin-portal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: left 0.4s ease;
+        }
+
+        .btn-admin-portal:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(14, 165, 233, 0.45);
+        }
+
+        .btn-admin-portal:hover::before {
+            left: 100%;
+        }
+
+        .btn-admin-portal:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .btn-admin-portal i {
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-admin-portal span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-portal-subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* Square Admin button (left panel) */
+        .admin-square-wrapper {
+            position: absolute;
+            top: -120px;
+            left: -36px; /* sit mostly outside the left panel */
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            z-index: 50;
+            transform: translateX(-6px);
+        }
+
+        .btn-admin-square {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            background: rgba(14,165,233,0.12);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 6px 18px rgba(2,132,199,0.12);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+            text-decoration: none;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.06);
+            opacity: 0.95;
+        }
+
+        .btn-admin-square:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 10px 28px rgba(2,132,199,0.22);
+            background: rgba(14,165,233,0.16);
+        }
+
+        .admin-square-icon {
+            width: 44px;
+            height: 44px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            /* On small screens bring the icon inside the panel so it's accessible */
+            .admin-square-wrapper {
+                top: 12px;
+                left: 12px;
+                transform: none;
+            }
+
+            .btn-admin-square {
+                width: 64px;
+                height: 64px;
+                border-radius: 9px;
+            }
+        }
+
         @media (max-width: 768px) {
             .login-container {
                 grid-template-columns: 1fr;
@@ -429,6 +579,12 @@
                             </div>
                         </li>
                     </ul>
+
+                    <div class="admin-square-wrapper" data-aos="fade-up" data-aos-delay="360">
+                        <a href="{{ route('admin.login') }}" class="btn-admin-square" aria-hidden="true">
+                            <img src="/images/admin-lock.svg" alt="" class="admin-square-icon">
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -476,7 +632,6 @@
                             <option value="">Select your role</option>
                             <option value="student" {{ old('role') === 'student' ? 'selected' : '' }}>Student</option>
                             <option value="staff" {{ old('role') === 'staff' ? 'selected' : '' }}>Teacher / Staff</option>
-                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Administrator</option>
                         </select>
                         @error('role')
                             <div class="form-error"><i class="fas fa-times-circle"></i> {{ $message }}</div>
@@ -513,6 +668,8 @@
                     >
                         <i class="fas fa-sign-in-alt"></i> Sign In Now
                     </button>
+
+                    <!-- Admin portal moved to left panel as a compact icon button -->
                 </form>
 
                 <div class="signup-link" data-aos="fade-up" data-aos-delay="350">

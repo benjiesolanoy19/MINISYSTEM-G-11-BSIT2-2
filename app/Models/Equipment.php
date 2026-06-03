@@ -18,20 +18,39 @@ class Equipment extends Model
         'available_quantity',
         'status',
         'image',
+        'image_path',
+        'asset_tag',
+        'brand',
+        'model',
+        'location',
+        'assigned_to',
+        'purchase_date',
+        'warranty_expiration',
+        'condition',
+        'status_label',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'available_quantity' => 'integer',
+        'purchase_date' => 'date',
+        'warranty_expiration' => 'date',
     ];
 
     public function getImageUrl(): string
     {
-        if ($this->image) {
+        // Prefer explicit public image path (e.g. 'images/equipment/xxx.svg')
+        if (!empty($this->image_path)) {
+            return asset($this->image_path);
+        }
+
+        // If a stored image path exists (legacy), return storage URL
+        if (!empty($this->image)) {
             return asset('storage/' . $this->image);
         }
-        // Fallback default image
-        return 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80';
+
+        // Default placeholder
+        return asset('images/equipment/placeholder.svg');
     }
 
 

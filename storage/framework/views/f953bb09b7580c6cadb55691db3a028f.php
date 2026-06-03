@@ -1,0 +1,325 @@
+<?php $__env->startSection('title', 'Time In/Out Logs'); ?>
+
+<?php $__env->startSection('styles'); ?>
+<style>
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 30px;
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(100, 116, 139, 0.2);
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.page-title i {
+  font-size: 36px;
+  opacity: 0.95;
+}
+
+.stat-card {
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-top: 4px solid #64748b;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(100, 116, 139, 0.15);
+}
+
+.btn-timein {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 20px 40px;
+  font-weight: 700;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-timein:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  color: white;
+}
+
+.btn-timeout {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 20px 40px;
+  font-weight: 700;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-timeout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+  color: white;
+}
+
+.card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border-top: 4px solid #64748b;
+}
+
+.card-body {
+  padding: 0;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: linear-gradient(135deg, #f1f5f9 0%, #f1f5f9 100%);
+  padding: 15px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #475569;
+  border: none;
+  border-bottom: 2px solid #64748b;
+}
+
+.table thead th i {
+  margin-right: 8px;
+  opacity: 0.8;
+}
+
+.table tbody td {
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background: #f8fafc;
+  box-shadow: inset 0 0 10px rgba(100, 116, 139, 0.05);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.badge {
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-type-in {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.badge-type-out {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #64748b;
+}
+
+.empty-state i {
+  font-size: 64px;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.empty-state h4 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 20px 0 10px 0;
+}
+
+.empty-state p {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+</style>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="container-fluid">
+  <div class="page-header" data-aos="fade-down" data-aos-duration="600">
+    <h1 class="page-title"><i class="fas fa-history"></i>Time In/Out Logs - ICTFE</h1>
+  </div>
+
+  <?php if(session('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" data-aos="fade-down">
+      <i class="fas fa-check-circle me-2"></i><?php echo e(session('success')); ?>
+
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <?php endif; ?>
+
+  <!-- Time Tracking Summary -->
+  <div class="row mb-4" data-aos="fade-up" data-aos-delay="50">
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <i class="fas fa-clock fa-3x text-success mb-3"></i>
+            <h5 class="card-title">Today's Status</h5>
+            <p class="text-muted small">Current session active</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <div class="h4 mb-2 text-success"><?php echo e(\Carbon\Carbon::now()->format('H:i')); ?></div>
+            <p class="text-muted small">Current time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <div class="h4 mb-2"><?php echo e($logs->where('type', 'time_in')->count()); ?></div>
+            <p class="text-muted small">Total Check-ins</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <div class="h4 mb-2"><?php echo e($logs->where('type', 'time_out')->count()); ?></div>
+            <p class="text-muted small">Total Check-outs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time In/Out Buttons -->
+  <div class="row mb-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="col-md-6">
+      <div class="card stat-card text-center">
+        <div class="card-body" style="padding: 40px;">
+          <form method="POST" action="<?php echo e(route('logs.timein')); ?>">
+            <?php echo csrf_field(); ?>
+            <button type="submit" class="btn btn-timein">
+              <i class="fas fa-sign-in-alt fa-lg"></i>
+              Record Time In
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card stat-card text-center">
+        <div class="card-body" style="padding: 40px;">
+          <form method="POST" action="<?php echo e(route('logs.timeout')); ?>">
+            <?php echo csrf_field(); ?>
+            <button type="submit" class="btn btn-timeout">
+              <i class="fas fa-sign-out-alt fa-lg"></i>
+              Record Time Out
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logs Table -->
+  <div class="card" data-aos="fade-up" data-aos-duration="700">
+    <div class="card-body">
+      <?php if($logs->count() > 0): ?>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><i class="fas fa-clock"></i>Type</th>
+                <th><i class="fas fa-calendar"></i>Date & Time</th>
+                <th><i class="fas fa-user"></i>User</th>
+                <th><i class="fas fa-desktop"></i>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php $__currentLoopData = $logs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <tr data-aos="fade-up" data-aos-delay="<?php echo e($loop->index * 50); ?>">
+                <td>
+                  <?php if($log->type === 'time_in'): ?>
+                    <span class="badge badge-type-in"><i class="fas fa-sign-in-alt"></i>Check In</span>
+                  <?php else: ?>
+                    <span class="badge badge-type-out"><i class="fas fa-sign-out-alt"></i>Check Out</span>
+                  <?php endif; ?>
+                </td>
+                <td>
+                  <strong><?php echo e(\Carbon\Carbon::parse($log->timestamp)->format('M d, Y')); ?></strong><br>
+                  <small class="text-muted"><?php echo e(\Carbon\Carbon::parse($log->timestamp)->format('h:i A')); ?></small>
+                </td>
+                <td><?php echo e($log->user->name ?? 'N/A'); ?></td>
+                <td><small class="text-muted">Facility System</small></td>
+              </tr>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </tbody>
+          </table>
+        </div>
+      <?php else: ?>
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <h4>No Logs Recorded</h4>
+          <p>Start recording by clicking the buttons above.</p>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<?php $__env->stopSection(); ?>
+</parameter>
+</create_file>
+
+<?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\MINISYSTEM-G-11-BSIT2-2\resources\views/logs/list.blade.php ENDPATH**/ ?>

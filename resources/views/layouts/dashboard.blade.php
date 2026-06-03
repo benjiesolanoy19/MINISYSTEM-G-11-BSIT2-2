@@ -16,13 +16,171 @@
             --text-dark: #1e293b;
             --text-muted: #64748b;
             --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --surface: #ffffff;
+            --surface-soft: rgba(248,250,252,0.95);
             --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.18);
             --sidebar-width: 270px;
             --sidebar-collapsed: 78px;
             --topbar-height: 70px;
         }
+
+        [data-theme="dark"] {
+            --primary: #60a5fa;
+            --primary-dark: #3b82f6;
+            --secondary: #34d399;
+            --text-dark: #e2eef8;
+            --text-muted: #a5b4fc;
+            --light-bg: #0b1220;
+            --card-bg: #111827;
+            --card-border: rgba(255,255,255,0.08);
+            --surface: #111827;
+            --surface-soft: rgba(15, 23, 42, 0.88);
+            --border-color: rgba(255,255,255,0.08);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+            --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.55);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.65);
+        }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Smooth transition for theme changes */
+        :root, body, .card, .navbar, .btn, .form-control, .form-select, .dropdown-menu, .modal-content, .table, .search-wrapper, .top-navbar, .badge {
+            transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+        }
+
+        body, .main-content, .page-section, .content-area, .dashboard-content {
+            background: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        .card, .card-body, .card-header, .modal-content, .dropdown-menu, .form-control, .form-select, .search-wrapper, .table, .table th, .table td, .alert, .badge, .page-section, .content-area, .dashboard-content {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+
+        .card {
+            box-shadow: var(--shadow-md);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+            color: var(--text-dark);
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid var(--border-color);
+            padding: 0.95rem 1rem;
+            background: var(--card-bg);
+            color: var(--text-dark);
+        }
+
+        .table th {
+            background: rgba(14, 165, 233, 0.08);
+        }
+
+        [data-theme="dark"] .table th {
+            background: rgba(255,255,255,0.08);
+        }
+
+        [data-theme="dark"] .table td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        input,
+        textarea,
+        select,
+        .form-control,
+        .form-select,
+        .form-check-input,
+        .form-check-label {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 1;
+        }
+
+        .btn:disabled,
+        .btn[disabled],
+        .form-control:disabled,
+        .form-control[disabled] {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .bg-white {
+            background-color: var(--card-bg) !important;
+        }
+
+        .bg-light {
+            background-color: rgba(255,255,255,0.12) !important;
+        }
+
+        .text-dark {
+            color: var(--text-dark) !important;
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .dropdown-menu,
+        .modal-content,
+        .popover,
+        .tooltip-inner {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+
+        .modal-backdrop.show {
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .alert-primary {
+            background: rgba(14, 165, 233, 0.12);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--secondary);
+            border-left-color: var(--secondary);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border-left-color: #ef4444;
+        }
+
+        [data-theme="dark"] .top-navbar,
+        [data-theme="dark"] .page-section,
+        [data-theme="dark"] .content-area,
+        [data-theme="dark"] .dashboard-content {
+            background: var(--surface);
+        }
+
+        [data-theme="dark"] input,
+        [data-theme="dark"] textarea,
+        [data-theme="dark"] select,
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.12);
+        }
         
         body {
             font-family: 'Inter', sans-serif;
@@ -32,9 +190,100 @@
         }
 
         /* Top Navigation */
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .theme-toggle button {
+            border: none;
+            background: transparent;
+            color: var(--text-dark);
+            border-radius: 999px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .theme-toggle button.active {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.18);
+        }
+
+        .theme-toast {
+            position: fixed;
+            right: 18px;
+            top: 90px;
+            z-index: 1102;
+            background: rgba(0, 0, 0, 0.72);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: opacity 220ms ease, transform 220ms ease;
+            pointer-events: none;
+            font-size: 0.92rem;
+        }
+
+        .theme-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        [data-theme="dark"] .card-modern,
+        [data-theme="dark"] .metric-card,
+        [data-theme="dark"] .lab-card,
+        [data-theme="dark"] .empty-state,
+        [data-theme="dark"] .notification-header,
+        [data-theme="dark"] .notification-list,
+        [data-theme="dark"] .notification-footer,
+        [data-theme="dark"] .dropdown-menu,
+        [data-theme="dark"] .modal-content,
+        [data-theme="dark"] .top-navbar,
+        [data-theme="dark"] .search-wrapper,
+        [data-theme="dark"] .main-content {
+            background: var(--surface);
+            border-color: var(--card-border);
+            box-shadow: 0 18px 60px rgba(0,0,0,0.38);
+        }
+
+        [data-theme="dark"] .topbar-icon {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-dark);
+        }
+
+        [data-theme="dark"] .topbar-icon:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        [data-theme="dark"] .metric-label,
+        [data-theme="dark"] .notification-time,
+        [data-theme="dark"] .notification-message,
+        [data-theme="dark"] .profile-menu-title,
+        [data-theme="dark"] .notification-footer,
+        [data-theme="dark"] .dropdown-item {
+            color: var(--text-muted);
+        }
+
         .top-navbar {
-            background: white !important;
+            background: var(--surface) !important;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            height: var(--topbar_height);
             height: var(--topbar-height);
             position: fixed;
             top: 0;
@@ -42,7 +291,7 @@
             right: 0;
             width: 100%;
             z-index: 1000;
-            transition: box-shadow 0.3s ease;
+            transition: box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
         }
 
         .app-shell {
@@ -227,7 +476,7 @@
         .notification-header {
             padding: 1.2rem 1.35rem;
             border-bottom: 1px solid rgba(226, 232, 240, 0.95);
-            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            background: var(--card-bg);
         }
 
         .notification-header h6 {
@@ -238,12 +487,12 @@
         .notification-header p {
             margin-bottom: 0;
             font-size: 0.82rem;
-            color: #64748b;
+            color: var(--text-muted);
             line-height: 1.5;
         }
 
         .notification-list {
-            background: #ffffff;
+            background: var(--card-bg);
             max-height: 360px;
             overflow-y: auto;
         }
@@ -781,8 +1030,9 @@
 
         .form-control {
             border-radius: 14px;
-            border: 1px solid rgba(226,232,240,0.95);
-            background: #ffffff;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-dark);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -795,15 +1045,16 @@
             border-radius: 24px;
             overflow: hidden;
             border: none;
+            background: var(--card-bg);
             box-shadow: 0 30px 80px rgba(15, 23, 42, 0.12);
         }
 
         .modal-header {
-            border-bottom: 1px solid rgba(226,232,240,0.95);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .modal-footer {
-            border-top: 1px solid rgba(226,232,240,0.95);
+            border-top: 1px solid var(--border-color);
         }
 
         .empty-state {
@@ -907,6 +1158,7 @@
     @yield('styles')
 </head>
 <body>
+    <div class="theme-toast" id="themeToast" role="status" aria-live="polite"></div>
 
 <div class="app-shell">
     @include('layouts.sidebar')
@@ -1066,6 +1318,12 @@
                     <span class="notification-badge pulse">{{ $globalMessageUnreadCount }}</span>
                 @endif
             </a>
+
+            <div class="theme-toggle d-none d-lg-flex" role="group" aria-label="Theme mode">
+                <button type="button" id="theme-system" title="System theme" aria-label="System theme">🖥️</button>
+                <button type="button" id="theme-light" title="Light mode" aria-label="Light mode">☀️</button>
+                <button type="button" id="theme-dark" title="Dark mode" aria-label="Dark mode">🌙</button>
+            </div>
 
             <div class="dropdown">
                 <button class="btn btn-sm p-0 d-flex align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -1281,6 +1539,64 @@
         })
         .catch(error => console.error('Error marking all notifications as read:', error));
     }
+
+    (function() {
+        const THEME_KEY = 'ictfe_theme';
+        const btnSystem = document.getElementById('theme-system');
+        const btnLight = document.getElementById('theme-light');
+        const btnDark = document.getElementById('theme-dark');
+        const toast = document.getElementById('themeToast');
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        let systemListener = null;
+
+        function applyDark(isDark) {
+            if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+            else document.documentElement.removeAttribute('data-theme');
+        }
+
+        function showToast(msg) {
+            if (!toast) return;
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.remove('show'), 1600);
+        }
+
+        function setActive(mode) {
+            [btnSystem, btnLight, btnDark].forEach(b => b && b.classList.remove('active'));
+            if (mode === 'system' && btnSystem) btnSystem.classList.add('active');
+            if (mode === 'light' && btnLight) btnLight.classList.add('active');
+            if (mode === 'dark' && btnDark) btnDark.classList.add('active');
+        }
+
+        function setTheme(mode, save = true) {
+            if (save) localStorage.setItem(THEME_KEY, mode);
+            if (mode === 'system') {
+                applyDark(mq.matches);
+                if (!systemListener) {
+                    systemListener = (e) => applyDark(e.matches);
+                    try { mq.addEventListener('change', systemListener); } catch (e) { mq.addListener(systemListener); }
+                }
+            } else {
+                applyDark(mode === 'dark');
+                if (systemListener) {
+                    try { mq.removeEventListener('change', systemListener); } catch (e) { mq.removeListener(systemListener); }
+                    systemListener = null;
+                }
+            }
+            setActive(mode);
+            showToast('Theme: ' + (mode === 'system' ? 'System' : (mode === 'dark' ? 'Dark' : 'Light')));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem(THEME_KEY) || 'system';
+            setTheme(saved, false);
+        });
+
+        if (btnSystem) btnSystem.addEventListener('click', () => setTheme('system'));
+        if (btnLight) btnLight.addEventListener('click', () => setTheme('light'));
+        if (btnDark) btnDark.addEventListener('click', () => setTheme('dark'));
+    })();
 </script>
 
 </body>

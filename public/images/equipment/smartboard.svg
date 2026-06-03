@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect x="40" y="30" width="280" height="140" rx="6" fill="#0b1220"/>
+  <rect x="140" y="175" width="80" height="10" rx="4" fill="#111827"/>
+  <text x="180" y="205" font-family="Arial" font-size="16" fill="#374151" text-anchor="middle">Smart Board</text>
+</svg>

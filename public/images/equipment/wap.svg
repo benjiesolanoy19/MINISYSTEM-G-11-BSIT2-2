@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <circle cx="180" cy="90" r="40" fill="#0f172a"/>
+  <path d="M180 50v-20" stroke="#9ca3af" stroke-width="4" stroke-linecap="round"/>
+  <path d="M180 70c20 10 40 0 40-20" stroke="#9ca3af" stroke-width="4" fill="none"/>
+  <text x="180" y="165" font-family="Arial" font-size="16" fill="#374151" text-anchor="middle">Wireless AP</text>
+</svg>

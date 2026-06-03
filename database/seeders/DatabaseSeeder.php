@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Database\Seeders\EquipmentSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,9 +13,10 @@ class DatabaseSeeder extends Seeder
     {
         // Create or update admin user benjie20 (user: benjie20, pass: benjie062606)
         User::updateOrCreate(
-            ['email' => 'benjie@clfms.com'],
+            ['username' => 'benjie20'],
             [
                 'name' => 'Benjie',
+                'email' => 'benjie20@clfms.com',
                 'username' => 'benjie20',
                 'password' => Hash::make('benjie062606'),
                 'password_hint' => '606',
@@ -53,9 +55,13 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('Database seeded successfully!');
         $this->command->info('Login credentials:');
-        $this->command->info('Admin: benjie20 (benjie@clfms.com or username benjie20) / benjie062606');
+        $this->command->info('Admin: benjie20 (benjie20@clfms.com or username benjie20) / benjie062606');
         $this->command->info('Staff: staff@clfms.com / password');
         $this->command->info('Student: john@clfms.com / password');
+
+        // Seed equipment inventory (ICT equipments)
+        $this->call(EquipmentSeeder::class);
+
     }
 }
 

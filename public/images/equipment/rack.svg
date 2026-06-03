@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="300" viewBox="0 0 240 300">
+  <rect width="100%" height="100%" fill="#f8fafc"/>
+  <rect x="50" y="30" width="140" height="240" rx="6" fill="#0b1220"/>
+  <g fill="#111827">
+    <rect x="62" y="50" width="116" height="16" rx="4"/>
+    <rect x="62" y="76" width="116" height="16" rx="4"/>
+    <rect x="62" y="102" width="116" height="16" rx="4"/>
+    <rect x="62" y="128" width="116" height="16" rx="4"/>
+  </g>
+  <text x="120" y="275" font-family="Arial" font-size="14" fill="#374151" text-anchor="middle">Network Rack</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .lock{fill:#2d7fb6}
+      .shackle{fill:#6b6b6b}
+      .key{fill:#f5c26b}
+    </style>
+  </defs>
+  <g transform="translate(0,0)">
+    <path class="shackle" d="M80 96a8 8 0 0 0-8 8v24a8 8 0 0 0 16 0v-24a40 40 0 1 1 80 0v24a8 8 0 0 0 16 0v-24a56 56 0 1 0-112 0z"/>
+    <rect x="44" y="112" width="120" height="96" rx="16" class="lock" />
+    <circle cx="100" cy="160" r="10" fill="#ffffff" opacity="0.9"/>
+    <path class="key" d="M176 136c6 0 12 2 16 6l14 14c6 6 6 14 0 20l-8 8c-6 6-14 6-20 0l-6-6-6 6-12-12 6-6-6-6 6-6c4-4 10-6 16-6z"/>
+  </g>
+</svg>

@@ -6,6 +6,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\IncidentController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\BorrowRequestController;
 
 require_once __DIR__ . '/borrowings.php';
 
@@ -34,6 +36,10 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Admin Authentication Routes
+Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
+Route::post('/admin/authenticate', [AdminAuthController::class, 'authenticate'])->name('admin.authenticate');
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // Test route to check auth
 Route::get('/test-auth', function() {
@@ -74,9 +80,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipment', [EquipmentController::class, 'index'])->name('equipment.index');
     Route::get('/equipment/create', [EquipmentController::class, 'create'])->name('equipment.create');
     Route::post('/equipment', [EquipmentController::class, 'store'])->name('equipment.store');
+    Route::get('/equipment/{id}', [EquipmentController::class, 'show'])->name('equipment.show');
     Route::get('/equipment/{id}/edit', [EquipmentController::class, 'edit'])->name('equipment.edit');
     Route::put('/equipment/{id}', [EquipmentController::class, 'update'])->name('equipment.update');
     Route::delete('/equipment/{id}', [EquipmentController::class, 'destroy'])->name('equipment.destroy');
+    Route::post('/equipment/{id}/borrow', [BorrowRequestController::class, 'store'])->name('equipment.borrow');
     
     // Incidents
     Route::get('/incidents/report', [IncidentController::class, 'report'])->name('incidents.report');

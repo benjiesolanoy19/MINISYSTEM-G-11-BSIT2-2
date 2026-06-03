@@ -495,7 +495,7 @@
     .sidebar-toggle {
         width: 38px;
         height: 38px;
-        background: white;
+        background: var(--surface);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -509,6 +509,12 @@
         outline: none;
         padding: 0;
         will-change: transform;
+    }
+
+    [data-theme="dark"] .sidebar-toggle {
+        background: var(--surface);
+        color: var(--text-dark);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
     }
 
     .sidebar-toggle:hover {

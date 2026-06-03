@@ -429,7 +429,7 @@
                     'status' => $item->status,
                     'quantity' => $item->quantity,
                     'available_quantity' => $item->available_quantity,
-                    'image' => $item->getImageUrl(),
+                    'image' => $item->getImageUrl(), // uses Equipment::getImageUrl()
                 ];
             })->toJson() !!},
             searchQuery: '',

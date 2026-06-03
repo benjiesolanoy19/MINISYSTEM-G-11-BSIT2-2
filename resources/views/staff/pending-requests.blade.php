@@ -68,10 +68,11 @@
                             <div class="col-12">
                                 <div class="req-row d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3">
                                     <div class="d-flex align-items-center gap-3" style="min-width: 280px;">
-                                        <img class="img-eq" src="{{ $r->equipment->image_url ?? 'https://via.placeholder.com/128?text=EQ' }}" alt="Equipment">
+                                        <img class="img-eq" src="{{ optional($r->equipment)->image_url ?? ($r->equipment ? $r->equipment->getImageUrl() : 'https://via.placeholder.com/128?text=EQ') }}" alt="Equipment">
                                         <div>
-                                            <div class="fw-bold">{{ $r->student->name }}</div>
-                                            <div class="text-muted small">Equipment: <strong class="text-dark">{{ $r->equipment->name }}</strong></div>
+                                            <div class="fw-bold">{{ optional($r->student)->name ?? 'Unknown student' }}</div>
+                                            <div class="text-muted small">Equipment: <strong class="text-dark">{{ optional($r->equipment)->name ?? 'Unknown equipment' }}</strong></div>
+
                                             <div class="text-muted small">Qty: <strong class="text-dark">{{ $r->quantity }}</strong></div>
                                             <div class="text-muted small">Borrow: <strong class="text-dark">{{ optional($r->borrow_date)->format('M d, Y') }}</strong></div>
                                             <div class="text-muted small">Return: <strong class="text-dark">{{ optional($r->return_date)->format('M d, Y') }}</strong></div>

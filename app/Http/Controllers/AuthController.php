@@ -27,7 +27,7 @@ class AuthController extends Controller
             $credentials = $request->validate([
                 'login' => 'required|string',
                 'password' => 'required|string',
-                'role' => 'required|in:student,staff,admin'
+                'role' => 'required|in:student,staff'
             ]);
 
             // Find user by email or username and role

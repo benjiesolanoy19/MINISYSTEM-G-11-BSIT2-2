@@ -14,6 +14,11 @@ class EquipmentController extends Controller
         return view('equipment.index', compact('equipment'));
     }
 
+    public function show(Equipment $equipment)
+    {
+        return view('equipment.show', compact('equipment'));
+    }
+
     public function create()
     {
         return view('equipment.create');
@@ -27,7 +32,7 @@ class EquipmentController extends Controller
             'serial_number' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'quantity' => 'required|integer|min:1',
-            'status' => 'required|in:available,borrowed,maintenance,lost',
+            'status' => 'required|in:available,borrowed,reserved,maintenance,lost',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -60,7 +65,7 @@ class EquipmentController extends Controller
             'serial_number' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'quantity' => 'required|integer|min:1',
-            'status' => 'required|in:available,borrowed,maintenance,lost',
+            'status' => 'required|in:available,borrowed,reserved,maintenance,lost',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -93,14 +98,20 @@ class EquipmentController extends Controller
         return redirect()->route('equipment.index')->with('success', 'Equipment updated successfully!');
     }
 
-    public function destroy(Equipment $equipment)
+public function destroy(Equipment $equipment)
     {
-        // Delete image if exists
+        // Hard delete the row (and delete image if exists)
         if ($equipment->image && Storage::disk('public')->exists($equipment->image)) {
             Storage::disk('public')->delete($equipment->image);
         }
-        
+
         $equipment->delete();
+
+        // Redirect to the most likely listing page based on role
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            return redirect()->route('admin.equipment.index')->with('success', 'Equipment deleted successfully!');
+        }
+
         return redirect()->route('equipment.index')->with('success', 'Equipment deleted successfully!');
     }
 }

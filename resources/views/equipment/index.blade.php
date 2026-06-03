@@ -94,27 +94,6 @@
         }
     }
 
-    @media (max-width: 576px) {
-        .inventory-controls {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .control-label {
-        font-weight: 700;
-        font-size: 0.85rem;
-        color: #334155;
-        margin-bottom: 6px;
-    }
-
-    .inventory-table-wrap {
-        border-radius: 24px;
-        overflow: hidden;
-        border: 1px solid rgba(226,232,240,0.95);
-        background: rgba(255,255,255,0.75);
-        box-shadow: 0 24px 70px rgba(15,23,42,0.05);
-    }
-
     .inventory-grid {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
@@ -243,6 +222,11 @@
         background: rgba(239,68,68,0.10);
         border-color: rgba(239,68,68,0.20);
         color: #991b1b;
+    }
+    .status-reserved {
+        background: rgba(59,130,246,0.10);
+        border-color: rgba(59,130,246,0.20);
+        color: #1d4ed8;
     }
     .status-maintenance {
         background: rgba(245,158,11,0.12);
@@ -460,6 +444,7 @@
                         <option value="">All Status</option>
                         <option value="available">Available</option>
                         <option value="borrowed">Borrowed</option>
+                        <option value="reserved">Reserved</option>
                         <option value="maintenance">Maintenance</option>
                         <option value="lost">Out of Stock</option>
                     </select>
@@ -500,16 +485,16 @@
                     data-status="{{ $effectiveStatus }}"
                     data-availability="{{ $isOut ? 'out' : 'in' }}">
 
-                    <div class="equip-media">
+                    <a href="{{ route('equipment.show', $item->id) }}" class="d-block equip-media" style="text-decoration:none;">
                         <img 
                             src="{{ $item->getImageUrl() }}" 
                             alt="{{ $item->name }}" 
                             loading="lazy" 
                             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80';" />
-                    </div>
+                    </a>
 
                     <div class="equip-body">
-                        <h3 class="equip-title">{{ $item->name }}</h3>
+                        <h3 class="equip-title"><a href="{{ route('equipment.show', $item->id) }}" class="text-reset text-decoration-none">{{ $item->name }}</a></h3>
                         @if($item->category)
                             <div class="equip-category">
                                 <i class="fas fa-tag"></i>
@@ -543,6 +528,13 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+                                </div>
+                            @endif
+                            @if(auth()->check() && auth()->user()->role === 'student')
+                                <div class="d-flex">
+                                    <button type="button" class="btn btn-primary borrow-btn" data-id="{{ $item->id }}" data-name="{{ $item->name }}" {{ $effectiveStatus !== 'available' ? 'disabled' : '' }}>
+                                        <i class="fas fa-hand-holding me-1"></i>Borrow
+                                    </button>
                                 </div>
                             @endif
                         </div>
@@ -619,5 +611,78 @@
         applyFilters();
     })();
 </script>
+@endsection
+
+@section('modals')
+<!-- Image preview modal -->
+<div class="modal fade" id="equipmentImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius:16px;">
+            <div class="modal-header">
+                <h5 class="modal-title">Equipment Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-3">
+                <img id="equipmentPreviewImage" src="" alt="Preview" style="max-width:100%;height:auto;border-radius:8px;"/>
+                <div id="equipmentPreviewCaption" class="mt-3 text-muted small"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Borrow modal -->
+            <div class="modal fade" id="borrowModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Borrow Equipment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="borrowForm" method="POST" action="">
+                            @csrf
+                            <div class="modal-body">
+                                <p>You are requesting to borrow: <strong id="borrowEquipName"></strong></p>
+                                <input type="hidden" id="borrowEquipmentId" name="equipment_id" value="" />
+
+                                <div class="mb-3">
+                                    <label class="form-label">Purpose</label>
+                                    <input type="text" name="purpose" class="form-control" placeholder="e.g., Project work, Exam" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Return Date</label>
+                                    <input type="date" name="return_date" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Request Borrow</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+        const modalEl = document.getElementById('equipmentImageModal');
+        const previewImg = document.getElementById('equipmentPreviewImage');
+        const caption = document.getElementById('equipmentPreviewCaption');
+        if (!modalEl) return;
+        const bsModal = new bootstrap.Modal(modalEl);
+
+        document.querySelectorAll('.equip-media img').forEach(img => {
+                img.style.cursor = 'zoom-in';
+                img.addEventListener('click', function () {
+                        const src = this.getAttribute('src') || this.getAttribute('data-src');
+                        const title = this.getAttribute('alt') || '';
+                        previewImg.src = src || '{{ asset('images/equipment/placeholder.svg') }}';
+                        caption.textContent = title;
+                        bsModal.show();
+                });
+        });
+});
+</script>
+
 @endsection
 

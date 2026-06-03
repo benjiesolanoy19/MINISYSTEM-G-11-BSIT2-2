@@ -36,6 +36,220 @@
             --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
         }
+        /* Theme overrides */
+        [data-theme="dark"] {
+            --mdc-primary: #60a5fa;
+            --mdc-primary-dark: #3b82f6;
+            --mdc-secondary: #34d399;
+            --mdc-error: #f87171;
+            --mdc-warning: #fbbf24;
+            --mdc-info: #60a5fa;
+            --mdc-success: #34d399;
+            --text-dark: #e6eef8;
+            --text-muted: #cbd5e1;
+            --light-bg: #0b1220;
+            --card-bg: #111827;
+            --border-color: rgba(255,255,255,0.12);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.35);
+            --shadow-md: 0 6px 24px rgba(0,0,0,0.55);
+            --shadow-lg: 0 16px 50px rgba(0,0,0,0.65);
+        }
+
+        /* Smooth transition for theme changes */
+        :root, body, .card, .navbar, .btn, .form-control, .form-select, .dropdown-menu, .modal-content, .table, .search-wrapper, .top-navbar, .badge {
+            transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+        }
+
+        body, .main-content, .page-section, .content-area, .dashboard-content {
+            background: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        .card, .card-body, .card-header, .modal-content, .dropdown-menu, .form-control, .form-select, .search-wrapper, .table, .table th, .table td, .alert, .badge, .page-section, .content-area, .dashboard-content {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+
+        .card {
+            box-shadow: var(--shadow-md);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+            color: var(--text-dark);
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid var(--border-color);
+            padding: 0.95rem 1rem;
+            background: var(--card-bg);
+            color: var(--text-dark);
+        }
+
+        .table th {
+            background: rgba(14, 165, 233, 0.08);
+        }
+
+        [data-theme="dark"] .table th {
+            background: rgba(255,255,255,0.08);
+        }
+
+        [data-theme="dark"] .table td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        input,
+        textarea,
+        select,
+        .form-control,
+        .form-select,
+        .form-check-input,
+        .form-check-label {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 1;
+        }
+
+        .btn:disabled,
+        .btn[disabled],
+        .form-control:disabled,
+        .form-control[disabled] {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .bg-white {
+            background-color: var(--card-bg) !important;
+        }
+
+        .bg-light {
+            background-color: rgba(255,255,255,0.12) !important;
+        }
+
+        .text-dark {
+            color: var(--text-dark) !important;
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .dropdown-menu,
+        .modal-content,
+        .popover,
+        .tooltip-inner {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-color: var(--border-color);
+        }
+
+        .modal-backdrop.show {
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .alert-primary {
+            background: rgba(14, 165, 233, 0.12);
+            color: var(--mdc-primary);
+            border-left-color: var(--mdc-primary);
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--mdc-secondary);
+            border-left-color: var(--mdc-secondary);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--mdc-error);
+            border-left-color: var(--mdc-error);
+        }
+
+        [data-theme="dark"] .top-navbar,
+        [data-theme="dark"] .page-section,
+        [data-theme="dark"] .content-area,
+        [data-theme="dark"] .dashboard-content {
+            background: var(--surface);
+        }
+
+        [data-theme="dark"] input,
+        [data-theme="dark"] textarea,
+        [data-theme="dark"] select,
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.12);
+        }
+            transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            right: 18px;
+            top: 18px;
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 999px;
+            padding: 6px;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(6px);
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(10,14,20,0.6);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .theme-toggle button {
+            border: none;
+            background: transparent;
+            padding: 8px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .theme-toggle button.active {
+            background: linear-gradient(90deg, var(--mdc-primary), var(--mdc-secondary));
+            color: white;
+            box-shadow: 0 6px 18px rgba(2,132,199,0.18);
+        }
+
+        .theme-toast {
+            position: fixed;
+            right: 22px;
+            top: 74px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 240ms ease, transform 240ms ease;
+            z-index: 1110;
+            pointer-events: none;
+        }
+
+        .theme-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
         
         * {
             margin: 0;
@@ -70,7 +284,7 @@
         
         /* Navbar Enhancement */
         .navbar {
-            background: rgba(255, 255, 255, 0.95) !important;
+            background: var(--surface) !important;
             backdrop-filter: blur(20px);
             box-shadow: var(--shadow-sm);
             padding: 12px 0;
@@ -436,6 +650,14 @@
 </head>
 <body>
     @yield('content')
+    <!-- Theme toggle button -->
+    <div class="theme-toggle" id="themeToggle" aria-hidden="false">
+        <button id="theme-system" title="Follow system" aria-label="System theme">🖥️</button>
+        <button id="theme-light" title="Light mode" aria-label="Light mode">☀️</button>
+        <button id="theme-dark" title="Dark mode" aria-label="Dark mode">🌙</button>
+    </div>
+
+    <div class="theme-toast" id="themeToast" role="status" aria-live="polite"></div>
     
     <!-- AOS (Animate On Scroll) JS -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
@@ -462,6 +684,63 @@
             // Register GSAP ScrollTrigger
             gsap.registerPlugin(ScrollTrigger);
         });
+    </script>
+    <script>
+        (function(){
+            const THEME_KEY = 'ictfe_theme';
+            const btnSystem = document.getElementById('theme-system');
+            const btnLight = document.getElementById('theme-light');
+            const btnDark = document.getElementById('theme-dark');
+            const toast = document.getElementById('themeToast');
+            const mq = window.matchMedia('(prefers-color-scheme: dark)');
+            let systemListener = null;
+
+            function applyDark(isDark) {
+                if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+                else document.documentElement.removeAttribute('data-theme');
+            }
+
+            function showToast(msg){
+                if(!toast) return;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._t);
+                toast._t = setTimeout(()=> toast.classList.remove('show'), 1600);
+            }
+
+            function setActive(mode){
+                [btnSystem, btnLight, btnDark].forEach(b=> b && b.classList.remove('active'));
+                if(mode === 'system' && btnSystem) btnSystem.classList.add('active');
+                if(mode === 'light' && btnLight) btnLight.classList.add('active');
+                if(mode === 'dark' && btnDark) btnDark.classList.add('active');
+            }
+
+            function setTheme(mode, save=true){
+                if(save) localStorage.setItem(THEME_KEY, mode);
+                if(mode === 'system'){
+                    applyDark(mq.matches);
+                    // listen for system changes
+                    if(!systemListener){
+                        systemListener = (e)=> applyDark(e.matches);
+                        try{ mq.addEventListener('change', systemListener); }catch(e){ mq.addListener(systemListener); }
+                    }
+                } else {
+                    applyDark(mode === 'dark');
+                    if(systemListener){ try{ mq.removeEventListener('change', systemListener);}catch(e){ mq.removeListener(systemListener);} systemListener = null; }
+                }
+                setActive(mode);
+                showToast('Theme: ' + (mode === 'system' ? 'System' : (mode === 'dark' ? 'Dark' : 'Light')) );
+            }
+
+            document.addEventListener('DOMContentLoaded', ()=>{
+                const saved = localStorage.getItem(THEME_KEY) || 'system';
+                setTheme(saved, false);
+            });
+
+            if(btnSystem) btnSystem.addEventListener('click', ()=> setTheme('system'));
+            if(btnLight) btnLight.addEventListener('click', ()=> setTheme('light'));
+            if(btnDark) btnDark.addEventListener('click', ()=> setTheme('dark'));
+        })();
     </script>
     
     @yield('scripts')
